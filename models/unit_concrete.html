@@ -61,7 +61,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
         <b data-i="kDrawing">Drawing</b><span>CM-02</span>
         <b data-i="kScale">Scale</b><span>N.T.S.</span>
         <b data-i="kDate">Date</b><span>2026-10-22</span>
-        <b data-i="kRev">Rev.</b><span>C</span>
+        <b data-i="kRev">Rev.</b><span>D</span>
       </div>
       <div class="lang" role="group" aria-label="Language">
         <button class="btn" id="lEn" aria-pressed="true">EN</button>
@@ -95,7 +95,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
       <dl>
         <div class="row"><dt data-i="sOut">Outside</dt><dd>36′-0″ × 52′-0″<span class="m">10.97 × 15.85 m</span></dd></div>
         <div class="row"><dt data-i="sIn">Inside clear</dt><dd>34′-4″ × 50′-4″<span class="m">10.47 × 15.35 m</span></dd></div>
-        <div class="row"><dt data-i="sArea">Floor area</dt><dd><span data-i="sAreaV">1,872 sft gross / 1,731 sft net</span><span class="m">173.9 m² / 160.8 m²</span></dd></div>
+        <div class="row"><dt data-i="sArea">Floor area</dt><dd><span data-i="sAreaV">1,872 sft gross / unit 1,372 sft (core and balcony excluded)</span><span class="m">173.9 m² / 127.5 m²</span></dd></div>
         <div class="row"><dt data-i="sH">Wall height</dt><dd>10′-0″<span class="m">3.05 m</span></dd></div>
         <div class="row"><dt data-i="sW">Walls</dt><dd data-i="sWv">Reinforced concrete, 250 mm (provisional), fair-faced finish both sides</dd></div>
         <div class="row"><dt data-i="sJ">Panel joints</dt><dd data-i="sJv">1,800 W × 900 H, laid horizontally, panel centred on the wall centre line, set out from floor level</dd></div>
@@ -118,8 +118,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
 <script>
 const TXT={
-en:{title:"Dwelling unit shell — exposed concrete",sub:"36′ × 52′, 10′ high, open top. Fair-faced concrete walls with a 1,800 × 900 mm formwork grid. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",csTag:"For Clip Studio (GLB)",glbAll:"Save the unit as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",hint:"Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sH:"Wall height",sW:"Walls",sWv:"Reinforced concrete, 250 mm (provisional), fair-faced finish both sides",sJ:"Panel joints",sJv:"1,800 W × 900 H, laid horizontally, panel centred on the wall centre line, set out from floor level",sP:"Form-tie cones",sPv:"@600 horizontal × @450 vertical, six per panel (300 and 225 from joints), aligned inside and out",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sPt:"Partitions",sPtv:"125 mm, painted, full height (provisional; material not decided)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sC:"Ceiling",sCv:"None — open model",kJ:"Panel joint",kP:"Form-tie cone",note:"Concept model for discussion. Partitions, doors and windows follow the CM-01 proposal. Formwork and tie-cone setting-out around openings is not yet planned and is shown cut at the openings. Not for construction."},
-ja:{title:"住戸の躯体モデル — コンクリート打ち放し",sub:"36′ × 52′、高さ 10′、天井なし。打ち放しの壁、型枠目地 1,800 × 900 mm。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",csTag:"Clip Studio 用（GLB）",glbAll:"住戸を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。床のグリッドは 1 ft、5 ft ごとに太線。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sH:"壁高さ",sW:"壁",sWv:"鉄筋コンクリート 250 mm（仮定）、内外とも打ち放し",sJ:"型枠目地",sJv:"幅 1,800 × 高さ 900（横使い）、壁の中心線にパネル中央を合わせ、床面から割付け",sP:"Pコン",sPv:"横 @600 × 縦 @450、1枚に6個（目地から 300・225）、内外で位置をそろえる",sF:"床",sFv:"スラブ 125 mm（仮定）",sPt:"間仕切り",sPtv:"125 mm、塗装仕上げ、壁の天端まで（仮定。材料は未決定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sC:"天井",sCv:"なし（開放モデル）",kJ:"型枠目地",kP:"Pコン",note:"協議用の概念モデルです。間仕切り・扉・窓は CM-01 の提案と同じです。開口まわりの型枠・Pコンの割付けは未検討で、開口で切れたまま表示しています。施工用ではありません。"}};
+en:{title:"Dwelling unit shell — exposed concrete",sub:"36′ × 52′, 10′ high, open top. Fair-faced concrete walls with a 1,800 × 900 mm formwork grid. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",csTag:"For Clip Studio (GLB)",glbAll:"Save the unit as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",hint:"Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / unit 1,372 sft (core and balcony excluded)",sH:"Wall height",sW:"Walls",sWv:"Reinforced concrete, 250 mm (provisional), fair-faced finish both sides",sJ:"Panel joints",sJv:"1,800 W × 900 H, laid horizontally, panel centred on the wall centre line, set out from floor level",sP:"Form-tie cones",sPv:"@600 horizontal × @450 vertical, six per panel (300 and 225 from joints), aligned inside and out",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sPt:"Partitions",sPtv:"125 mm, painted, full height (provisional; material not decided)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sC:"Ceiling",sCv:"None — open model",kJ:"Panel joint",kP:"Form-tie cone",note:"Concept model for discussion. Partitions, doors and windows follow the CM-01 proposal. Formwork and tie-cone setting-out around openings is not yet planned and is shown cut at the openings. Not for construction."},
+ja:{title:"住戸の躯体モデル — コンクリート打ち放し",sub:"36′ × 52′、高さ 10′、天井なし。打ち放しの壁、型枠目地 1,800 × 900 mm。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",csTag:"Clip Studio 用（GLB）",glbAll:"住戸を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。床のグリッドは 1 ft、5 ft ごとに太線。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 住戸 1,372 sft（コア・バルコニーを除く）",sH:"壁高さ",sW:"壁",sWv:"鉄筋コンクリート 250 mm（仮定）、内外とも打ち放し",sJ:"型枠目地",sJv:"幅 1,800 × 高さ 900（横使い）、壁の中心線にパネル中央を合わせ、床面から割付け",sP:"Pコン",sPv:"横 @600 × 縦 @450、1枚に6個（目地から 300・225）、内外で位置をそろえる",sF:"床",sFv:"スラブ 125 mm（仮定）",sPt:"間仕切り",sPtv:"125 mm、塗装仕上げ、壁の天端まで（仮定。材料は未決定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sC:"天井",sCv:"なし（開放モデル）",kJ:"型枠目地",kP:"Pコン",note:"協議用の概念モデルです。間仕切り・扉・窓は CM-01 の提案と同じです。開口まわりの型枠・Pコンの割付けは未検討で、開口で切れたまま表示しています。施工用ではありません。"}};
 let lang='en';
 function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(t)e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');try{localStorage.setItem('csh-lang',l)}catch(e){}}
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
@@ -148,12 +148,13 @@ function mat(canvas){const t=new THREE.CanvasTexture(canvas);t.anisotropy=AN;ret
 const Lo=Z*1000,So=X*1000,Si=So-2*T*1000;
 const fLong=cface(-Lo/2,Lo/2,1),fShort=cface(-Si/2,Si/2,2),fEndR=cface(So/2-T*1000,So/2,3),fEndL=cface(-So/2,-So/2+T*1000,4);
 const topM=new THREE.MeshLambertMaterial({color:0xb4b2ab});
-const PART=[[20,0,20,11],[20,11,34.36,11],[26,11,26,16],[22,16,34.36,16],[22,16,22,26],[22,26,34.36,26],[26.36,26,26.36,36],[26.36,30,34.36,30],[0,30,8,30],[8,30,8,36],[0,36,15,36],[15,36,15,50.36],[19.36,36,19.36,50.36],[19.36,36,34.36,36]];
-const DOORS=[['D1','h',0,14.5,17.5,1],['D2','h',11,21,24,-1],['D3','h',11,30,32.5,1],['D4','v',22,17,20,1],['D5','v',26.36,26.5,29,1],['D6','h',36,5.2,7.7,-1],['D7','v',15,36.6,39.6,-1],['D8','v',19.36,36.6,39.6,1],['D9','h',36,26.66,29.16,-1]];
-const WINS=[['N1','F',2.5,6.5,3,7],['N2','L',11,15,3,7],['N3','F',28,32,3,7],['V1','R',12,14,6,7],['N4','L',24,28,3,7],['N5','R',17.2,21.2,3.5,7],['V2','L',31,33,6,7],['V3','R',31,33,6,7],['N6','L',44,48,3,7],['N7','R',44,48,3,7],['N8','B',15.7,18.7,3,7]];
+const PART=[[22,5,22,33.88],[22,13,34.36,13],[28.36,13,28.36,19],[22,19,34.36,19],[12,17,12,31],[0,17,12,17],[0,31,12,31],[7,31,7,38],[0,38,12,38],[12,38,12,50.36],[12,42,17.98,42]];
+const DOORS=[['D1','v',18.31,37.18,40.68,-1],['D2','v',22,9,12,1],['D3','h',13,30,32.5,1],['D4','v',22,14.5,17,1],['D5','v',22,22,25,1],['D6','h',31,8,11,-1],['D7','v',7,33,35.5,-1],['D8','h',38,8.5,11.5,1],['D9','v',12,44,46.5,1]];
+const WINS=[['N1','F',1.43,3.43,3.5,7],['N3','F',25.18,31.18,3,7],['N9','K',6.68,20.68,0,7.5],['N2','L',8,12,3,7],['N4','L',22,26,3,7],['V2','L',33.5,35.5,6,7],['N6','L',42,46,3,7],['N7','R',4,9,3,7],['V1','R',15,17.5,6,7],['N5','R',23,28,3.5,7],['N8','B',3,8,3,7],['V3','B',13.5,16,6,7]];
 const OP={PT:0.125,DH:7};
+const CORE={x0:17.98,v0:33.88,t:0.656},BAL={x0:5.68,x1:21.68,d:4.18};
 function buildWalls(face,mt){
-  const iw=(X-2*T)/FT,id=(Z-2*T)/FT,wx=x=>-X/2+T+x*FT,wz=v=>Z/2-T-v*FT,ht=OP.PT/2,dh=OP.DH*FT,e=1e-4;
+  const iw=(X-2*T)/FT,id=(Z-2*T)/FT,tf=T/FT,wx=x=>-X/2+T+x*FT,wz=v=>Z/2-T-v*FT,ht=OP.PT/2,dh=OP.DH*FT,e=1e-4,ct=CORE.t*FT,cc=CORE.x0+CORE.t/2;
   function piece(x0,x1,y0,y1,z0,z1,fc,dm){if(x1-x0<e||y1-y0<e||z1-z0<e)return;const g=new THREE.BoxGeometry(x1-x0,y1-y0,z1-z0);g.translate((x0+x1)/2,(y0+y1)/2,(z0+z1)/2);
     const p=g.attributes.position,uv=g.attributes.uv,pl=[x1,x0,y1,y0,z1,z0],ms=[];
     for(let f=0;f<6;f++){const r=fc?fc(f,pl[f],(x0+x1)/2):null;ms.push(r?r.m:dm);if(r&&r.u)for(let i=f*4;i<f*4+4;i++)uv.setXY(i,r.u(p.getX(i),p.getZ(i)),p.getY(i)/Y);}
@@ -162,26 +163,33 @@ function buildWalls(face,mt){
   function win(hz,c,r0,r1,y0,y1,vent){const f=0.05,dp=0.08,fb=(a0,a1,b0,b1,m,t)=>box(hz?(a0+a1)/2:c,(b0+b1)/2,hz?c:(a0+a1)/2,hz?a1-a0:t,b1-b0,hz?t:a1-a0,m);
     fb(r0,r1,y0,y0+f,mt.fr,dp);fb(r0,r1,y1-f,y1,mt.fr,dp);fb(r0,r0+f,y0+f,y1-f,mt.fr,dp);fb(r1-f,r1,y0+f,y1-f,mt.fr,dp);
     if(!vent){const m=(r0+r1)/2;fb(m-f/2,m+f/2,y0+f,y1-f,mt.fr,dp);}fb(r0+f,r1-f,y0+f,y1-f,vent?mt.vt:mt.gl,0.01);}
-  const ext={F:[1,Z/2-T,Z/2],B:[1,-Z/2,-Z/2+T],R:[0,X/2-T,X/2],L:[0,-X/2,-X/2+T]};
-  const side=d=>d[1]==='h'?(Math.abs(d[2])<e?'F':Math.abs(d[2]-id)<0.01?'B':null):(Math.abs(d[2])<e?'L':Math.abs(d[2]-iw)<0.01?'R':null);
+  // 外壁 F/B/R/L と、バルコニーのくぼみの奥の壁 K。[横向きか, 厚さの範囲, 長さの範囲]
+  const ext={F:[1,Z/2-T,Z/2,-X/2+T+0.001,X/2-T-0.001],B:[1,-Z/2,-Z/2+T,-X/2+T+0.001,X/2-T-0.001],R:[0,X/2-T,X/2,-Z/2,Z/2],L:[0,-X/2,-X/2+T,-Z/2,Z/2],K:[1,wz(BAL.d+tf),wz(BAL.d),wx(BAL.x0-tf),wx(BAL.x1+tf)]};
+  const side=d=>d[1]==='h'?(Math.abs(d[2])<e?'F':Math.abs(d[2]-id)<0.01?'B':null):(Math.abs(d[2])<e?'L':Math.abs(d[2]-iw)<0.01?'R':Math.abs(d[2]-cc)<0.01?'C':null);
   const along=(hz,a,b)=>hz?[wx(a),wx(b)]:[wz(b),wz(a)];
-  const ops={F:[],B:[],R:[],L:[]};
+  const ops={F:[[wx(BAL.x0-tf),wx(BAL.x1+tf),0,Y,'void']],B:[],R:[],L:[],K:[]};
   WINS.forEach(w=>ops[w[1]].push([...along(ext[w[1]][0],w[2],w[3]),w[4]*FT,w[5]*FT,w[0][0]==='V'?'vent':'win']));
-  DOORS.forEach(d=>{const s=side(d);if(s)ops[s].push([...along(ext[s][0],d[3],d[4]),0,dh,'door']);});
-  for(const s in ext){const [hz,t0,t1]=ext[s],full=hz?[-X/2+T+0.001,X/2-T-0.001]:[-Z/2,Z/2];let cur=full[0];
+  DOORS.forEach(d=>{const s=side(d);if(s&&ops[s])ops[s].push([...along(ext[s][0],d[3],d[4]),0,dh,'door']);});
+  for(const s in ext){const [hz,t0,t1,f0,f1]=ext[s];let cur=f0;
     const add=(a0,a1,y0,y1)=>hz?piece(a0,a1,y0,y1,t0,t1,face,mt.rev):piece(t0,t1,y0,y1,a0,a1,face,mt.rev);
-    ops[s].sort((p,q)=>p[0]-q[0]).forEach(o=>{add(cur,o[0],0,Y);add(o[0],o[1],0,o[2]);add(o[0],o[1],o[3],Y);cur=o[1];if(o[4]!=='door')win(hz,(t0+t1)/2,o[0],o[1],o[2],o[3],o[4]==='vent');});
-    add(cur,full[1],0,Y);}
+    ops[s].sort((p,q)=>p[0]-q[0]).forEach(o=>{add(cur,o[0],0,Y);add(o[0],o[1],0,o[2]);add(o[0],o[1],o[3],Y);cur=o[1];if(o[4]==='win'||o[4]==='vent')win(hz,(t0+t1)/2,o[0],o[1],o[2],o[3],o[4]==='vent');});
+    add(cur,f1,0,Y);}
+  [[BAL.x0-tf,BAL.x0],[BAL.x1,BAL.x1+tf]].forEach(r=>piece(wx(r[0]),wx(r[1]),0,Y,wz(BAL.d),Z/2,face,mt.rev));
+  // 共用コア（CM-03 の階段室・EV・ホール）の壁と、玄関扉 D1
+  let cur=CORE.v0;const addC=(a,b,y0,y1)=>piece(wx(CORE.x0),wx(CORE.x0)+ct,y0,y1,wz(b),wz(a),null,mt.core);
+  DOORS.filter(d=>side(d)==='C').sort((p,q)=>p[3]-q[3]).forEach(d=>{addC(cur,d[3],0,Y);addC(d[3],d[4],dh,Y);cur=d[4];});addC(cur,id,0,Y);
+  piece(wx(CORE.x0),wx(iw),0,Y,wz(CORE.v0)-ct,wz(CORE.v0),null,mt.core);
+  box(wx(CORE.x0)+ct+(wx(iw)-wx(CORE.x0)-ct)/2,0.005,(wz(CORE.v0)-ct+wz(id))/2,wx(iw)-wx(CORE.x0)-ct,0.01,wz(CORE.v0)-ct-wz(id),mt.coreF);
   PART.forEach(p=>{const hz=p[1]===p[3],c=hz?p[1]:p[0],a=hz?[p[0],p[2]]:[p[1],p[3]],lo=Math.max(0,Math.min(...a)-ht/FT),hi=Math.min(hz?iw:id,Math.max(...a)+ht/FT);
     const add=(a0,a1,y0,y1)=>hz?piece(wx(a0),wx(a1),y0,y1,wz(c)-ht,wz(c)+ht,null,mt.part):piece(wx(c)-ht,wx(c)+ht,y0,y1,wz(a1),wz(a0),null,mt.part);
     let cur=lo;DOORS.filter(d=>(d[1]==='h')===hz&&Math.abs(d[2]-c)<e&&!side(d)).sort((q,r)=>q[3]-r[3]).forEach(d=>{add(cur,d[3],0,Y);add(d[3],d[4],dh,Y);cur=d[4];});add(cur,hi,0,Y);});
   DOORS.forEach(d=>{const s=side(d),hz=d[1]==='h',w=(d[4]-d[3])*FT-0.04,sw=d[5];
-    const vc=s==='F'||s==='L'?-T/2:s==='B'?id*FT+T/2:s==='R'?iw*FT+T/2:d[2]*FT,hp=vc+sw*(s?T/2:ht),a=d[3]*FT+0.04;
+    const vc=s==='F'||s==='L'?-T/2:s==='B'?id*FT+T/2:s==='R'?iw*FT+T/2:d[2]*FT,hp=vc+sw*(s==='C'?ct/2:s?T/2:ht),a=d[3]*FT+0.04;
     if(hz)box(-X/2+T+a,dh/2,Z/2-T-(hp+sw*w/2),0.04,dh-0.02,w,s?mt.leafX:mt.leaf);
     else box(-X/2+T+hp+sw*w/2,dh/2,Z/2-T-a,w,dh-0.02,0.04,s?mt.leafX:mt.leaf);});
 }
 function openMats(rev,part){const L=c=>new THREE.MeshLambertMaterial({color:c});
-  return {rev:L(rev),part:L(part),leaf:L(0x8a6446),leafX:L(0x5e3f2a),fr:L(0xd6d7d3),
+  return {rev:L(rev),part:L(part),leaf:L(0x8a6446),leafX:L(0x5e3f2a),fr:L(0xd6d7d3),core:L(0xbab8b2),coreF:L(0x9a9a94),
     gl:new THREE.MeshLambertMaterial({color:0x9fc0d0,transparent:true,opacity:0.35,depthWrite:false}),
     vt:new THREE.MeshLambertMaterial({color:0xe4ecee,transparent:true,opacity:0.7,depthWrite:false})};}
 const e4=1e-4,mL=mat(fLong),mS=mat(fShort),mER=mat(fEndR),mEL=mat(fEndL);

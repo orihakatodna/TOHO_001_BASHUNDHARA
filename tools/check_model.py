@@ -14,6 +14,11 @@
  10. 壁付けの機器（間仕切りに付くものを含む）が、同じ壁の開口の上端より上にあるか
  11. 外壁の窓の前に、腰高より高い床置きの家具がないか（高さ h を持つ種類のみ）
  12. 両モデルの間仕切り・扉・窓のデータが同じか
+ 13. 修正指示用の DXF（dxf/ の最新）が、現行のモデルから書き出したものと同じか
+ 14. GLB の書き出し機能が three.js と同じ版で読み込まれ、保存ボタンがあるか
+ 15. 住戸 CM-01 と建物 CM-03 の一致（窓・掃出し窓・バルコニー・共用コア・玄関扉）と、住戸の家具と柱の重なり
+ 建物 CM-03: 規模、後退、階段・EV・高架水槽の規定、コアの配置、柱がバルコニーに立たないか（値は LAW の出典を参照）
+ 住戸: 家具が共用コア・バルコニーの壁と重ならないか、バルコニーには植物だけか
 
 照合していない内容（未照合）:
   - 画面での見た目、ドラッグ操作、スマートフォン幅・ダークモードの表示
@@ -83,6 +88,14 @@ def parse_open(js):
     if not m:
         return None
     out["PT"], out["DH"] = float(m.group(1)), float(m.group(2))
+    m = re.search(r"const CORE=\{x0:([\d.]+),v0:([\d.]+),t:([\d.]+)\},BAL=\{x0:([\d.]+),x1:([\d.]+),d:([\d.]+)\};", js)
+    if not m:
+        return None
+    g = list(map(float, m.groups()))
+    out["CORE"] = {"x0": g[0], "v0": g[1], "t": g[2]}
+    out["BAL"] = {"x0": g[3], "x1": g[4], "d": g[5]}
+    dims = parse_dims(js)
+    out["TF"] = dims[3] / FT if dims else 0.82
     return out
 
 
@@ -108,7 +121,12 @@ def parts(op, iw, idp):
 
 def wall_faces(op, iw, idp):
     """壁付けの機器が付く面。(軸, 面の位置, 始点, 終点, 室内側の向き, 壁の線)。モデルの wallFaces() と同じ順。"""
-    f = [("x", 0, 0, idp, 1, "L"), ("x", iw, 0, idp, -1, "R"), ("v", 0, 0, iw, 1, "F"), ("v", idp, 0, iw, -1, "B")]
+    if not op:
+        return [("x", 0, 0, idp, 1, "L"), ("x", iw, 0, idp, -1, "R"), ("v", 0, 0, iw, 1, "F"), ("v", idp, 0, iw, -1, "B")]
+    tf, co, ba = op["TF"], op["CORE"], op["BAL"]
+    f = [("x", 0, 0, idp, 1, "L"), ("x", iw, 0, co["v0"], -1, "R"), ("v", 0, 0, ba["x0"] - tf, 1, "F"),
+         ("v", 0, ba["x1"] + tf, iw, 1, "F"), ("v", ba["d"] + tf, ba["x0"] - tf, ba["x1"] + tf, 1, "K"),
+         ("v", idp, 0, co["x0"], -1, "B"), ("x", co["x0"], co["v0"], idp, -1, "C"), ("v", co["v0"], co["x0"], iw, -1, "CH")]
     if op:
         h = op["PT"] / FT / 2
         for hz, c, lo, hi in parts(op, iw, idp):
@@ -153,17 +171,35 @@ def openings(op, iw, idp):
             s = "L"
         elif not hz and abs(c - iw) < 0.01:
             s = "R"
+        elif not hz and "CORE" in op and abs(c - (op["CORE"]["x0"] + op["CORE"]["t"] / 2)) < 0.01:
+            s = "C"
         out.append((i, s or (hz, c), a, b, 0.0, op["DH"], "door", sw))
     return out
 
 
-def line_geom(line, iw, idp):
-    """壁の線を (横向きか, 位置, 長さ) に。"""
+def line_geom(line, iw, idp, op=None):
+    """壁の線を (横向きか, 位置, 範囲) に。範囲は外壁・コア・バルコニーの壁なら (始点, 終点)、間仕切りなら None。
+    F/B/L/R の位置は内面、K（バルコニーの奥の壁）・C／CH（コアの壁）の位置は壁の中心。"""
     if line in ("F", "B"):
-        return True, 0 if line == "F" else idp, iw
+        return True, 0 if line == "F" else idp, (0, iw)
     if line in ("L", "R"):
-        return False, 0 if line == "L" else iw, idp
+        return False, 0 if line == "L" else iw, (0, idp)
+    if line == "K":
+        return True, op["BAL"]["d"] + op["TF"] / 2, (op["BAL"]["x0"], op["BAL"]["x1"])
+    if line == "C":
+        return False, op["CORE"]["x0"] + op["CORE"]["t"] / 2, (op["CORE"]["v0"], idp)
+    if line == "CH":
+        return True, op["CORE"]["v0"] + op["CORE"]["t"] / 2, (op["CORE"]["x0"], iw)
     return line[0], line[1], None
+
+
+def hinge(line, c, sw, op, rng):
+    """扉の吊り元の面の位置（ft）。"""
+    if rng is None:
+        return c + sw * op["PT"] / FT / 2
+    if line == "C":
+        return c + sw * op["CORE"]["t"] / 2
+    return c
 
 
 def check_open(op, iw, idp, h_ft, boxes, cat, ex, wall_y, found, notes):
@@ -172,12 +208,17 @@ def check_open(op, iw, idp, h_ft, boxes, cat, ex, wall_y, found, notes):
     ops = openings(op, iw, idp)
     # 6. 開口の範囲と、扉が間仕切りの上にあるか
     for i, line, a, b, lo, hi, kind, sw in ops:
-        hz, c, length = line_geom(line, iw, idp)
+        hz, c, length = line_geom(line, iw, idp, op)
         if not (a < b and lo < hi <= h_ft + TOL):
             found.append(f"開口の寸法が不正: {i}")
         if length is not None:
-            if a < -TOL or b > length + TOL:
-                found.append(f"開口が外壁の範囲外: {i}")
+            if a < length[0] - TOL or b > length[1] + TOL:
+                found.append(f"開口が壁の範囲外: {i}")
+            co, ba, tf = op["CORE"], op["BAL"], op["TF"]
+            if line == "F" and a < ba["x1"] + tf - TOL and ba["x0"] - tf + TOL < b:
+                found.append(f"正面の開口がバルコニーのくぼみにかかる: {i}")
+            if (line == "B" and b > co["x0"] + TOL) or (line == "R" and b > co["v0"] + TOL):
+                found.append(f"外壁の開口が共用コアにかかる: {i}")
         elif not any(p[0] == hz and abs(p[1] - c) < 1e-4 and p[2] - TOL <= a and b <= p[3] + TOL for p in pts):
             found.append(f"扉が間仕切りの上にない: {i}")
         # 7. 開口が、直交する間仕切りの取り合い（厚さの範囲）にかからないか
@@ -190,7 +231,7 @@ def check_open(op, iw, idp, h_ft, boxes, cat, ex, wall_y, found, notes):
     for x in range(len(ops)):
         for y in range(x + 1, len(ops)):
             p, q = ops[x], ops[y]
-            if line_geom(p[1], iw, idp)[:2] == line_geom(q[1], iw, idp)[:2] and p[2] < q[3] - TOL and q[2] < p[3] - TOL:
+            if line_geom(p[1], iw, idp, op)[:2] == line_geom(q[1], iw, idp, op)[:2] and p[2] < q[3] - TOL and q[2] < p[3] - TOL:
                 found.append(f"開口どうしが重なる: {p[0]} と {q[0]}")
     # 9. 床置きの家具と、間仕切り・扉の開き
     rects = []
@@ -199,10 +240,16 @@ def check_open(op, iw, idp, h_ft, boxes, cat, ex, wall_y, found, notes):
     for i, line, a, b, lo, hi, kind, sw in ops:
         if kind != "door":
             continue
-        hz, c, length = line_geom(line, iw, idp)
-        hp = c + sw * ht if length is None else c
+        hz, c, length = line_geom(line, iw, idp, op)
+        hp = hinge(line, c, sw, op, length)
         s0, s1 = sorted((hp, hp + sw * (b - a)))
         rects.append((f"扉 {i} の開き", (a, b, s0, s1) if hz else (s0, s1, a, b)))
+    co, ba, tf = op["CORE"], op["BAL"], op["TF"]
+    rects += [("共用コア", (co["x0"], iw, co["v0"], idp)), ("バルコニーの左の壁", (ba["x0"] - tf, ba["x0"], -tf, ba["d"] + tf)),
+              ("バルコニーの右の壁", (ba["x1"], ba["x1"] + tf, -tf, ba["d"] + tf)), ("バルコニーの奥の壁", (ba["x0"] - tf, ba["x1"] + tf, ba["d"], ba["d"] + tf))]
+    for k, x, v, mount, B, *_ in boxes:
+        if mount == "floor" and ex.get(k, (None, None))[1] != "plant" and overlap((ba["x0"], ba["x1"], -tf, ba["d"]), B):
+            found.append(f"バルコニーに植物以外の家具: {k} ({x}, {v})")
     for k, x, v, mount, B, *_ in boxes:
         if mount != "floor":
             continue
@@ -221,7 +268,7 @@ def check_open(op, iw, idp, h_ft, boxes, cat, ex, wall_y, found, notes):
         ax, fc, flo, fhi, n, line = face
         along = (B[2], B[3]) if ax == "x" else (B[0], B[1])
         for i, oline, a, b, lo, hi, kind, sw in ops:
-            if line_geom(oline, iw, idp)[:2] != line_geom(line, iw, idp)[:2] or not (a < along[1] - TOL and along[0] < b - TOL):
+            if line_geom(oline, iw, idp, op)[:2] != line_geom(line, iw, idp, op)[:2] or not (a < along[1] - TOL and along[0] < b - TOL):
                 continue
             g = y0 - hi * FT
             gaps.append(g)
@@ -255,6 +302,72 @@ LAW = {
     "ev_height": 18.0,  # m  DBR 規則59(1): 最上階の屋根がこれを超えると EV が要る
     "tank_max": 5.0,    # m  DBR 規則49(ঘ): 高架水槽は屋根の仕上げ面から 5 m 以内
 }
+
+
+def col_points(b):
+    """柱の位置（建物の座標 ft）。コアの位置は除き、移した柱は移した先。"""
+    cl, out = b["COL"], []
+    for x0 in cl["xs"]:
+        for v0 in cl["vs"]:
+            if [x0, v0] in cl["skip"]:
+                continue
+            mv = next((m for m in cl.get("move", []) if m[0] == x0 and m[1] == v0), None)
+            out.append((mv[2], mv[3]) if mv else (x0, v0))
+    return out
+
+
+def read_bld(js):
+    m = re.search(r"const BLD=(\{.*?\}\});", js, re.S)
+    return json.loads(m.group(1)) if m else None
+
+
+def cross_check():
+    """15. 住戸モデル（CM-01）と建物モデル（CM-03）の一致: 窓・バルコニー・コア・玄関扉、住戸の家具と柱。"""
+    bp, up = MODELS / "building_g6.html", MODELS / "unit_brick.html"
+    if not (bp.exists() and up.exists()):
+        return [], ["未照合（ファイルが無い）"]
+    last = lambda p: re.findall(r"<script>(.*?)</script>", p.read_text(encoding="utf-8"), re.S)[-1]
+    b, ujs = read_bld(last(bp)), last(up)
+    op, dims = parse_open(ujs), parse_dims(ujs)
+    if not (b and op and dims):
+        return ["データが読めない"], []
+    found, n = [], 0
+    off, iw, idp = op["TF"], dims[4], dims[5]
+    eq = lambda p, q: len(p) == len(q) and all(abs(x - y) <= 0.02 for x, y in zip(p, q))
+    if abs(b["T"] - off) > 0.01:
+        found.append(f"外壁の厚さが違う: CM-03 {b['T']} ft、住戸 {off:.3f} ft")
+    for sd in "FLRB":
+        uw = sorted([a + off, c + off, lo, hi] for i, s2, a, c, lo, hi in op["WINS"] if s2 == sd)
+        bw = sorted(b["WIN"][sd])
+        n += len(bw)
+        if len(uw) != len(bw) or not all(eq(p, q) for p, q in zip(uw, bw)):
+            found.append(f"{sd} 面の窓が一致しない: 住戸 {[[round(v, 2) for v in w] for w in uw]} ／ CM-03 {bw}")
+    k = [[a + off, c + off, lo, hi] for i, s2, a, c, lo, hi in op["WINS"] if s2 == "K"]
+    if len(k) != 1 or not eq(k[0], b["WIN"]["K"]):
+        found.append("バルコニーの掃出し窓が一致しない")
+    ba, bb = op["BAL"], b["BAL"]
+    if not eq([ba["x0"] + off, ba["x1"] + off, ba["d"] + off], [bb["x0"], bb["x1"], bb["d"]]):
+        found.append("バルコニーのくぼみが一致しない")
+    co = op["CORE"]
+    if not eq([co["x0"] + off, co["x0"] + off, co["v0"] + off, co["v0"] + off, co["t"]],
+              [b["EV"]["x0"], b["LOBBY"]["x0"], b["STAIR"]["v0"], b["LOBBY"]["v0"], b["STAIR"]["wall"]]):
+        found.append("共用コアの位置・壁厚が一致しない")
+    d1 = [[a + off, c + off] for i, s, a, c, lo, hi, kind, sw in openings(op, iw, idp) if s == "C"]
+    if len(d1) != 1 or not eq(d1[0], b["LOBBY"]["door"]):
+        found.append(f"玄関扉の位置が一致しない: 住戸 {d1} ／ CM-03 {b['LOBBY']['door']}")
+    cat, init, cl = parse_cat(ujs), parse_init(ujs) or [], b["COL"]
+    cols = [(x - off, v - off) for x, v in col_points(b)]
+    for kf, x, v, r in init:
+        if kf not in cat or cat[kf][2] != "floor":
+            continue
+        w, d, _ = cat[kf]
+        bw_, bd_ = (d, w) if r % 180 else (w, d)
+        B = (x - bw_ / 2, x + bw_ / 2, v - bd_ / 2, v + bd_ / 2)
+        for cx, cv in cols:
+            if overlap((cx - cl["b"] / 2, cx + cl["b"] / 2, cv - cl["d"] / 2, cv + cl["d"] / 2), B):
+                found.append(f"住戸の家具が柱と重なる: {kf} ({x}, {v}) と柱 ({cx:.2f}, {cv:.2f})")
+    inside = [c for c in cols if 0 < c[0] < iw and 0 < c[1] < idp]
+    return found, [f"窓 {n} か所・掃出し窓・バルコニー・コア・玄関扉・柱 {len(cols)} 本を照合（住戸の中に立つ柱 {len(inside)} 本）"]
 
 
 def check_building(js, found, notes):
@@ -329,6 +442,11 @@ def check_building(js, found, notes):
     tank_top = (b["ROOF"]["room"] + b["ROOF"]["tank"][4]) * FT
     if tank_top > LAW["tank_max"] + 1e-6:
         found.append(f"高架水槽の上端が屋上から {tank_top:.2f} m（上限 {LAW['tank_max']} m）")
+    # F. 柱がバルコニー（くぼみ）の中に立たないか
+    ba, cl = b["BAL"], b["COL"]
+    for x, v in col_points(b):
+        if overlap((x - cl["b"] / 2, x + cl["b"] / 2, v - cl["d"] / 2, v + cl["d"] / 2), (ba["x0"], ba["x1"], 0, ba["d"])):
+            found.append(f"柱がバルコニーの中に立つ: ({x}, {v})")
     notes.append(f"保留 1: 階段1本（消防規則 2014 第13別表(৯)は7層以上で階段2本。施主の判断で保留）")
     notes.append("未照合: 容積率・建蔽率の上限、消防水槽、上階の柱・梁、住戸の間取り")
 
@@ -451,6 +569,13 @@ def main():
     for n in diff:
         print(f"   ✗ {n} が {names[0]} と異なる")
     total += len(diff)
+    cf, cn = cross_check()
+    print(f"■ 住戸 CM-01 と建物 CM-03 の一致  検出 {len(cf)}")
+    for t in cn:
+        print("   ・" + t)
+    for t in cf:
+        print("   ✗ " + t)
+    total += len(cf)
     # 13. 修正指示用の DXF（dxf/ の最新）が、現行のモデルから書き出したものと同じか
     dxfs = sorted((ROOT / "dxf").glob("unit_plan_*.dxf"))
     if dxfs:

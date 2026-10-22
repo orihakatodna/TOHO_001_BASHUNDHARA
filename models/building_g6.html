@@ -62,7 +62,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
         <b data-i="kDrawing">Drawing</b><span>CM-03</span>
         <b data-i="kScale">Scale</b><span>N.T.S.</span>
         <b data-i="kDate">Date</b><span>2026-10-22</span>
-        <b data-i="kRev">Rev.</b><span>A</span>
+        <b data-i="kRev">Rev.</b><span>B</span>
       </div>
       <div class="lang" role="group" aria-label="Language">
         <button class="btn" id="lEn" aria-pressed="true">EN</button>
@@ -106,7 +106,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
         <div class="row"><dt data-i="sEv">Lift</dt><dd data-i="sEvv">One lift, required because the top floor roof is above 18 m (DBR rule 59(1)). Shaft about 2.06 × 1.87 m clear, pit 1.5 m, machine room on the roof (provisional; no lift model chosen).</dd></div>
         <div class="row"><dt data-i="sRf">Roof</dt><dd data-i="sRfv">Parapet 3′-6″. Stair head room and lift machine room 10′. Overhead water tank on top, 15′ (4.57 m) above the roof (limit 5 m, DBR rule 49(gha)).</dd></div>
       </dl>
-      <p class="note" data-i="note">Concept model for discussion, not for construction. Pending: a 7-storey building falls under Fire Rules 2014 Schedule 13, which asks for two stairs (item 9) — one stair is the owner's decision and stays pending, as in the 4-katha G+8 study. Not yet checked: FAR, fire water tank, upper-floor columns (the front middle column would stand in the balcony). The unit model CM-01/02 fills the whole 36′ × 52′ and must be revised to leave room for the core.</p>
+      <p class="note" data-i="note">Concept model for discussion, not for construction. Pending: a 7-storey building falls under Fire Rules 2014 Schedule 13, which asks for two stairs (item 9) — one stair is the owner's decision and stays pending, as in the 4-katha G+8 study. Not yet checked: FAR, fire water tank, upper-floor columns and beams. The front middle column is moved into the right wall of the balcony; two columns stand inside the dwelling (see CM-01/02 Rev.D, whose plan and windows match this model).</p>
     </aside>
   </div>
 </div>
@@ -115,8 +115,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
 <script>
 const TXT={
-en:{title:"Apartment building G+6 — 36′ × 52′ on a 45′ × 65′ plot",sub:"Exterior after the reference image, with structure columns at the ground floor, one stair and one lift at the rear right. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vStreet:"From the street",vFront:"Front",vTop:"Top",zoom:"Distance",dims:"Dimensions",lvTag:"Floors shown",csTag:"For Clip Studio (GLB)",glbAll:"Save the building as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",hint:"Drag to rotate. Scroll or use the slider to zoom. Lower the floors slider to cut the building away and see the stair and lift. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sSite:"Plot",sRoad:"road 40′ (12.19 m) in front",sBld:"Building",sBldM:"7 storeys, coverage 64 %",sSb:"Setbacks",sSbv:"Front 8′-0″ (2.44 m), sides 4′-6″ (1.37 m), rear 5′-0″ (1.52 m). Required: front 1.5 m, sides 1.00 m, rear 1.25 m (DBR rule 41(1), Table 1).",sLv:"Levels",sLvv:"Ground floor +1′-6″ above the road (provisional). GF 12′ (parking, entrance), 1F–6F 10′ (dwellings). Roof slab 72′ (21.95 m) above the ground floor.",sSt:"Structure",sStv:"RC frame. Columns 12″ × 18″, shown at the ground floor only; slab 125 mm; core walls 200 mm. All provisional.",sCo:"Stair",sCov:"One stair, flights 1.15 m wide. GF 22 risers × 166 mm, 1F–6F 18 × 169 mm, treads 250 mm (DBR rule 57: risers ≤ 175, treads ≥ 225).",sEv:"Lift",sEvv:"One lift, required because the top floor roof is above 18 m (DBR rule 59(1)). Shaft about 2.06 × 1.87 m clear, pit 1.5 m, machine room on the roof (provisional; no lift model chosen).",sRf:"Roof",sRfv:"Parapet 3′-6″. Stair head room and lift machine room 10′. Overhead water tank on top, 15′ (4.57 m) above the roof (limit 5 m, DBR rule 49(gha)).",note:"Concept model for discussion, not for construction. Pending: a 7-storey building falls under Fire Rules 2014 Schedule 13, which asks for two stairs (item 9) — one stair is the owner's decision and stays pending, as in the 4-katha G+8 study. Not yet checked: FAR, fire water tank, upper-floor columns (the front middle column would stand in the balcony). The unit model CM-01/02 fills the whole 36′ × 52′ and must be revised to leave room for the core.",lv:["GF","1F","2F","3F","4F","5F","6F","Roof","Roof + tank"]},
-ja:{title:"集合住宅 G+6 — 建物 36′ × 52′、敷地 45′ × 65′",sub:"参考画像に倣った外観。1階の柱、右奥に階段1本・エレベーター1台。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vStreet:"道路から",vFront:"正面",vTop:"上から",zoom:"距離",dims:"寸法表示",lvTag:"表示する階",csTag:"Clip Studio 用（GLB）",glbAll:"建物を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。「表示する階」を下げると上の階が外れ、階段とエレベーターが見えます。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sSite:"敷地",sRoad:"前面道路 40′（12.19 m）",sBld:"建物",sBldM:"7層、建蔽率 64 %",sSb:"後退",sSbv:"前面 8′-0″（2.44 m）、側面 4′-6″（1.37 m）、背面 5′-0″（1.52 m）。必要値は前面 1.5 m、側面 1.00 m、背面 1.25 m（DBR 規則41(1)・表1）。",sLv:"レベル",sLvv:"1階床は道路から +1′-6″（仮定）。階高は GF 12′（駐車場・玄関）、1F〜6F 10′（住戸）。屋上スラブは 1階床から 72′（21.95 m）。",sSt:"構造",sStv:"RC ラーメン。柱 12″ × 18″（1階のみ表示）、スラブ 125 mm、コアの壁 200 mm。いずれも仮定。",sCo:"階段",sCov:"1本、有効幅 1.15 m。GF は蹴上 166 mm × 22 段、1F〜6F は 169 mm × 18 段、踏面 250 mm（DBR 第57条: 蹴上 175 以下・踏面 225 以上）。",sEv:"エレベーター",sEvv:"1台。最上階の屋根が 18 m を超えるため必要（DBR 規則59(1)）。昇降路の内法 約 2.06 × 1.87 m、ピット 1.5 m、機械室は屋上（仮定。機種は未選定）。",sRf:"屋上",sRfv:"パラペット 3′-6″。階段室と EV 機械室は高さ 10′。その上に高架水槽、上端は屋上から 15′（4.57 m）（上限 5 m、DBR 規則49(ঘ)）。",note:"協議用の概念モデルで、施工用ではありません。保留: 7層は消防規則 2014 第13別表の対象で、階段2本（(৯)）が求められます。階段1本は施主の判断で、4カタ G+8 案と同じく保留です。未照合: 容積率、消防水槽、上階の柱（前面中央の柱はバルコニーの中に立つ）。住戸モデル CM-01/02 は 36′ × 52′ 全体を使っており、コアの分を空けるよう直す必要があります。",lv:["GF","1F","2F","3F","4F","5F","6F","屋上","屋上＋水槽"]}};
+en:{title:"Apartment building G+6 — 36′ × 52′ on a 45′ × 65′ plot",sub:"Exterior after the reference image, with structure columns at the ground floor, one stair and one lift at the rear right. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vStreet:"From the street",vFront:"Front",vTop:"Top",zoom:"Distance",dims:"Dimensions",lvTag:"Floors shown",csTag:"For Clip Studio (GLB)",glbAll:"Save the building as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",hint:"Drag to rotate. Scroll or use the slider to zoom. Lower the floors slider to cut the building away and see the stair and lift. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sSite:"Plot",sRoad:"road 40′ (12.19 m) in front",sBld:"Building",sBldM:"7 storeys, coverage 64 %",sSb:"Setbacks",sSbv:"Front 8′-0″ (2.44 m), sides 4′-6″ (1.37 m), rear 5′-0″ (1.52 m). Required: front 1.5 m, sides 1.00 m, rear 1.25 m (DBR rule 41(1), Table 1).",sLv:"Levels",sLvv:"Ground floor +1′-6″ above the road (provisional). GF 12′ (parking, entrance), 1F–6F 10′ (dwellings). Roof slab 72′ (21.95 m) above the ground floor.",sSt:"Structure",sStv:"RC frame. Columns 12″ × 18″, shown at the ground floor only; slab 125 mm; core walls 200 mm. All provisional.",sCo:"Stair",sCov:"One stair, flights 1.15 m wide. GF 22 risers × 166 mm, 1F–6F 18 × 169 mm, treads 250 mm (DBR rule 57: risers ≤ 175, treads ≥ 225).",sEv:"Lift",sEvv:"One lift, required because the top floor roof is above 18 m (DBR rule 59(1)). Shaft about 2.06 × 1.87 m clear, pit 1.5 m, machine room on the roof (provisional; no lift model chosen).",sRf:"Roof",sRfv:"Parapet 3′-6″. Stair head room and lift machine room 10′. Overhead water tank on top, 15′ (4.57 m) above the roof (limit 5 m, DBR rule 49(gha)).",note:"Concept model for discussion, not for construction. Pending: a 7-storey building falls under Fire Rules 2014 Schedule 13, which asks for two stairs (item 9) — one stair is the owner's decision and stays pending, as in the 4-katha G+8 study. Not yet checked: FAR, fire water tank, upper-floor columns and beams. The front middle column is moved into the right wall of the balcony; two columns stand inside the dwelling (see CM-01/02 Rev.D, whose plan and windows match this model).",lv:["GF","1F","2F","3F","4F","5F","6F","Roof","Roof + tank"]},
+ja:{title:"集合住宅 G+6 — 建物 36′ × 52′、敷地 45′ × 65′",sub:"参考画像に倣った外観。1階の柱、右奥に階段1本・エレベーター1台。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vStreet:"道路から",vFront:"正面",vTop:"上から",zoom:"距離",dims:"寸法表示",lvTag:"表示する階",csTag:"Clip Studio 用（GLB）",glbAll:"建物を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。「表示する階」を下げると上の階が外れ、階段とエレベーターが見えます。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sSite:"敷地",sRoad:"前面道路 40′（12.19 m）",sBld:"建物",sBldM:"7層、建蔽率 64 %",sSb:"後退",sSbv:"前面 8′-0″（2.44 m）、側面 4′-6″（1.37 m）、背面 5′-0″（1.52 m）。必要値は前面 1.5 m、側面 1.00 m、背面 1.25 m（DBR 規則41(1)・表1）。",sLv:"レベル",sLvv:"1階床は道路から +1′-6″（仮定）。階高は GF 12′（駐車場・玄関）、1F〜6F 10′（住戸）。屋上スラブは 1階床から 72′（21.95 m）。",sSt:"構造",sStv:"RC ラーメン。柱 12″ × 18″（1階のみ表示）、スラブ 125 mm、コアの壁 200 mm。いずれも仮定。",sCo:"階段",sCov:"1本、有効幅 1.15 m。GF は蹴上 166 mm × 22 段、1F〜6F は 169 mm × 18 段、踏面 250 mm（DBR 第57条: 蹴上 175 以下・踏面 225 以上）。",sEv:"エレベーター",sEvv:"1台。最上階の屋根が 18 m を超えるため必要（DBR 規則59(1)）。昇降路の内法 約 2.06 × 1.87 m、ピット 1.5 m、機械室は屋上（仮定。機種は未選定）。",sRf:"屋上",sRfv:"パラペット 3′-6″。階段室と EV 機械室は高さ 10′。その上に高架水槽、上端は屋上から 15′（4.57 m）（上限 5 m、DBR 規則49(ঘ)）。",note:"協議用の概念モデルで、施工用ではありません。保留: 7層は消防規則 2014 第13別表の対象で、階段2本（(৯)）が求められます。階段1本は施主の判断で、4カタ G+8 案と同じく保留です。未照合: 容積率、消防水槽、上階の柱・梁。前面中央の柱はバルコニー右の壁の中へ移しました。住戸の中には柱が2本立ちます（住戸モデル CM-01/02 Rev.D。間取りと窓はこのモデルと一致させています）。",lv:["GF","1F","2F","3F","4F","5F","6F","屋上","屋上＋水槽"]}};
 let lang='en';
 function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(typeof t==='string')e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');lvLabel();try{localStorage.setItem('bg6-lang',l)}catch(e){}}
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
@@ -124,7 +124,9 @@ document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById
 // 寸法は ft。x は建物の左の外面から右へ、v は正面（道路側）の外面から奥へ、z は道路面から上へ。
 const BLD={"W":36,"D":52,"T":0.82,"GF":12,"TYP":10,"N":6,"PL":1.5,"SITE_Z":0.5,"PAR":3.5,"SLAB":0.41,
 "SITE":{"W":45,"D":65,"F":8,"S":4.5,"R":5,"ROAD":40},
-"COL":{"xs":[0.5,18,35.5],"vs":[0.75,17.6,34.4,51.25],"b":1,"d":1.5,"skip":[[35.5,34.4],[35.5,51.25]]},
+"COL":{"xs":[0.5,18,35.5],"vs":[0.75,17.6,34.4,51.25],"b":1,"d":1.5,"skip":[[35.5,34.4],[35.5,51.25]],"move":[[18,0.75,23.0,0.75]]},
+"WIN":{"F":[[2.25,4.25,3.5,7],[26,32,3,7]],"K":[7.5,21.5,0,7.5],"L":[[8.82,12.82,3,7],[22.82,26.82,3,7],[34.32,36.32,6,7],[42.82,46.82,3,7]],"R":[[4.82,9.82,3,7],[15.82,18.32,6,7],[23.82,28.82,3.5,7]],"B":[[3.82,8.82,3,7],[14.32,16.82,6,7]],"BS":[28.5,33.5,6.5,9.3]},
+"FIN":[3,17,30,39.5,49],
 "STAIR":{"x0":26.2,"x1":36,"v0":34.7,"v1":52,"wall":0.656,"w":1.15,"gap":0.15,"tread":0.25,"rmax":0.175,"land":1.15,"door":[35.5,39.0]},
 "EV":{"x0":18.8,"x1":26.2,"v0":44.4,"v1":52,"pit":1.5,"door":[21.0,24.0]},
 "LOBBY":{"x0":18.8,"x1":26.2,"v0":34.7,"v1":44.4,"door":[38.0,41.5]},
@@ -202,7 +204,7 @@ function core(i,z0,h,g){const E=B.EV,Lb=B.LOBBY,cw=S.wall,dh=7;
 // --- 1階（ピロティ・玄関）
 (function(){const g=LV[0],z=FL(0),h=H(0)-B.SLAB;
   box(0,W,0,D,B.SITE_Z,z,MT.slab,g);
-  B.COL.xs.forEach(x=>B.COL.vs.forEach(v=>{if(B.COL.skip.some(s=>s[0]===x&&s[1]===v))return;box(x-B.COL.b/2,x+B.COL.b/2,v-B.COL.d/2,v+B.COL.d/2,z,FL(1)-B.SLAB,MT.col,g);}));
+  B.COL.xs.forEach(x0=>B.COL.vs.forEach(v0=>{if(B.COL.skip.some(s=>s[0]===x0&&s[1]===v0))return;const mv=B.COL.move.find(m=>m[0]===x0&&m[1]===v0),x=mv?mv[2]:x0,v=mv?mv[3]:v0;box(x-B.COL.b/2,x+B.COL.b/2,v-B.COL.d/2,v+B.COL.d/2,z,FL(1)-B.SLAB,MT.col,g);}));
   core(0,z,h,g);stair(0,LV[0]);
   wallRun({hz:false,c:W-T/2,t:T,a0:8,a1:D,z0:z,h,g,mats:[[34.7,D,MT.grey]]});
   wallRun({hz:true,c:D-T/2,t:T,a0:B.EV.x0,a1:W-T,z0:z,h,g,def:MT.grey});
@@ -216,18 +218,18 @@ function core(i,z0,h,g){const E=B.EV,Lb=B.LOBBY,cw=S.wall,dh=7;
 // --- 住戸階 1F〜6F
 for(let i=1;i<=B.N;i++){const g=LV[i],z=FL(i),h=H(i),BA=B.BAL;
   slab(i,z,g);core(i,z,h,g);stair(i,g);
-  wallRun({hz:true,c:T/2,t:T,a0:0,a1:W,z0:z,h,g,mats:[[0,BA.x0,MT.grey]],ops:[[2.25,4.25,3.5,7,'win'],[BA.x0,BA.x1,0,h,'void'],[26,32,3,7,'win']]});
+  wallRun({hz:true,c:T/2,t:T,a0:0,a1:W,z0:z,h,g,mats:[[0,BA.x0,MT.grey]],ops:B.WIN.F.map(w=>[...w,'win']).concat([[BA.x0,BA.x1,0,h,'void']])});
   box(BA.x0-T,BA.x0,0,BA.d,z,z+h,MT.cream,g);box(BA.x1,BA.x1+T,0,BA.d,z,z+h,MT.cream,g);
-  wallRun({hz:true,c:BA.d+T/2,t:T,a0:BA.x0-T,a1:BA.x1+T,z0:z,h,g,ops:[[BA.x0+1,BA.x1-1,0,7.5,'sl']]});
+  wallRun({hz:true,c:BA.d+T/2,t:T,a0:BA.x0-T,a1:BA.x1+T,z0:z,h,g,ops:[[...B.WIN.K,'sl']]});
   box(BA.x0,BA.x1,0.1,0.25,z+3.35,z+3.5,MT.rail,g);box(BA.x0,BA.x1,0.1,0.25,z+0.3,z+0.4,MT.rail,g);
   for(let x=BA.x0+0.35;x<BA.x1-0.2;x+=0.42)box(x-0.04,x+0.04,0.13,0.22,z+0.3,z+3.35,MT.rail,g);
   plant(BA.x0+1.2,1.4,z,2.4,g);plant(BA.x1-1.5,1.6,z,1.8,g);
   [BA.x0+4,BA.x1-4].forEach(x=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(0.25*FT,0.25*FT,0.05*FT,12),MT.lamp);l.position.set(wx(x),(z+h-B.SLAB-0.03)*FT,wz(2.5));g.add(l);});
   box(BA.x0-T,W,-0.35,0,z-B.SLAB,z+0.6,MT.band,g);box(25.5,32.5,-1.5,0,z+7.3,z+7.6,MT.band,g);
-  wallRun({hz:false,c:T/2,t:T,a0:0,a1:D,z0:z,h,g,ops:[[6,10,3,7,'win'],[17,21,3,7,'win'],[28,32,3,7,'win'],[39,43,3,7,'win']]});
-  [3,14,25,36,47].forEach(v=>box(-1,0,v-0.3,v+0.3,z,z+h,MT.band,g));
-  wallRun({hz:false,c:W-T/2,t:T,a0:0,a1:D,z0:z,h,g,mats:[[S.v0,D,MT.grey]],ops:[[4,10,3,7,'win'],[16,19,5,7,'win'],[24,30,3,7,'win']]});
-  wallRun({hz:true,c:D-T/2,t:T,a0:0,a1:W,z0:z,h,g,mats:[[B.EV.x0,W,MT.grey]],ops:[[3,8,3,7,'win'],[11,16,3,7,'win'],[28.5,33.5,6.5,9.3,'win']]});}
+  wallRun({hz:false,c:T/2,t:T,a0:0,a1:D,z0:z,h,g,ops:B.WIN.L.map(w=>[...w,'win'])});
+  B.FIN.forEach(v=>box(-1,0,v-0.3,v+0.3,z,z+h,MT.band,g));
+  wallRun({hz:false,c:W-T/2,t:T,a0:0,a1:D,z0:z,h,g,mats:[[S.v0,D,MT.grey]],ops:B.WIN.R.map(w=>[...w,'win'])});
+  wallRun({hz:true,c:D-T/2,t:T,a0:0,a1:W,z0:z,h,g,mats:[[B.EV.x0,W,MT.grey]],ops:B.WIN.B.concat([B.WIN.BS]).map(w=>[...w,'win'])});}
 
 // --- 屋上
 (function(){const g=LV[B.N+1],z=ROOF,rh=B.ROOF.room,E=B.EV;

@@ -37,6 +37,7 @@ LAYERS = {
     "A-FURN": (8, "床置きの家具・衛生器具"),
     "A-EQPM": (6, "壁付けの機器（エアコン）"),
     "A-CLNG": (8, "天井扇・天井照明（破線）"),
+    "A-CORE": (8, "共用コア（CM-03 の階段・EV・ホール）の網掛け"),
     "A-TEXT": (7, "部屋名"),
     "A-TEXT-ID": (3, "扉・窓の記号"),
     "A-GRID1": (9, "1 ft グリッド（内法基準）"),
@@ -44,7 +45,7 @@ LAYERS = {
     "A-DIM": (2, "寸法"),
     "A-TITL": (7, "表題・注記"),
 }
-EXTRA_ROOMS = [(8, 26, 18.36, 10, "Hall", "ホール"), (26.36, 26, 8, 4, "Store", "物入れ"), (15, 36, 4.36, 14.36, "Corridor", "廊下")]
+EXTRA_ROOMS = []  # 部屋名はモデルの ZONES だけから取る
 
 
 def fmt_ft(f):
@@ -115,6 +116,8 @@ def build():
     ops = cm.openings(op, iw, idp)
     cut = {s: [(X(a) if s in "FB" else Y(a), X(b) if s in "FB" else Y(b)) for i, l, a, b, lo, hi, k, sw in ops if l == s and lo * MM < CUT]
            for s in "FBLR"}
+    co, ba, tf = op["CORE"], op["BAL"], op["TF"]
+    cut["F"].append((X(ba["x0"] - tf), X(ba["x1"] + tf)))
     rects = []
 
     def pieces(a0, a1, holes):
@@ -129,6 +132,14 @@ def build():
     for s, (fixed, along) in {"F": ((0, T), (0, W)), "B": ((D - T, D), (0, W)), "L": ((0, T), (0, D)), "R": ((W - T, W), (0, D))}.items():
         for a0, a1 in pieces(*along, cut[s]):
             rects.append((a0, fixed[0], a1, fixed[1]) if s in "FB" else (fixed[0], a0, fixed[1], a1))
+    # バルコニーのくぼみ（左右の壁と奥の壁）、共用コアの壁
+    rects += [(X(ba["x0"] - tf), 0, X(ba["x0"]), Y(ba["d"] + tf)), (X(ba["x1"]), 0, X(ba["x1"] + tf), Y(ba["d"] + tf))]
+    holes = [(X(a), X(b)) for i, l, a, b, lo, hi, k, sw in ops if l == "K" and lo * MM < CUT]
+    rects += [(p0, Y(ba["d"]), p1, Y(ba["d"] + tf)) for p0, p1 in pieces(X(ba["x0"] - tf), X(ba["x1"] + tf), holes)]
+    ct = co["t"] * MM
+    holes = [(Y(a), Y(b)) for i, l, a, b, lo, hi, k, sw in ops if l == "C"]
+    rects += [(X(co["x0"]), p0, X(co["x0"]) + ct, p1) for p0, p1 in pieces(Y(co["v0"]), D - T, holes)]
+    rects.append((X(co["x0"]), Y(co["v0"]), W - T, Y(co["v0"]) + ct))
     for hz, c, lo, hi in cm.parts(op, iw, idp):
         holes = [(X(a) if hz else Y(a), X(b) if hz else Y(b)) for i, l, a, b, lo2, hi2, k, sw in ops
                  if k == "door" and l == (hz, c)]
@@ -140,13 +151,11 @@ def build():
 
     # 扉と窓
     for i, l, a, b, lo, hi, kind, sw in ops:
-        hz, c, length = cm.line_geom(l, iw, idp)
+        hz, c, length = cm.line_geom(l, iw, idp, op)
         if kind == "door":
             w = (b - a) * MM
-            if length is None:
-                hp = (Y(c) if hz else X(c)) + sw * ht
-            else:
-                hp = Y(c) if hz else X(c)
+            hpf = cm.hinge(l, c, sw, op, length)
+            hp = Y(hpf) if hz else X(hpf)
             if hz:
                 hx, hy = X(a), hp
                 line("A-DOOR", hx, hy, hx, hy + sw * w)
@@ -160,7 +169,12 @@ def build():
             continue
         vent = lo * MM >= CUT
         lt = "DASHED" if vent else None
-        if l in "FB":
+        if l == "K":
+            y0, y1 = Y(ba["d"]), Y(ba["d"] + tf)
+            for y in [y0, y1, (y0 + y1) / 2 - 30, (y0 + y1) / 2 + 30]:
+                line("A-GLAZ", X(a), y, X(b), y, lt)
+            text("A-TEXT-ID", X((a + b) / 2), y0 - 1100, 180, i)
+        elif l in ("F", "B"):
             y0, y1 = (0, T) if l == "F" else (D - T, D)
             x0, x1 = X(a), X(b)
             offs = [y0 + T / 2 - 30, y0 + T / 2 + 30] + ([] if vent else [y0, y1])
@@ -174,6 +188,17 @@ def build():
             for x in offs:
                 line("A-GLAZ", x, y0, x, y1, lt)
             text("A-TEXT-ID", -450 if l == "L" else W + 450, (y0 + y1) / 2, 180, i)
+
+    # 共用コアの網掛け（45°、@600）
+    hx0, hy0, hx1, hy1 = X(co["x0"]) + ct, Y(co["v0"]) + ct, W - T, D - T
+    k = hy0 - hx1
+    while k < hy1 - hx0:
+        pts = [(x, x + k) for x in (hx0, hx1) if hy0 <= x + k <= hy1] + [(y - k, y) for y in (hy0, hy1) if hx0 <= y - k <= hx1]
+        if len(pts) >= 2:
+            (p0, p1) = sorted(pts)[0], sorted(pts)[-1]
+            if p0 != p1:
+                line("A-CORE", p0[0], p0[1], p1[0], p1[1])
+        k += 600
 
     # 家具・器具（壁付けはモデルと同じ規則で壁に寄せる）
     faces = cm.wall_faces(op, iw, idp)
@@ -230,6 +255,7 @@ def build():
         "概念モデルから書き出した協議用の図。施工用ではない。",
         "座標: 内法の左下を (x, v) = (0, 0) ft とする。グリッドの番号はモデルの家具の座標と同じ。",
         "未確認の前提: 外壁 250・間仕切り 125（材料未決定）・扉高さ 7′・窓の腰高 3′（台所 3′-6″）・上端 7′・換気窓 6′〜7′。法規との照合は未実施。",
+        "右奥の網掛けは共用コア（CM-03 の階段・EV・ホール、壁 200）で、住戸の外。正面中央はバルコニーのくぼみ。",
         "切断高さ 1,200。換気窓（下端 6′）は破線。天井扇・照明は破線の円（A-CLNG）。家具・器具の寸法は代表値。",
         "画層: " + "、".join(f"{k} {v[1]}" for k, v in LAYERS.items()),
     ]
@@ -277,7 +303,7 @@ def to_dxf(E):
 def to_svg(E, info):
     pad = 3500
     x0, y0, w, h = -pad, -7000, info["W"] + 2 * pad, info["D"] + 7000 + pad
-    col = {"A-WALL": "#111", "A-DOOR": "#c0392b", "A-GLAZ": "#1f6fd1", "A-FURN": "#888", "A-EQPM": "#8e44ad", "A-CLNG": "#bbb",
+    col = {"A-WALL": "#111", "A-DOOR": "#c0392b", "A-GLAZ": "#1f6fd1", "A-FURN": "#888", "A-EQPM": "#8e44ad", "A-CLNG": "#bbb", "A-CORE": "#999",
            "A-TEXT": "#111", "A-TEXT-ID": "#1e8449", "A-GRID1": "#eee", "A-GRID5": "#ccc", "A-DIM": "#b7950b", "A-TITL": "#111"}
     Yf = lambda y: -y
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0} {-(y0 + h)} {w} {h}" width="900" style="background:#fff">']
