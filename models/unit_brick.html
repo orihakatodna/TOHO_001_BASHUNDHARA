@@ -60,14 +60,14 @@ select{padding:7px 8px;max-width:100%}
   <header class="tb">
     <div>
       <h1 data-i="title">Dwelling unit shell — 36′ × 52′</h1>
-      <p class="sub" data-i="sub">Brick walls in English bond, 10′ high, open top. Three-bedroom furniture layout. Concept model.</p>
+      <p class="sub" data-i="sub">Brick walls in English bond, 10′ high, open top. Three-bedroom layout with partitions, doors and windows. Concept model.</p>
     </div>
     <div style="display:grid;gap:10px;justify-items:end">
       <div class="meta">
         <b data-i="kDrawing">Drawing</b><span>CM-01</span>
         <b data-i="kScale">Scale</b><span>N.T.S.</span>
         <b data-i="kDate">Date</b><span>2026-10-22</span>
-        <b data-i="kRev">Rev.</b><span>B</span>
+        <b data-i="kRev">Rev.</b><span>C</span>
       </div>
       <div class="lang" role="group" aria-label="Language">
         <button class="btn" id="lEn" aria-pressed="true">EN</button>
@@ -118,7 +118,9 @@ select{padding:7px 8px;max-width:100%}
         <div class="row"><dt data-i="sOut">Outside</dt><dd>36′-0″ × 52′-0″<span class="m">10.97 × 15.85 m</span></dd></div>
         <div class="row"><dt data-i="sIn">Inside clear</dt><dd>34′-4″ × 50′-4″<span class="m">10.47 × 15.35 m</span></dd></div>
         <div class="row"><dt data-i="sArea">Floor area</dt><dd><span data-i="sAreaV">1,872 sft gross / 1,731 sft net</span><span class="m">173.9 m² / 160.8 m²</span></dd></div>
-        <div class="row"><dt data-i="sL">Layout</dt><dd data-i="sLv">3 bedrooms, 3 baths, living, dining, kitchen (proposal; partitions not yet drawn)</dd></div>
+        <div class="row"><dt data-i="sL">Layout</dt><dd data-i="sLv">3 bedrooms each with its own bath, living, dining, kitchen, store (proposal)</dd></div>
+        <div class="row"><dt data-i="sPt">Partitions</dt><dd data-i="sPtv">125 mm, painted, full height (provisional; material not decided)</dd></div>
+        <div class="row"><dt data-i="sOp">Doors, windows</dt><dd data-i="sOpv">Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.</dd></div>
         <div class="row"><dt data-i="sS">Services</dt><dd data-i="sSv">Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.</dd></div>
         <div class="row"><dt data-i="sH">Wall height</dt><dd>10′-0″<span class="m" data-i="sHm">3.05 m · 38 courses</span></dd></div>
         <div class="row"><dt data-i="sW">Walls</dt><dd data-i="sWv">250 mm (10″) first-class burnt clay brick, cement mortar, English bond</dd></div>
@@ -131,7 +133,7 @@ select{padding:7px 8px;max-width:100%}
         <span><i class="sw" style="background:rgba(200,140,110,.55)"></i><span data-i="zK">Kitchen</span></span>
         <span><i class="sw" style="background:rgba(100,170,170,.6)"></i><span data-i="zW">Baths</span></span>
       </div>
-      <p class="note" data-i="note">Concept model for discussion. Room zones, furniture, fans, lights and AC are a first proposal; partitions, windows and doors follow in the next revision. Furniture you move is kept only in your own browser. Not for construction.</p>
+      <p class="note" data-i="note">Concept model for discussion. Room zones, partitions, doors, windows, furniture, fans, lights and AC are a first proposal. Furniture you move is kept only in your own browser. Not for construction.</p>
     </aside>
   </div>
 </div>
@@ -139,8 +141,8 @@ select{padding:7px 8px;max-width:100%}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const TXT={
-en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Brick walls in English bond, 10′ high, open top. Three-bedroom furniture layout. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",fix:"Fans, lights, AC",finTag:"Floor finish",bathL:"Baths: anti-slip tile 300 × 300",grid:"1 ft grid",zones:"Room zones",sFv2:"On 125 mm slab (provisional)",bathSuf:"; baths: anti-slip tile",fTag:"Furniture",selNone:"Nothing selected",rot:"Rotate 90°",del:"Remove",add:"Add",reset:"Restore proposal",hint:"Drag a piece of furniture to move it; drag empty space to rotate the view. The Top view is easiest for arranging. The 1 ft grid (heavy line every 5 ft) can be switched on below.",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sS:"Services",sSv:"Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.",sL:"Layout",sLv:"3 bedrooms, 3 baths, living, dining, kitchen (proposal; partitions not yet drawn)",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",zL:"Living, dining",zB:"Bedrooms",zK:"Kitchen",zW:"Baths",note:"Concept model for discussion. Room zones, furniture, fans, lights and AC are a first proposal; partitions, windows and doors follow in the next revision. Furniture you move is kept only in your own browser. Not for construction."},
-ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。3寝室の家具配置。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",fix:"天井扇・照明・エアコン",finTag:"床仕上げ",bathL:"浴室は防滑タイル 300 × 300",grid:"1 ft グリッド",zones:"部屋の区分",sFv2:"スラブ 125 mm（仮定）の上",bathSuf:"、浴室は防滑タイル",fTag:"家具",selNone:"未選択",rot:"90° 回転",del:"削除",add:"追加",reset:"提案の配置に戻す",hint:"家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。配置は「上から」が操作しやすいです。1 ft のグリッド（5 ft ごとに太線）は下のボタンで表示できます。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sS:"設備",sSv:"天井扇 56″（羽根の高さは床から約 2.7 m、仮定）、LED 天井照明、壁掛けエアコン室内機。位置は提案。天井は未作図。",sL:"間取り",sLv:"寝室3・浴室3・居間・食堂・台所（提案。間仕切りは未作図）",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",zL:"居間・食堂",zB:"寝室",zK:"台所",zW:"浴室",note:"協議用の概念モデルです。部屋の区分・家具・天井扇・照明・エアコンは最初の提案で、間仕切り・窓・扉は次の版で追加します。動かした家具の位置は、見ている方のブラウザーにだけ残ります。施工用ではありません。"}};
+en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Brick walls in English bond, 10′ high, open top. Three-bedroom layout with partitions, doors and windows. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",fix:"Fans, lights, AC",finTag:"Floor finish",bathL:"Baths: anti-slip tile 300 × 300",grid:"1 ft grid",zones:"Room zones",sFv2:"On 125 mm slab (provisional)",bathSuf:"; baths: anti-slip tile",fTag:"Furniture",selNone:"Nothing selected",rot:"Rotate 90°",del:"Remove",add:"Add",reset:"Restore proposal",hint:"Drag a piece of furniture to move it; drag empty space to rotate the view. The Top view is easiest for arranging. The 1 ft grid (heavy line every 5 ft) can be switched on below.",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sS:"Services",sSv:"Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.",sL:"Layout",sLv:"3 bedrooms each with its own bath, living, dining, kitchen, store (proposal)",sPt:"Partitions",sPtv:"125 mm, painted, full height (provisional; material not decided)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",zL:"Living, dining",zB:"Bedrooms",zK:"Kitchen",zW:"Baths",note:"Concept model for discussion. Room zones, partitions, doors, windows, furniture, fans, lights and AC are a first proposal. Furniture you move is kept only in your own browser. Not for construction."},
+ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。3寝室の間取り（間仕切り・扉・窓）と家具配置。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",fix:"天井扇・照明・エアコン",finTag:"床仕上げ",bathL:"浴室は防滑タイル 300 × 300",grid:"1 ft グリッド",zones:"部屋の区分",sFv2:"スラブ 125 mm（仮定）の上",bathSuf:"、浴室は防滑タイル",fTag:"家具",selNone:"未選択",rot:"90° 回転",del:"削除",add:"追加",reset:"提案の配置に戻す",hint:"家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。配置は「上から」が操作しやすいです。1 ft のグリッド（5 ft ごとに太線）は下のボタンで表示できます。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sS:"設備",sSv:"天井扇 56″（羽根の高さは床から約 2.7 m、仮定）、LED 天井照明、壁掛けエアコン室内機。位置は提案。天井は未作図。",sL:"間取り",sLv:"寝室3（各室に浴室）・居間・食堂・台所・物入れ（提案）",sPt:"間仕切り",sPtv:"125 mm、塗装仕上げ、壁の天端まで（仮定。材料は未決定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",zL:"居間・食堂",zB:"寝室",zK:"台所",zW:"浴室",note:"協議用の概念モデルです。部屋の区分・間仕切り・扉・窓・家具・天井扇・照明・エアコンは最初の提案です。動かした家具の位置は、見ている方のブラウザーにだけ残ります。施工用ではありません。"}};
 let lang='en';
 
 const FT=0.3048,M={W:36,D:52,H:10,T:0.25,slab:0.125};
@@ -194,14 +196,48 @@ function tx(canvas,rx,ox){const t=new THREE.CanvasTexture(canvas);t.anisotropy=A
 const Lo=Z*1000,So=X*1000,Li=Lo-500,Si=So-500;
 const cOL=face(Lo,false),cOS=face(So,true),cIL=face(Li,false),cIS=face(Si,true);
 const topM=new THREE.MeshLambertMaterial({color:0xb9ab98});
-function wall(geo,mats,x,z){const w=new THREE.Mesh(geo,mats);w.position.set(x,Y/2,z);sc.add(w);}
-const longG=new THREE.BoxGeometry(T,Y,Z),shortG=new THREE.BoxGeometry(X-2*T-0.002,Y,T);
-const inL=()=>tx(cIL,Lo/Li,-250/Li),endA=()=>tx(cOS,250/So,0),endB=()=>tx(cOS,250/So,(So-250)/So);
-wall(longG,[tx(cOL,1,0),inL(),topM,topM,endB(),endA()],X/2-T/2,0);
-wall(longG,[inL(),tx(cOL,1,0),topM,topM,endA(),endB()],-X/2+T/2,0);
-const outS=()=>tx(cOS,Si/So,250/So),inS=()=>tx(cIS,1,0);
-wall(shortG,[topM,topM,topM,topM,outS(),inS()],0,Z/2-T/2);
-wall(shortG,[topM,topM,topM,topM,inS(),outS()],0,-Z/2+T/2);
+const PART=[[20,0,20,11],[20,11,34.36,11],[26,11,26,16],[22,16,34.36,16],[22,16,22,26],[22,26,34.36,26],[26.36,26,26.36,36],[26.36,30,34.36,30],[0,30,8,30],[8,30,8,36],[0,36,15,36],[15,36,15,50.36],[19.36,36,19.36,50.36],[19.36,36,34.36,36]];
+const DOORS=[['D1','h',0,14.5,17.5,1],['D2','h',11,21,24,-1],['D3','h',11,30,32.5,1],['D4','v',22,17,20,1],['D5','v',26.36,26.5,29,1],['D6','h',36,5.2,7.7,-1],['D7','v',15,36.6,39.6,-1],['D8','v',19.36,36.6,39.6,1],['D9','h',36,26.66,29.16,-1]];
+const WINS=[['N1','F',2.5,6.5,3,7],['N2','L',11,15,3,7],['N3','F',28,32,3,7],['V1','R',12,14,6,7],['N4','L',24,28,3,7],['N5','R',17.2,21.2,3.5,7],['V2','L',31,33,6,7],['V3','R',31,33,6,7],['N6','L',44,48,3,7],['N7','R',44,48,3,7],['N8','B',15.7,18.7,3,7]];
+const OP={PT:0.125,DH:7};
+function buildWalls(face,mt){
+  const iw=(X-2*T)/FT,id=(Z-2*T)/FT,wx=x=>-X/2+T+x*FT,wz=v=>Z/2-T-v*FT,ht=OP.PT/2,dh=OP.DH*FT,e=1e-4;
+  function piece(x0,x1,y0,y1,z0,z1,fc,dm){if(x1-x0<e||y1-y0<e||z1-z0<e)return;const g=new THREE.BoxGeometry(x1-x0,y1-y0,z1-z0);g.translate((x0+x1)/2,(y0+y1)/2,(z0+z1)/2);
+    const p=g.attributes.position,uv=g.attributes.uv,pl=[x1,x0,y1,y0,z1,z0],ms=[];
+    for(let f=0;f<6;f++){const r=fc?fc(f,pl[f],(x0+x1)/2):null;ms.push(r?r.m:dm);if(r&&r.u)for(let i=f*4;i<f*4+4;i++)uv.setXY(i,r.u(p.getX(i),p.getZ(i)),p.getY(i)/Y);}
+    uv.needsUpdate=true;sc.add(new THREE.Mesh(g,ms));}
+  function box(x,y,z,w,h,d,m){const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.set(x,y,z);sc.add(b);}
+  function win(hz,c,r0,r1,y0,y1,vent){const f=0.05,dp=0.08,fb=(a0,a1,b0,b1,m,t)=>box(hz?(a0+a1)/2:c,(b0+b1)/2,hz?c:(a0+a1)/2,hz?a1-a0:t,b1-b0,hz?t:a1-a0,m);
+    fb(r0,r1,y0,y0+f,mt.fr,dp);fb(r0,r1,y1-f,y1,mt.fr,dp);fb(r0,r0+f,y0+f,y1-f,mt.fr,dp);fb(r1-f,r1,y0+f,y1-f,mt.fr,dp);
+    if(!vent){const m=(r0+r1)/2;fb(m-f/2,m+f/2,y0+f,y1-f,mt.fr,dp);}fb(r0+f,r1-f,y0+f,y1-f,vent?mt.vt:mt.gl,0.01);}
+  const ext={F:[1,Z/2-T,Z/2],B:[1,-Z/2,-Z/2+T],R:[0,X/2-T,X/2],L:[0,-X/2,-X/2+T]};
+  const side=d=>d[1]==='h'?(Math.abs(d[2])<e?'F':Math.abs(d[2]-id)<0.01?'B':null):(Math.abs(d[2])<e?'L':Math.abs(d[2]-iw)<0.01?'R':null);
+  const along=(hz,a,b)=>hz?[wx(a),wx(b)]:[wz(b),wz(a)];
+  const ops={F:[],B:[],R:[],L:[]};
+  WINS.forEach(w=>ops[w[1]].push([...along(ext[w[1]][0],w[2],w[3]),w[4]*FT,w[5]*FT,w[0][0]==='V'?'vent':'win']));
+  DOORS.forEach(d=>{const s=side(d);if(s)ops[s].push([...along(ext[s][0],d[3],d[4]),0,dh,'door']);});
+  for(const s in ext){const [hz,t0,t1]=ext[s],full=hz?[-X/2+T+0.001,X/2-T-0.001]:[-Z/2,Z/2];let cur=full[0];
+    const add=(a0,a1,y0,y1)=>hz?piece(a0,a1,y0,y1,t0,t1,face,mt.rev):piece(t0,t1,y0,y1,a0,a1,face,mt.rev);
+    ops[s].sort((p,q)=>p[0]-q[0]).forEach(o=>{add(cur,o[0],0,Y);add(o[0],o[1],0,o[2]);add(o[0],o[1],o[3],Y);cur=o[1];if(o[4]!=='door')win(hz,(t0+t1)/2,o[0],o[1],o[2],o[3],o[4]==='vent');});
+    add(cur,full[1],0,Y);}
+  PART.forEach(p=>{const hz=p[1]===p[3],c=hz?p[1]:p[0],a=hz?[p[0],p[2]]:[p[1],p[3]],lo=Math.max(0,Math.min(...a)-ht/FT),hi=Math.min(hz?iw:id,Math.max(...a)+ht/FT);
+    const add=(a0,a1,y0,y1)=>hz?piece(wx(a0),wx(a1),y0,y1,wz(c)-ht,wz(c)+ht,null,mt.part):piece(wx(c)-ht,wx(c)+ht,y0,y1,wz(a1),wz(a0),null,mt.part);
+    let cur=lo;DOORS.filter(d=>(d[1]==='h')===hz&&Math.abs(d[2]-c)<e&&!side(d)).sort((q,r)=>q[3]-r[3]).forEach(d=>{add(cur,d[3],0,Y);add(d[3],d[4],dh,Y);cur=d[4];});add(cur,hi,0,Y);});
+  DOORS.forEach(d=>{const s=side(d),hz=d[1]==='h',w=(d[4]-d[3])*FT-0.04,sw=d[5];
+    const vc=s==='F'||s==='L'?-T/2:s==='B'?id*FT+T/2:s==='R'?iw*FT+T/2:d[2]*FT,hp=vc+sw*(s?T/2:ht),a=d[3]*FT+0.04;
+    if(hz)box(-X/2+T+a,dh/2,Z/2-T-(hp+sw*w/2),0.04,dh-0.02,w,s?mt.leafX:mt.leaf);
+    else box(-X/2+T+hp+sw*w/2,dh/2,Z/2-T-a,w,dh-0.02,0.04,s?mt.leafX:mt.leaf);});
+}
+function openMats(rev,part){const L=c=>new THREE.MeshLambertMaterial({color:c});
+  return {rev:L(rev),part:L(part),leaf:L(0x8a6446),leafX:L(0x5e3f2a),fr:L(0xd6d7d3),
+    gl:new THREE.MeshLambertMaterial({color:0x9fc0d0,transparent:true,opacity:0.35,depthWrite:false}),
+    vt:new THREE.MeshLambertMaterial({color:0xe4ecee,transparent:true,opacity:0.7,depthWrite:false})};}
+const e4=1e-4,mOL=tx(cOL,1,0),mIL=tx(cIL,1,0),mOS=tx(cOS,1,0),mIS=tx(cIS,1,0);
+function bface(f,c){const a=Math.abs(c);
+  if(f<2){if(Math.abs(a-X/2)<e4)return{m:mOL,u:(x,z)=>(z+Z/2)/Z};if(Math.abs(a-(X/2-T))<e4)return{m:mIL,u:(x,z)=>((z+Z/2)*1000-250)/Li};return null;}
+  if(f>3){if(Math.abs(a-Z/2)<e4)return{m:mOS,u:x=>(x+X/2)/X};if(Math.abs(a-(Z/2-T))<e4)return{m:mIS,u:x=>((x+X/2)*1000-250)/Si};return null;}
+  return f===2&&Math.abs(c-Y)<e4?{m:topM}:null;}
+buildWalls(bface,openMats(0xa65f3f,0xe6e1d6));
 drawFloor();const gt=new THREE.CanvasTexture(fc);gt.anisotropy=AN;window.gt=gt;
 const slabSide=new THREE.MeshLambertMaterial({color:0x9c9a94});
 const slab=new THREE.Mesh(new THREE.BoxGeometry(X,M.slab,Z),[slabSide,slabSide,new THREE.MeshLambertMaterial({map:gt}),slabSide,slabSide,slabSide]);slab.position.y=-M.slab/2;sc.add(slab);
@@ -239,14 +275,14 @@ tube:{en:'LED tube light, 4 ft',ja:'LED 直管照明（4 ft）',w:4,d:0.3,type:'
 ac:{en:'Split AC indoor unit',ja:'エアコン室内機（壁掛け）',w:3.1,d:0.8,type:'ac',mount:'wall'}};
 const INIT=[['tv',10,0.85,180],['sofa',10,13.5,0],['coffee',10,9.5,0],['arm',3.5,8.5,90],['arm',16.5,8.5,-90],
 ['dtable',8,22,0],['dchair',6.5,19.4,180],['dchair',9.5,19.4,180],['dchair',6.5,24.6,0],['dchair',9.5,24.6,0],['dchair',4.2,22,90],['dchair',11.8,22,-90],
-['counter',33.3,19.2,-90],['counter',30.3,24.9,0],['fridge',23.6,24.7,0],
+['counter',33.3,19.25,-90],['counter',30.3,24.75,0],['fridge',23.6,24.5,0],
 ['king',7.5,46.7,0],['side',3.4,49.5,0],['side',11.6,49.5,0],['ward',1.1,40.5,90],
-['queen',26.86,46.7,0],['side',23.4,49.5,0],['side',30.3,49.5,0],['ward',33.3,40.5,-90],['desk',20.4,40,90],
+['queen',26.86,46.7,0],['side',23.4,49.5,0],['side',30.3,49.5,0],['ward',33.3,40.5,-90],['desk',20.6,42.5,90],
 ['double',30.8,5.5,-90],['ward',24,1.1,180],['side',33.4,1.6,-90],
-['wc',1.25,34,90],['basin',5,35.2,0],['shower',6.4,31.6,0],
-['wc',33.1,34,-90],['basin',29.4,35.2,0],['shower',27.9,31.6,0],
-['wc',33.1,14.6,-90],['basin',29.5,15.2,0],['shower',27.6,12.6,0],
-['plantL',1.2,1.2,0],['plantL',18.8,1.2,0],['plantS',1,27,0],['plantS',14,37.2,0],
+['wc',1.25,34,90],['basin',3.3,31,180],['shower',6.25,31.75,0],
+['wc',33.1,34,-90],['basin',31.06,31,180],['shower',28.11,31.75,0],
+['wc',33.1,14.6,-90],['basin',29.5,15,0],['shower',27.75,12.75,0],
+['plantL',1.2,1.2,0],['plantL',18.8,1.2,0],['plantS',1,27,0],['plantS',14,44.5,0],
 ['fan',10,8,0],['fan',8,22,0],['fan',7.5,43,0],['fan',26.86,43,0],['fan',27,6,0],
 ['clight',4,8,0],['clight',16,8,0],['clight',7.5,38.5,0],['clight',26.86,38.5,0],['clight',22.5,6,0],['clight',28,21,0],['clight',4,33,0],['clight',30.36,33,0],['clight',30,13.5,0],['clight',19,22,0],['clight',17.5,33,0],
 ['ac',0,8,90],['ac',0,22,90],['ac',0,46,90],['ac',34.36,46,-90],['ac',30,0,180]];
@@ -268,11 +304,17 @@ let items=[],sel=null,helper=null,showFix=true;
 function place(it){it.g.position.set(-X/2+T+it.x*FT,0,Z/2-T-it.v*FT);it.g.rotation.y=it.r*Math.PI/180;}
 function ext(it){const c=CAT[it.k],q=((it.r%180)+180)%180===90;return q?[c.d/2,c.w/2]:[c.w/2,c.d/2];}
 function clamp(it){const e=ext(it);it.x=Math.max(e[0],Math.min(IW-e[0],it.x));it.v=Math.max(e[1],Math.min(ID-e[1],it.v));}
-function snapWall(it){const c=CAT[it.k],ds=[it.x,IW-it.x,it.v,ID-it.v],m=ds.indexOf(Math.min(...ds));it.r=[90,-90,180,0][m];if(m===0)it.x=c.d/2;else if(m===1)it.x=IW-c.d/2;else if(m===2)it.v=c.d/2;else it.v=ID-c.d/2;const e=ext(it);if(m<2)it.v=Math.max(e[1],Math.min(ID-e[1],it.v));else it.x=Math.max(e[0],Math.min(IW-e[0],it.x));}
+function wallFaces(){const h=OP.PT/2/FT,F=[['x',0,0,ID,1],['x',IW,0,ID,-1],['v',0,0,IW,1],['v',ID,0,IW,-1]];
+  PART.forEach(p=>{const hz=p[1]===p[3],c=hz?p[1]:p[0],a=hz?[p[0],p[2]]:[p[1],p[3]],ax=hz?'v':'x';F.push([ax,c-h,Math.min(...a),Math.max(...a),-1],[ax,c+h,Math.min(...a),Math.max(...a),1]);});return F;}
+const WF=wallFaces();
+function snapWall(it){const c=CAT[it.k];let f=WF[0],bd=1e9;
+  WF.forEach(w=>{const p=w[0]==='x'?it.x:it.v,q=w[0]==='x'?it.v:it.x;if(q<w[2]||q>w[3]||(p-w[1])*w[4]<-0.5)return;const d=Math.abs(p-w[1]);if(d<bd){bd=d;f=w;}});
+  const p=f[1]+f[4]*c.d/2,lo=f[2]+c.w/2,hi=f[3]-c.w/2;
+  if(f[0]==='x'){it.x=p;it.r=f[4]>0?90:-90;it.v=Math.max(lo,Math.min(hi,it.v));}else{it.v=p;it.r=f[4]>0?180:0;it.x=Math.max(lo,Math.min(hi,it.x));}}
 function addItem(k,x,v,r){const it={k,x,v,r,g:build(k)};it.g.userData.it=it;sc.add(it.g);if(CAT[k].mount==='wall')snapWall(it);it.g.visible=!CAT[k].mount||showFix;place(it);items.push(it);return it;}
 function clearItems(){select(null);items.forEach(it=>sc.remove(it.g));items=[];}
 function load(list){clearItems();list.forEach(a=>{if(CAT[a[0]])addItem(a[0],+a[1],+a[2],+a[3]);});}
-function save(){try{localStorage.setItem('ush-layout-b',JSON.stringify(items.map(i=>[i.k,i.x,i.v,i.r])));}catch(e){}}
+function save(){try{localStorage.setItem('ush-layout-c',JSON.stringify(items.map(i=>[i.k,i.x,i.v,i.r])));}catch(e){}}
 function fmt(f){let ft=Math.floor(f+1e-6),inch=Math.round((f-ft)*12);if(inch===12){ft++;inch=0;}return ft+'′-'+inch+'″';}
 function info(){const el=document.getElementById('selInfo');document.getElementById('rotB').disabled=!sel||CAT[sel.k].mount==='wall';document.getElementById('delB').disabled=!sel;
   if(!sel){el.className='none';el.textContent=TXT[lang].selNone;return;}const c=CAT[sel.k];el.className='';el.textContent=c[lang]+' · '+fmt(c.w)+' × '+fmt(c.d);}
@@ -326,7 +368,7 @@ function rotateSel(){if(!sel)return;sel.r=(sel.r+90)%360;clamp(sel);place(sel);s
 function deleteSel(){if(!sel)return;sc.remove(sel.g);items=items.filter(i=>i!==sel);select(null);save();render();}
 document.getElementById('rotB').onclick=rotateSel;document.getElementById('delB').onclick=deleteSel;
 document.getElementById('addB').onclick=()=>{const k=document.getElementById('addK').value;if(CAT[k].mount&&!showFix)toggleFix();const it=addItem(k,IW/2,22,0);if(CAT[k].mount!=='wall')clamp(it);place(it);select(it);save();render();};
-document.getElementById('resetB').onclick=()=>{load(INIT);try{localStorage.removeItem('ush-layout-b')}catch(e){}render();};
+document.getElementById('resetB').onclick=()=>{load(INIT);try{localStorage.removeItem('ush-layout-c')}catch(e){}render();};
 document.addEventListener('keydown',e=>{if(!sel||/SELECT|INPUT/.test(document.activeElement.tagName))return;if(e.key==='r'||e.key==='R'){rotateSel();}else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();deleteSel();}});
 
 function fillSelect(){const s=document.getElementById('addK'),v=s.value;s.innerHTML='';Object.keys(CAT).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=CAT[k][lang];s.appendChild(o);});if(v)s.value=v;s.setAttribute('aria-label',lang==='ja'?'追加する家具':'Furniture to add');}
@@ -340,7 +382,7 @@ document.getElementById('zoneT').addEventListener('click',()=>{showZones=!showZo
 function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(t&&e.id!=='selInfo')e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');fillSelect();fillFin();updateFin();info();drawFloor();render();try{localStorage.setItem('ush-lang',l)}catch(e){}}
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
 
-let saved=null;try{saved=JSON.parse(localStorage.getItem('ush-layout-b')||'null');}catch(e){}
+let saved=null;try{saved=JSON.parse(localStorage.getItem('ush-layout-c')||'null');}catch(e){}
 load(Array.isArray(saved)&&saved.length?saved:INIT);
 fillSelect();fillFin();updateFin();info();
 new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
