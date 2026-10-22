@@ -1,0 +1,184 @@
+<title>Unit Shell 36×52</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: drawing-sheet frame — title block band on top, 3D viewport + specification column, stacking on phones */
+:root{
+  --paper:#f3f4f2; --sheet:#ffffff; --ink:#1d2326; --ink-2:#5b6468; --rule:#cfd4d4;
+  --brick:#b3532f; --brick-ink:#8a3a1d; --view:#e4e7e5;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans","IBM Plex Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#151a1c;--sheet:#1d2427;--ink:#e6eae9;--ink-2:#9aa4a7;--rule:#344044;--brick:#d77450;--brick-ink:#f0a483;--view:#263034;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#151a1c;--sheet:#1d2427;--ink:#e6eae9;--ink-2:#9aa4a7;--rule:#344044;--brick:#d77450;--brick-ink:#f0a483;--view:#263034;color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+.tb{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;border-top:3px solid var(--ink);border-bottom:1px solid var(--rule);padding-block:12px}
+.tb h1{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,5vw,40px);line-height:1.05;letter-spacing:.01em;margin:0;text-wrap:balance}
+.tb .sub{color:var(--ink-2);margin:4px 0 0}
+.meta{display:grid;grid-template-columns:auto auto;gap:2px 14px;font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.meta b{font-weight:500;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.lang{display:flex;gap:4px;justify-content:flex-end;grid-column:2}
+.btn{font:500 13px/1 var(--f-body);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--ink-2)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--brick);outline-offset:2px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.stage{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;overflow:hidden;min-width:0}
+#view{position:relative;height:min(62vh,560px);min-height:340px;background:var(--view);cursor:grab;touch-action:none}
+#view canvas{display:block}
+.dim{position:absolute;transform:translate(-50%,-50%);font:500 13px/1 var(--f-mono);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);padding:3px 6px;border-radius:4px;pointer-events:none;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;border-top:1px solid var(--rule)}
+.bar .grp{display:flex;flex-wrap:wrap;gap:6px}
+.bar label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);flex:1;min-width:180px}
+.bar input[type=range]{flex:1;accent-color:var(--brick)}
+.hint{font-size:12px;color:var(--ink-2);padding:0 12px 10px}
+.spec{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:16px;min-width:0}
+.spec h2{font-family:var(--f-display);font-weight:600;font-size:20px;letter-spacing:.02em;margin:0 0 8px}
+.spec dl{display:grid;grid-template-columns:1fr;gap:0;margin:0}
+.spec .row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid var(--rule)}
+.spec dt{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);padding-top:2px}
+.spec dd{margin:0;font-variant-numeric:tabular-nums}
+.spec dd .m{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2);display:block}
+.key{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12px;color:var(--ink-2)}
+.key span{display:flex;align-items:center;gap:6px}
+.sw{width:18px;height:9px;display:inline-block;border-radius:1px}
+.note{margin-top:14px;padding-top:10px;border-top:2px solid var(--brick);font-size:12.5px;color:var(--ink-2)}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}.tb{grid-template-columns:1fr}.lang{grid-column:1;justify-content:flex-start}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="tb">
+    <div>
+      <h1 data-i="title">Dwelling unit shell — 36′ × 52′</h1>
+      <p class="sub" data-i="sub">Load-bearing brick walls in English bond, 10′ high, open top. Concept model.</p>
+    </div>
+    <div style="display:grid;gap:10px;justify-items:end">
+      <div class="meta">
+        <b data-i="kDrawing">Drawing</b><span>CM-01</span>
+        <b data-i="kScale">Scale</b><span>N.T.S.</span>
+        <b data-i="kDate">Date</b><span>2026-10-22</span>
+        <b data-i="kRev">Rev.</b><span>A</span>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button class="btn" id="lEn" aria-pressed="true">EN</button>
+        <button class="btn" id="lJa" aria-pressed="false">日本語</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="stage">
+      <div id="view" aria-label="3D model viewer"></div>
+      <div class="bar">
+        <div class="grp" role="group" aria-label="Views">
+          <button class="btn" data-v="persp" aria-pressed="true" data-i="vPersp">Perspective</button>
+          <button class="btn" data-v="top" aria-pressed="false" data-i="vTop">Top</button>
+          <button class="btn" data-v="front" aria-pressed="false" data-i="vFront">Front</button>
+          <button class="btn" data-v="inside" aria-pressed="false" data-i="vInside">Inside, eye level</button>
+        </div>
+        <label for="zm"><span data-i="zoom">Distance</span><input type="range" id="zm" min="6" max="60" value="30"></label>
+        <button class="btn" id="dimT" aria-pressed="true" data-i="dims">Dimensions</button>
+      </div>
+      <p class="hint" data-i="hint">Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft.</p>
+    </section>
+
+    <aside class="spec">
+      <h2 data-i="specH">Specification</h2>
+      <dl>
+        <div class="row"><dt data-i="sOut">Outside</dt><dd>36′-0″ × 52′-0″<span class="m">10.97 × 15.85 m</span></dd></div>
+        <div class="row"><dt data-i="sIn">Inside clear</dt><dd>34′-4″ × 50′-4″<span class="m">10.47 × 15.35 m</span></dd></div>
+        <div class="row"><dt data-i="sArea">Floor area</dt><dd><span data-i="sAreaV">1,872 sft gross / 1,731 sft net</span><span class="m">173.9 m² / 160.8 m²</span></dd></div>
+        <div class="row"><dt data-i="sH">Wall height</dt><dd>10′-0″<span class="m" data-i="sHm">3.05 m · 38 courses</span></dd></div>
+        <div class="row"><dt data-i="sW">Walls</dt><dd data-i="sWv">250 mm (10″) first-class burnt clay brick, cement mortar, English bond</dd></div>
+        <div class="row"><dt data-i="sB">Brick</dt><dd>240 × 115 × 70 mm<span class="m" data-i="sBm">10 mm joints</span></dd></div>
+        <div class="row"><dt data-i="sF">Floor</dt><dd data-i="sFv">Slab, 125 mm (provisional)</dd></div>
+        <div class="row"><dt data-i="sC">Ceiling</dt><dd data-i="sCv">None — open model</dd></div>
+      </dl>
+      <div class="key">
+        <span><i class="sw" style="background:#c2683f"></i><span data-i="kS">Stretcher</span></span>
+        <span><i class="sw" style="background:#8e4528;width:9px"></i><span data-i="kH">Header</span></span>
+        <span><i class="sw" style="background:#e7ae80;width:5px"></i><span data-i="kC">Queen closer</span></span>
+      </div>
+      <p class="note" data-i="note">Concept model for discussion. Windows, doors and partitions will be added in the next revision. Not for construction.</p>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const TXT={
+en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Load-bearing brick walls in English bond, 10′ high, open top. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",hint:"Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft.",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sB:"Brick",sBm:"10 mm joints",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",kS:"Stretcher",kH:"Header",kC:"Queen closer",note:"Concept model for discussion. Windows, doors and partitions will be added in the next revision. Not for construction."},
+ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。床のグリッドは 1 ft、5 ft ごとに太線。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sB:"レンガ",sBm:"目地 10 mm",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",kS:"長手",kH:"小口",kC:"羊かん",note:"協議用の概念モデルです。窓・扉・間仕切りは次の版で追加します。施工用ではありません。"}};
+let lang='en';
+function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(t)e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');try{localStorage.setItem('ush-lang',l)}catch(e){}}
+document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
+try{const s=localStorage.getItem('ush-lang');if(s==='ja')setLang('ja')}catch(e){}
+
+const FT=0.3048,M={W:36,D:52,H:10,T:0.25,slab:0.125};
+const X=M.W*FT,Z=M.D*FT,Y=M.H*FT,T=M.T,HM=Y*1000,P=0.25;
+function rnd(i){const x=Math.sin(i*12.9898+78.233)*43758.5453;return x-Math.floor(x);}
+const base={S:[194,104,63],H:[150,72,44],C:[214,150,105]};
+function seqRow(len,header){const o=[];if(header){const mid=len-375,n=Math.floor(mid/125),rem=mid-n*125,h=Math.floor(n/2);o.push([125,'H'],[62.5,'C']);for(let i=0;i<h;i++)o.push([125,'H']);if(rem>0.5)o.push([rem,'H']);for(let i=h;i<n;i++)o.push([125,'H']);o.push([62.5,'C'],[125,'H']);}else{const n=Math.floor(len/250),rem=len-n*250,h=Math.floor(n/2);for(let i=0;i<h;i++)o.push([250,'S']);if(rem>0.5)o.push([rem,'S']);for(let i=h;i<n;i++)o.push([250,'S']);}return o;}
+let seed=0;
+function face(len,startHeader){const W=Math.round(len*P),H=Math.round(HM*P),c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.fillStyle='#cfc5b6';g.fillRect(0,0,W,H);const N=Math.ceil(HM/80);for(let r=0;r<N;r++){const header=(r%2===0)===startHeader;const y=H-(r+1)*80*P+5*P;let x=0;for(const [l,t] of seqRow(len,header)){const w=Math.max((l-10)*P,0),b=base[t],v=(rnd(seed++)-0.5)*34;g.fillStyle='rgb('+((b[0]+v)|0)+','+((b[1]+v*0.7)|0)+','+((b[2]+v*0.5)|0)+')';g.fillRect(x+5*P,y,w,70*P);x+=l*P;}}return c;}
+function gridCanvas(){const s=24,c=document.createElement('canvas');c.width=M.W*s;c.height=M.D*s;const g=c.getContext('2d');g.fillStyle='#cdc9c0';g.fillRect(0,0,c.width,c.height);for(let i=0;i<=M.W;i++){const k=i%5===0;g.fillStyle=k?'rgba(60,60,60,0.45)':'rgba(80,80,80,0.18)';g.fillRect(i*s-(k?1:0.5),0,k?2:1,c.height);}for(let j=0;j<=M.D;j++){const k=j%5===0;g.fillStyle=k?'rgba(60,60,60,0.45)':'rgba(80,80,80,0.18)';g.fillRect(0,j*s-(k?1:0.5),c.width,k?2:1);}return c;}
+
+const view=document.getElementById('view');
+const R=new THREE.WebGLRenderer({antialias:true,alpha:true});R.setPixelRatio(Math.min(window.devicePixelRatio||1,2));R.setSize(view.clientWidth,view.clientHeight);view.appendChild(R.domElement);
+const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,view.clientWidth/view.clientHeight,0.05,500);
+const AN=R.capabilities.getMaxAnisotropy();
+function tx(canvas,rx,ox){const t=new THREE.CanvasTexture(canvas);t.anisotropy=AN;t.repeat.set(rx,1);t.offset.set(ox,0);return new THREE.MeshLambertMaterial({map:t});}
+const Lo=Z*1000,So=X*1000,Li=Lo-500,Si=So-500;
+const cOL=face(Lo,false),cOS=face(So,true),cIL=face(Li,false),cIS=face(Si,true);
+const topM=new THREE.MeshLambertMaterial({color:0xb9ab98});
+function wall(geo,mats,x,z){const w=new THREE.Mesh(geo,mats);w.position.set(x,Y/2,z);sc.add(w);}
+const longG=new THREE.BoxGeometry(T,Y,Z),shortG=new THREE.BoxGeometry(X-2*T-0.002,Y,T);
+const inL=()=>tx(cIL,Lo/Li,-250/Li),endA=()=>tx(cOS,250/So,0),endB=()=>tx(cOS,250/So,(So-250)/So);
+wall(longG,[tx(cOL,1,0),inL(),topM,topM,endB(),endA()],X/2-T/2,0);
+wall(longG,[inL(),tx(cOL,1,0),topM,topM,endA(),endB()],-X/2+T/2,0);
+const outS=()=>tx(cOS,Si/So,250/So),inS=()=>tx(cIS,1,0);
+wall(shortG,[topM,topM,topM,topM,outS(),inS()],0,Z/2-T/2);
+wall(shortG,[topM,topM,topM,topM,inS(),outS()],0,-Z/2+T/2);
+const gt=new THREE.CanvasTexture(gridCanvas());gt.anisotropy=AN;
+const slabSide=new THREE.MeshLambertMaterial({color:0x9c9a94});
+const slab=new THREE.Mesh(new THREE.BoxGeometry(X,M.slab,Z),[slabSide,slabSide,new THREE.MeshLambertMaterial({map:gt}),slabSide,slabSide,slabSide]);slab.position.y=-M.slab/2;sc.add(slab);
+const gr=new THREE.Mesh(new THREE.PlaneGeometry(90,90),new THREE.MeshLambertMaterial({color:0x9aa08f}));gr.rotation.x=-Math.PI/2;gr.position.y=-M.slab-0.01;sc.add(gr);
+const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),new THREE.MeshLambertMaterial({color:0x2f5d8a}));pm.position.set(-X/4,0.85,Z/2-2.5);sc.add(pm);
+sc.add(new THREE.AmbientLight(0xffffff,0.55));const dl=new THREE.DirectionalLight(0xffffff,0.75);dl.position.set(20,40,30);sc.add(dl);
+
+const dimG=new THREE.Group();sc.add(dimG);
+const lm=new THREE.LineBasicMaterial({color:0x1d2326});
+function seg(a,b){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]);dimG.add(new THREE.Line(g,lm));}
+const o=0.9,tk=0.25;
+seg([-X/2,0.02,Z/2+o],[X/2,0.02,Z/2+o]);seg([-X/2,0.02,Z/2+o-tk],[-X/2,0.02,Z/2+o+tk]);seg([X/2,0.02,Z/2+o-tk],[X/2,0.02,Z/2+o+tk]);
+seg([X/2+o,0.02,-Z/2],[X/2+o,0.02,Z/2]);seg([X/2+o-tk,0.02,-Z/2],[X/2+o+tk,0.02,-Z/2]);seg([X/2+o-tk,0.02,Z/2],[X/2+o+tk,0.02,Z/2]);
+seg([X/2+o*0.7,0,Z/2+o*0.7],[X/2+o*0.7,Y,Z/2+o*0.7]);seg([X/2+o*0.7-tk,Y,Z/2+o*0.7],[X/2+o*0.7+tk,Y,Z/2+o*0.7]);
+const labels=[{p:[0,0.02,Z/2+o],t:"36′-0″"},{p:[X/2+o,0.02,0],t:"52′-0″"},{p:[X/2+o*0.7,Y/2,Z/2+o*0.7],t:"10′-0″"}].map(d=>{const e=document.createElement('div');e.className='dim';e.textContent=d.t;view.appendChild(e);d.e=e;return d;});
+let showDims=true;
+
+let mode='orbit',th=0.6,ph=0.6,dist=30,yaw=Math.PI,pitch=-0.05;const tgt=new THREE.Vector3(0,0.8,0);const eye=new THREE.Vector3(-X/4+0.6,1.6,Z/2-1.2);
+function render(){
+  if(mode==='orbit'){cam.position.set(dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);}
+  else{cam.position.copy(eye);cam.lookAt(eye.x+Math.sin(yaw)*Math.cos(pitch),eye.y+Math.sin(pitch),eye.z+Math.cos(yaw)*Math.cos(pitch));}
+  R.render(sc,cam);
+  const w=view.clientWidth,h=view.clientHeight;
+  labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&mode==='orbit'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});
+}
+const views={persp:{th:0.6,ph:0.6,dist:30},top:{th:0,ph:1.55,dist:34},front:{th:0,ph:0.12,dist:30}};
+function setView(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));if(k==='inside'){mode='inside';yaw=Math.PI;pitch=-0.05;dimG.visible=false;}else{mode='orbit';dimG.visible=showDims;Object.assign(window,{});th=views[k].th;ph=views[k].ph;dist=views[k].dist;document.getElementById('zm').value=dist;}render();}
+document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
+document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims&&mode==='orbit';render();});
+let drag=false,px=0,py=0;
+view.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;view.style.cursor='grabbing';view.setPointerCapture(e.pointerId);});
+view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;
+  if(mode==='orbit'){th-=dx*0.008;ph=Math.max(0.02,Math.min(1.55,ph+dy*0.006));}else{yaw-=dx*0.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*0.004));}
+  document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===(mode==='inside'?'inside':'')));render();});
+view.addEventListener('pointerup',()=>{drag=false;view.style.cursor='grab';});
+view.addEventListener('wheel',e=>{if(mode!=='orbit')return;e.preventDefault();dist=Math.max(6,Math.min(60,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
+document.getElementById('zm').addEventListener('input',e=>{if(mode!=='orbit')setView('persp');dist=+e.target.value;render();});
+new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
+render();
+</script>
