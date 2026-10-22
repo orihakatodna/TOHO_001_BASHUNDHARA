@@ -349,6 +349,26 @@ def main():
     for n in diff:
         print(f"   ✗ {n} が {names[0]} と異なる")
     total += len(diff)
+    # 13. 修正指示用の DXF（dxf/ の最新）が、現行のモデルから書き出したものと同じか
+    dxfs = sorted((ROOT / "dxf").glob("unit_plan_*.dxf"))
+    if dxfs:
+        import export_dxf as xd
+        E, info = xd.build()
+        cur = xd.to_dxf(E)
+        last = dxfs[-1].read_text(encoding="cp932")
+        cnt, odd = xd.stats(last)
+        bad = []
+        # cp932 は「〜」などを別の文字に読み戻すので、バイト列で比べる
+        if dxfs[-1].read_bytes().replace(b"\r\n", b"\n") != cur.encode("cp932"):
+            bad.append(f"{dxfs[-1].name} が現行のモデルと一致しない（python tools/export_dxf.py で書き出し直す）")
+        if odd:
+            bad.append(f"壁の輪郭が閉じていない（端点 {len(odd)} 個）")
+        if cnt.get(("ARC", "A-DOOR"), 0) != info["doors"]:
+            bad.append(f"扉の円弧 {cnt.get(('ARC', 'A-DOOR'), 0)} 個 ≠ 扉 {info['doors']} か所")
+        print(f"■ dxf/{dxfs[-1].name}  検出 {len(bad)}（現行モデルから書き出し直した内容と照合）")
+        for b in bad:
+            print("   ✗ " + b)
+        total += len(bad)
     print(f"合計 検出 {total}（{len(files)} ファイル）")
     print("未照合: 画面表示・操作、寸法の前提と原典の照合、扉・窓の寸法と法規（BNBC など）の照合")
     return 0 if total == 0 else 1
