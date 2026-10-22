@@ -177,7 +177,7 @@ const gr=new THREE.Mesh(new THREE.PlaneGeometry(90,90),new THREE.MeshLambertMate
 const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),new THREE.MeshLambertMaterial({color:0x2f5d8a}));pm.position.set(-X/2+T+23*FT,0.85,Z/2-T-14*FT);sc.add(pm);
 sc.add(new THREE.AmbientLight(0xffffff,0.55));const dl=new THREE.DirectionalLight(0xffffff,0.75);dl.position.set(20,40,30);sc.add(dl);
 
-const MAT={fabric:0x6f7f95,wood:0x9a7350,wood2:0x7c5c40,linen:0xe6e0d4,white:0xf1f1ec,white2:0xdcdcd6,stone:0xc9c2b4};
+const MAT={fabric:0x6f7f95,wood:0x9a7350,wood2:0x7c5c40,linen:0xe6e0d4,white:0xf1f1ec,white2:0xdcdcd6,stone:0xc9c2b4,pot:0xa0583a,leaf:0x4f7a3a,leaf2:0x6f9a4c};
 Object.keys(MAT).forEach(k=>MAT[k]=new THREE.MeshLambertMaterial({color:MAT[k]}));
 const CAT={
 sofa:{en:'3-seat sofa',ja:'3人掛けソファ',w:7,d:3,type:'sofa'},
@@ -196,7 +196,9 @@ counter:{en:'Kitchen counter',ja:'キッチンカウンター',w:6,d:2,h:0.9,c:'
 fridge:{en:'Refrigerator',ja:'冷蔵庫',w:2.5,d:2.4,h:1.8,c:'white2'},
 wc:{en:'WC',ja:'便器',w:1.3,d:2.3,h:0.75,c:'white'},
 basin:{en:'Wash basin',ja:'洗面台',w:2,d:1.5,h:0.85,c:'white'},
-shower:{en:'Shower area',ja:'シャワースペース',w:3,d:3,h:0.06,c:'white'}};
+shower:{en:'Shower area',ja:'シャワースペース',w:3,d:3,h:0.06,c:'white'},
+plantL:{en:'Floor plant, large',ja:'観葉植物（大）',w:1.6,d:1.6,h:1.6,type:'plant'},
+plantS:{en:'Floor plant, small',ja:'観葉植物（小）',w:1.1,d:1.1,h:0.8,type:'plant'}};
 const INIT=[['tv',10,0.85,180],['sofa',10,13.5,0],['coffee',10,9.5,0],['arm',3.5,8.5,90],['arm',16.5,8.5,-90],
 ['dtable',8,22,0],['dchair',6.5,19.4,180],['dchair',9.5,19.4,180],['dchair',6.5,24.6,0],['dchair',9.5,24.6,0],['dchair',4.2,22,90],['dchair',11.8,22,-90],
 ['counter',33.3,19.2,-90],['counter',30.3,24.9,0],['fridge',23.6,24.7,0],
@@ -205,13 +207,15 @@ const INIT=[['tv',10,0.85,180],['sofa',10,13.5,0],['coffee',10,9.5,0],['arm',3.5
 ['double',30.8,5.5,-90],['ward',24,1.1,180],['side',33.4,1.6,-90],
 ['wc',1.25,34,90],['basin',5,35.2,0],['shower',6.4,31.6,0],
 ['wc',33.1,34,-90],['basin',29.4,35.2,0],['shower',27.9,31.6,0],
-['wc',33.1,14.6,-90],['basin',29.5,15.2,0],['shower',27.6,12.6,0]];
+['wc',33.1,14.6,-90],['basin',29.5,15.2,0],['shower',27.6,12.6,0],
+['plantL',1.2,1.2,0],['plantL',18.8,1.2,0],['plantS',1,27,0],['plantS',14,37.2,0]];
 
 function build(k){const c=CAT[k],g=new THREE.Group(),w=c.w*FT,d=c.d*FT;
   const box=(bw,bh,bd,x,y,z,col)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(bw,bh,bd),MAT[col]);m.position.set(x,y+bh/2,z);g.add(m);};
   if(c.type==='sofa'){box(w,0.42,d,0,0,0,'fabric');box(w,0.4,0.22,0,0.42,-d/2+0.11,'fabric');}
   else if(c.type==='chair'){box(w,0.45,d,0,0,0,'wood');box(w,0.45,0.05,0,0.45,-d/2+0.025,'wood');}
   else if(c.type==='bed'){box(w,0.5,d,0,0,0,'linen');box(w*0.9,0.12,0.45,0,0.5,-d/2+0.35,'white');box(w+0.06,1.0,0.08,0,0,-d/2-0.04,'wood');}
+  else if(c.type==='plant'){const pr=w*0.32,ph=c.h*0.22;const pot=new THREE.Mesh(new THREE.CylinderGeometry(pr,pr*0.8,ph,16),MAT.pot);pot.position.y=ph/2;g.add(pot);const tr=new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.025,c.h*0.6,6),MAT.wood2);tr.position.y=ph+c.h*0.3;g.add(tr);const n=c.h>1?5:3;for(let i=0;i<n;i++){const rr=w*(0.26+0.04*(i%3));const a=i*2.4,sd=i?w*0.16:0;const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rr,1),i%2?MAT.leaf2:MAT.leaf);m.position.set(Math.cos(a)*sd,ph+(c.h-ph)*(0.35+0.5*i/n),Math.sin(a)*sd);g.add(m);}}
   else box(w,c.h,d,0,0,0,c.c);
   return g;}
 let items=[],sel=null,helper=null;
