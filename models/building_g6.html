@@ -1,0 +1,281 @@
+<title>Apartment G+6</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: drawing-sheet frame — title block band on top, 3D viewport + specification column, stacking on phones */
+:root{
+  --paper:#f2f3f3; --sheet:#ffffff; --ink:#1c2226; --ink-2:#5a6469; --rule:#cfd4d6;
+  --accent:#4f6f86; --view:#e3e6e7;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans","IBM Plex Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#14191c;--sheet:#1c2327;--ink:#e5eaec;--ink-2:#99a4a9;--rule:#334046;--accent:#8fb2c9;--view:#252f34;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#14191c;--sheet:#1c2327;--ink:#e5eaec;--ink-2:#99a4a9;--rule:#334046;--accent:#8fb2c9;--view:#252f34;color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+.tb{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;border-top:3px solid var(--ink);border-bottom:1px solid var(--rule);padding-block:12px}
+.tb h1{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,5vw,40px);line-height:1.05;letter-spacing:.01em;margin:0;text-wrap:balance}
+.tb .sub{color:var(--ink-2);margin:4px 0 0}
+.meta{display:grid;grid-template-columns:auto auto;gap:2px 14px;font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.meta b{font-weight:500;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.lang{display:flex;gap:4px;justify-content:flex-end}
+.btn{font:500 13px/1 var(--f-body);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--ink-2)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.stage{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;overflow:hidden;min-width:0}
+#view{position:relative;height:min(62vh,560px);min-height:340px;background:var(--view);cursor:grab;touch-action:none}
+#view canvas{display:block}
+.dim{position:absolute;transform:translate(-50%,-50%);font:500 13px/1 var(--f-mono);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);padding:3px 6px;border-radius:4px;pointer-events:none;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;border-top:1px solid var(--rule)}
+.bar .grp{display:flex;flex-wrap:wrap;gap:6px}
+.bar label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);flex:1;min-width:180px}
+.bar input[type=range]{flex:1;accent-color:var(--accent)}
+.bar .tag{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
+.hint{font-size:12px;color:var(--ink-2);padding:0 12px 10px}
+.spec{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:16px;min-width:0}
+.spec h2{font-family:var(--f-display);font-weight:600;font-size:20px;letter-spacing:.02em;margin:0 0 8px}
+.spec dl{display:grid;margin:0}
+.spec .row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid var(--rule)}
+.spec dt{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);padding-top:2px}
+.spec dd{margin:0;font-variant-numeric:tabular-nums}
+.spec dd .m{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2);display:block}
+.key{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12px;color:var(--ink-2)}
+.key span{display:flex;align-items:center;gap:6px}
+.jt{width:18px;height:2px;background:#5a5a56;display:inline-block}
+.pc{width:9px;height:9px;border-radius:50%;background:#8d8c86;box-shadow:inset 0 0 0 1.5px #5f5e59;display:inline-block}
+.note{margin-top:14px;padding-top:10px;border-top:2px solid var(--accent);font-size:12.5px;color:var(--ink-2)}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}.tb{grid-template-columns:1fr}.tb>div:last-child{justify-items:start!important}.lang{justify-content:flex-start}}
+.lvn{font-family:var(--f-mono);font-size:12px;color:var(--ink);min-width:6em}
+</style>
+
+<div class="wrap">
+  <header class="tb">
+    <div>
+      <h1 data-i="title">Apartment building G+6 — 36′ × 52′ on a 45′ × 65′ plot</h1>
+      <p class="sub" data-i="sub">Exterior after the reference image, with structure columns at the ground floor, one stair and one lift at the rear right. Concept model.</p>
+    </div>
+    <div style="display:grid;gap:10px;justify-items:end">
+      <div class="meta">
+        <b data-i="kDrawing">Drawing</b><span>CM-03</span>
+        <b data-i="kScale">Scale</b><span>N.T.S.</span>
+        <b data-i="kDate">Date</b><span>2026-10-22</span>
+        <b data-i="kRev">Rev.</b><span>A</span>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button class="btn" id="lEn" aria-pressed="true">EN</button>
+        <button class="btn" id="lJa" aria-pressed="false">日本語</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="stage">
+      <div id="view" aria-label="3D model viewer"></div>
+      <div class="bar">
+        <div class="grp" role="group" aria-label="Views">
+          <button class="btn" data-v="persp" aria-pressed="true" data-i="vPersp">Perspective</button>
+          <button class="btn" data-v="street" aria-pressed="false" data-i="vStreet">From the street</button>
+          <button class="btn" data-v="front" aria-pressed="false" data-i="vFront">Front</button>
+          <button class="btn" data-v="top" aria-pressed="false" data-i="vTop">Top</button>
+        </div>
+        <label for="zm"><span data-i="zoom">Distance</span><input type="range" id="zm" min="15" max="120" value="48"></label>
+        <button class="btn" id="dimT" aria-pressed="true" data-i="dims">Dimensions</button>
+      </div>
+      <div class="bar">
+        <label for="lv"><span data-i="lvTag">Floors shown</span><input type="range" id="lv" min="0" max="8" value="8"><span id="lvName" class="lvn">Roof</span></label>
+      </div>
+      <div class="bar">
+        <span class="tag" data-i="csTag">For Clip Studio (GLB)</span>
+        <button class="btn" id="glbB" data-i="glbAll">Save the building as GLB</button>
+      </div>
+      <p class="hint" data-i="hint">Drag to rotate. Scroll or use the slider to zoom. Lower the floors slider to cut the building away and see the stair and lift. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
+    </section>
+
+    <aside class="spec">
+      <h2 data-i="specH">Specification</h2>
+      <dl>
+        <div class="row"><dt data-i="sSite">Plot</dt><dd>45′-0″ × 65′-0″<span class="m">13.72 × 19.81 m · <span data-i="sRoad">road 40′ (12.19 m) in front</span></span></dd></div>
+        <div class="row"><dt data-i="sBld">Building</dt><dd>36′-0″ × 52′-0″ · G+6<span class="m">10.97 × 15.85 m · <span data-i="sBldM">7 storeys, coverage 64 %</span></span></dd></div>
+        <div class="row"><dt data-i="sSb">Setbacks</dt><dd data-i="sSbv">Front 8′-0″ (2.44 m), sides 4′-6″ (1.37 m), rear 5′-0″ (1.52 m). Required: front 1.5 m, sides 1.00 m, rear 1.25 m (DBR rule 41(1), Table 1).</dd></div>
+        <div class="row"><dt data-i="sLv">Levels</dt><dd data-i="sLvv">Ground floor +1′-6″ above the road (provisional). GF 12′ (parking, entrance), 1F–6F 10′ (dwellings). Roof slab 72′ (21.95 m) above the ground floor.</dd></div>
+        <div class="row"><dt data-i="sSt">Structure</dt><dd data-i="sStv">RC frame. Columns 12″ × 18″, shown at the ground floor only; slab 125 mm; core walls 200 mm. All provisional.</dd></div>
+        <div class="row"><dt data-i="sCo">Stair</dt><dd data-i="sCov">One stair, flights 1.15 m wide. GF 22 risers × 166 mm, 1F–6F 18 × 169 mm, treads 250 mm (DBR rule 57: risers ≤ 175, treads ≥ 225).</dd></div>
+        <div class="row"><dt data-i="sEv">Lift</dt><dd data-i="sEvv">One lift, required because the top floor roof is above 18 m (DBR rule 59(1)). Shaft about 2.06 × 1.87 m clear, pit 1.5 m, machine room on the roof (provisional; no lift model chosen).</dd></div>
+        <div class="row"><dt data-i="sRf">Roof</dt><dd data-i="sRfv">Parapet 3′-6″. Stair head room and lift machine room 10′. Overhead water tank on top, 15′ (4.57 m) above the roof (limit 5 m, DBR rule 49(gha)).</dd></div>
+      </dl>
+      <p class="note" data-i="note">Concept model for discussion, not for construction. Pending: a 7-storey building falls under Fire Rules 2014 Schedule 13, which asks for two stairs (item 9) — one stair is the owner's decision and stays pending, as in the 4-katha G+8 study. Not yet checked: FAR, fire water tank, upper-floor columns (the front middle column would stand in the balcony). The unit model CM-01/02 fills the whole 36′ × 52′ and must be revised to leave room for the core.</p>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+<script>
+const TXT={
+en:{title:"Apartment building G+6 — 36′ × 52′ on a 45′ × 65′ plot",sub:"Exterior after the reference image, with structure columns at the ground floor, one stair and one lift at the rear right. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vStreet:"From the street",vFront:"Front",vTop:"Top",zoom:"Distance",dims:"Dimensions",lvTag:"Floors shown",csTag:"For Clip Studio (GLB)",glbAll:"Save the building as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",hint:"Drag to rotate. Scroll or use the slider to zoom. Lower the floors slider to cut the building away and see the stair and lift. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sSite:"Plot",sRoad:"road 40′ (12.19 m) in front",sBld:"Building",sBldM:"7 storeys, coverage 64 %",sSb:"Setbacks",sSbv:"Front 8′-0″ (2.44 m), sides 4′-6″ (1.37 m), rear 5′-0″ (1.52 m). Required: front 1.5 m, sides 1.00 m, rear 1.25 m (DBR rule 41(1), Table 1).",sLv:"Levels",sLvv:"Ground floor +1′-6″ above the road (provisional). GF 12′ (parking, entrance), 1F–6F 10′ (dwellings). Roof slab 72′ (21.95 m) above the ground floor.",sSt:"Structure",sStv:"RC frame. Columns 12″ × 18″, shown at the ground floor only; slab 125 mm; core walls 200 mm. All provisional.",sCo:"Stair",sCov:"One stair, flights 1.15 m wide. GF 22 risers × 166 mm, 1F–6F 18 × 169 mm, treads 250 mm (DBR rule 57: risers ≤ 175, treads ≥ 225).",sEv:"Lift",sEvv:"One lift, required because the top floor roof is above 18 m (DBR rule 59(1)). Shaft about 2.06 × 1.87 m clear, pit 1.5 m, machine room on the roof (provisional; no lift model chosen).",sRf:"Roof",sRfv:"Parapet 3′-6″. Stair head room and lift machine room 10′. Overhead water tank on top, 15′ (4.57 m) above the roof (limit 5 m, DBR rule 49(gha)).",note:"Concept model for discussion, not for construction. Pending: a 7-storey building falls under Fire Rules 2014 Schedule 13, which asks for two stairs (item 9) — one stair is the owner's decision and stays pending, as in the 4-katha G+8 study. Not yet checked: FAR, fire water tank, upper-floor columns (the front middle column would stand in the balcony). The unit model CM-01/02 fills the whole 36′ × 52′ and must be revised to leave room for the core.",lv:["GF","1F","2F","3F","4F","5F","6F","Roof","Roof + tank"]},
+ja:{title:"集合住宅 G+6 — 建物 36′ × 52′、敷地 45′ × 65′",sub:"参考画像に倣った外観。1階の柱、右奥に階段1本・エレベーター1台。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vStreet:"道路から",vFront:"正面",vTop:"上から",zoom:"距離",dims:"寸法表示",lvTag:"表示する階",csTag:"Clip Studio 用（GLB）",glbAll:"建物を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。「表示する階」を下げると上の階が外れ、階段とエレベーターが見えます。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sSite:"敷地",sRoad:"前面道路 40′（12.19 m）",sBld:"建物",sBldM:"7層、建蔽率 64 %",sSb:"後退",sSbv:"前面 8′-0″（2.44 m）、側面 4′-6″（1.37 m）、背面 5′-0″（1.52 m）。必要値は前面 1.5 m、側面 1.00 m、背面 1.25 m（DBR 規則41(1)・表1）。",sLv:"レベル",sLvv:"1階床は道路から +1′-6″（仮定）。階高は GF 12′（駐車場・玄関）、1F〜6F 10′（住戸）。屋上スラブは 1階床から 72′（21.95 m）。",sSt:"構造",sStv:"RC ラーメン。柱 12″ × 18″（1階のみ表示）、スラブ 125 mm、コアの壁 200 mm。いずれも仮定。",sCo:"階段",sCov:"1本、有効幅 1.15 m。GF は蹴上 166 mm × 22 段、1F〜6F は 169 mm × 18 段、踏面 250 mm（DBR 第57条: 蹴上 175 以下・踏面 225 以上）。",sEv:"エレベーター",sEvv:"1台。最上階の屋根が 18 m を超えるため必要（DBR 規則59(1)）。昇降路の内法 約 2.06 × 1.87 m、ピット 1.5 m、機械室は屋上（仮定。機種は未選定）。",sRf:"屋上",sRfv:"パラペット 3′-6″。階段室と EV 機械室は高さ 10′。その上に高架水槽、上端は屋上から 15′（4.57 m）（上限 5 m、DBR 規則49(ঘ)）。",note:"協議用の概念モデルで、施工用ではありません。保留: 7層は消防規則 2014 第13別表の対象で、階段2本（(৯)）が求められます。階段1本は施主の判断で、4カタ G+8 案と同じく保留です。未照合: 容積率、消防水槽、上階の柱（前面中央の柱はバルコニーの中に立つ）。住戸モデル CM-01/02 は 36′ × 52′ 全体を使っており、コアの分を空けるよう直す必要があります。",lv:["GF","1F","2F","3F","4F","5F","6F","屋上","屋上＋水槽"]}};
+let lang='en';
+function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(typeof t==='string')e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');lvLabel();try{localStorage.setItem('bg6-lang',l)}catch(e){}}
+document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
+
+// 寸法は ft。x は建物の左の外面から右へ、v は正面（道路側）の外面から奥へ、z は道路面から上へ。
+const BLD={"W":36,"D":52,"T":0.82,"GF":12,"TYP":10,"N":6,"PL":1.5,"SITE_Z":0.5,"PAR":3.5,"SLAB":0.41,
+"SITE":{"W":45,"D":65,"F":8,"S":4.5,"R":5,"ROAD":40},
+"COL":{"xs":[0.5,18,35.5],"vs":[0.75,17.6,34.4,51.25],"b":1,"d":1.5,"skip":[[35.5,34.4],[35.5,51.25]]},
+"STAIR":{"x0":26.2,"x1":36,"v0":34.7,"v1":52,"wall":0.656,"w":1.15,"gap":0.15,"tread":0.25,"rmax":0.175,"land":1.15,"door":[35.5,39.0]},
+"EV":{"x0":18.8,"x1":26.2,"v0":44.4,"v1":52,"pit":1.5,"door":[21.0,24.0]},
+"LOBBY":{"x0":18.8,"x1":26.2,"v0":34.7,"v1":44.4,"door":[38.0,41.5]},
+"ROOF":{"room":10,"tank":[27,35,40,51,5]},
+"BAL":{"x0":6.5,"x1":22.5,"d":5}};
+const FT=0.3048,B=BLD,W=B.W,D=B.D,T=B.T,S=B.STAIR;
+const FL=i=>i===0?B.PL:B.PL+B.GF+(i-1)*B.TYP, ROOF=FL(B.N+1);
+const wx=x=>(x-W/2)*FT, wz=v=>(D/2-v)*FT;
+
+const view=document.getElementById('view');
+const R=new THREE.WebGLRenderer({antialias:true,alpha:true});R.setPixelRatio(Math.min(window.devicePixelRatio||1,2));R.setSize(view.clientWidth,view.clientHeight);view.appendChild(R.domElement);
+const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,view.clientWidth/view.clientHeight,0.1,800);
+const L=c=>new THREE.MeshLambertMaterial({color:c});
+const MT={cream:L(0xeae2d3),band:L(0xf5f1e8),grey:L(0x8b8e91),core:L(0xbab8b2),frame:L(0x2c2f32),rail:L(0x26282a),wood:L(0xa0673d),site:L(0xcdc8bd),road:L(0x5a5c5f),line:L(0xe8e4d8),wallS:L(0xe1dccf),gate:L(0x3a3d40),col:L(0xe6dfd2),slab:L(0xd9d4c8),car:L(0x6b6f74),tank:L(0x7d8a92),pot:L(0x9c6b4e),leaf:L(0x4f7a3a),leaf2:L(0x6f9a4c),stair:L(0xc9c4ba),
+  glass:new THREE.MeshLambertMaterial({color:0x7f97a6,transparent:true,opacity:0.55,depthWrite:false}),
+  lamp:new THREE.MeshLambertMaterial({color:0xfff6d8,emissive:0xfff0c0,emissiveIntensity:0.9})};
+const LV=[];for(let i=0;i<=B.N+2;i++){const g=new THREE.Group();g.name=i===0?'GF':i<=B.N?i+'F':i===B.N+1?'Roof':'RoofTank';LV.push(g);sc.add(g);}
+const siteG=new THREE.Group();siteG.name='Site';sc.add(siteG);
+
+function box(x0,x1,v0,v1,z0,z1,m,g){if(x1-x0<1e-4||v1-v0<1e-4||z1-z0<1e-4)return null;const b=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)*FT,(z1-z0)*FT,(v1-v0)*FT),m);b.position.set(wx((x0+x1)/2),(z0+z1)/2*FT,wz((v0+v1)/2));g.add(b);return b;}
+function sphere(x,v,z,r,m,g){const s=new THREE.Mesh(new THREE.IcosahedronGeometry(r*FT,1),m);s.position.set(wx(x),z*FT,wz(v));g.add(s);}
+function plant(x,v,z,h,g){box(x-0.6,x+0.6,v-0.6,v+0.6,z,z+0.9,MT.pot,g);for(let i=0;i<4;i++)sphere(x+Math.cos(i*2.4)*0.35*(i?1:0),v+Math.sin(i*2.4)*0.35*(i?1:0),z+0.9+h*(0.3+0.18*i),0.55+0.1*(i%2),i%2?MT.leaf2:MT.leaf,g);}
+// 壁: hz=true は x 方向に伸びる壁（v=c を中心）。ops=[開始,終了,下端,上端,種類]（高さは z0 から）。mats=[[開始,終了,材料]]
+function wallRun(o){const {hz,c,t,a0,a1,z0,h,g}=o,ops=o.ops||[],mats=o.mats||[];const def=o.def||MT.cream;
+  const bp=[...new Set([a0,a1,...ops.flatMap(p=>[p[0],p[1]]),...mats.flatMap(p=>[p[0],p[1]])])].filter(p=>p>=a0&&p<=a1).sort((p,q)=>p-q);
+  const seg=(p,q,s0,s1,m)=>hz?box(p,q,c-t/2,c+t/2,z0+s0,z0+s1,m,g):box(c-t/2,c+t/2,p,q,z0+s0,z0+s1,m,g);
+  for(let i=0;i<bp.length-1;i++){const p=bp[i],q=bp[i+1],mid=(p+q)/2,op=ops.find(r=>r[0]<=mid&&mid<=r[1]),mm=(mats.find(r=>r[0]<=mid&&mid<=r[1])||[0,0,def])[2];
+    if(!op)seg(p,q,0,h,mm);else{if(op[2]>0)seg(p,q,0,op[2],mm);if(op[3]<h)seg(p,q,op[3],h,mm);}}
+  ops.forEach(p=>{if(p[4]==='win'||p[4]==='sl')frame(hz,c,p[0],p[1],z0+p[2],z0+p[3],p[4]==='sl'?3:(p[1]-p[0]>4?1:0),g);});}
+function frame(hz,c,a,b,z0,z1,n,g){const f=0.18,d=0.25,fb=(p,q,s0,s1,m,dd)=>hz?box(p,q,c-dd/2,c+dd/2,s0,s1,m,g):box(c-dd/2,c+dd/2,p,q,s0,s1,m,g);
+  fb(a,b,z0,z0+f,MT.frame,d);fb(a,b,z1-f,z1,MT.frame,d);fb(a,a+f,z0,z1,MT.frame,d);fb(b-f,b,z0,z1,MT.frame,d);
+  for(let k=1;k<=n;k++){const m=a+(b-a)*k/(n+1);fb(m-f/2,m+f/2,z0,z1,MT.frame,d);}fb(a+f,b-f,z0+f,z1-f,MT.glass,0.03);}
+
+// --- 敷地・道路・塀
+const SI=B.SITE,sx0=-SI.S,sx1=W+SI.S,sv0=-SI.F,sv1=D+SI.R;
+box(sx0,sx1,sv0,sv1,0,B.SITE_Z,MT.site,siteG);
+box(sx0-30,sx1+30,sv0-SI.ROAD,sv0,-0.2,0,MT.road,siteG);
+for(let x=sx0-28;x<sx1+28;x+=12)box(x,x+6,sv0-SI.ROAD/2-0.25,sv0-SI.ROAD/2+0.25,0,0.02,MT.line,siteG);
+box(sx0-30,sx1+30,sv0-6,sv0,0,0.5,MT.wallS,siteG);
+const WH=5.5,wt=0.5;
+const gates=[[sx0+2,sx0+17,'car'],[34.5,39,'ped']];
+wallRun({hz:true,c:sv0+wt/2,t:wt,a0:sx0,a1:sx1,z0:B.SITE_Z,h:WH,g:siteG,def:MT.wallS,ops:gates.map(q=>[q[0],q[1],0,WH,'void'])});
+gates.forEach(q=>{box(q[0],q[1],sv0+0.05,sv0+0.4,B.SITE_Z+WH-0.4,B.SITE_Z+WH-0.2,MT.gate,siteG);box(q[0],q[1],sv0+0.05,sv0+0.4,B.SITE_Z+0.2,B.SITE_Z+0.4,MT.gate,siteG);});
+gates.forEach(q=>{for(let x=q[0]+0.4;x<q[1];x+=0.45)box(x-0.05,x+0.05,sv0+0.05,sv0+0.4,B.SITE_Z,B.SITE_Z+WH-0.2,MT.gate,siteG);});
+wallRun({hz:false,c:sx0+wt/2,t:wt,a0:sv0,a1:sv1,z0:B.SITE_Z,h:WH,g:siteG,def:MT.wallS});
+wallRun({hz:false,c:sx1-wt/2,t:wt,a0:sv0,a1:sv1,z0:B.SITE_Z,h:WH,g:siteG,def:MT.wallS});
+wallRun({hz:true,c:sv1-wt/2,t:wt,a0:sx0,a1:sx1,z0:B.SITE_Z,h:WH,g:siteG,def:MT.wallS});
+[[sx0+1.5,sv0+3],[sx1-1.5,sv0+3],[sx1-1.5,D+2.5],[sx0+1.5,D+2.5]].forEach(p=>{box(p[0]-0.2,p[0]+0.2,p[1]-0.2,p[1]+0.2,B.SITE_Z,B.SITE_Z+9,MT.wood,siteG);for(let i=0;i<5;i++)sphere(p[0]+Math.cos(i*1.3)*1.6,p[1]+Math.sin(i*1.3)*1.6,B.SITE_Z+10+(i%3),2.2,i%2?MT.leaf2:MT.leaf,siteG);});
+
+// --- 床スラブ（階段の吹抜けと昇降路を除く）
+const xi0=S.x0+S.wall,xi1=S.x1-T,vi0=S.v0+S.wall,vi1=S.v1-T,M=1/FT;
+const H=i=>FL(i+1)-FL(i);
+const nR=i=>{const n=Math.ceil(H(i)*FT/S.rmax-1e-9);return n%2?n+1:n;};
+const run=i=>(nR(i)/2-1)*S.tread*M;
+function slab(i,z,g){const E=B.EV,ve=vi1-S.land*M,up=i<=B.N?run(i):run(B.N),dn=run(i-1),w=S.w*M;
+  box(0,W,0,S.v0,z-B.SLAB,z,MT.slab,g);box(0,E.x0,S.v0,D,z-B.SLAB,z,MT.slab,g);box(E.x0,S.x0,S.v0,E.v0,z-B.SLAB,z,MT.slab,g);
+  box(xi0,xi0+w,vi0,ve-up,z-B.SLAB,z,MT.stair,g);box(xi0+w,xi1,vi0,ve-dn,z-B.SLAB,z,MT.stair,g);}
+
+// --- 階段（折返し、1本）: 左半分を奥へ上がり、奥の踊り場で折り返して右半分を手前へ
+function stair(i,g){const z=FL(i),h=H(i),n=nR(i),r=h/n,m=n/2,t=S.tread*M,w=S.w*M,ve=vi1-S.land*M,rn=run(i);
+  for(let j=1;j<m;j++){const top=z+j*r;box(xi0,xi0+w,ve-rn+(j-1)*t,ve-rn+j*t,top-r-0.6,top,MT.stair,g);}
+  box(xi0,xi1,ve,vi1,z+h/2-0.6,z+h/2,MT.stair,g);
+  for(let j=1;j<m;j++){const top=z+h/2+j*r;box(xi1-w,xi1,ve-j*t,ve-(j-1)*t,top-r-0.6,top,MT.stair,g);}}
+
+// --- コアの壁（階段室・昇降路・ホール）
+function core(i,z0,h,g){const E=B.EV,Lb=B.LOBBY,cw=S.wall,dh=7;
+  const gfOps=[[30.2,34.5,0,h,'void']];
+  wallRun({hz:false,c:S.x0+cw/2,t:cw,a0:i===0?8:S.v0,a1:D-T,z0,h,g,def:MT.core,ops:[[S.door[0],S.door[1],0,dh,'void']].concat(i===0?gfOps:[])});
+  wallRun({hz:true,c:S.v0+cw/2,t:cw,a0:S.x0,a1:W-T,z0,h,g,def:MT.core});
+  wallRun({hz:false,c:E.x0+cw/2,t:cw,a0:i===0?30:i<=B.N?Lb.v0:E.v0,a1:D-T,z0,h,g,def:MT.core,ops:i>=1&&i<=B.N?[[Lb.door[0],Lb.door[1],0,dh,'void']]:[]});
+  wallRun({hz:true,c:E.v0+cw/2,t:cw,a0:E.x0,a1:S.x0,z0,h,g,def:MT.core,ops:i<=B.N?[[E.door[0],E.door[1],0,dh,'void']]:[]});
+  if(i===0)wallRun({hz:true,c:30+cw/2,t:cw,a0:E.x0,a1:S.x0,z0,h,g,def:MT.core});
+  else if(i<=B.N)wallRun({hz:true,c:Lb.v0+cw/2,t:cw,a0:E.x0,a1:S.x0,z0,h,g,def:MT.core});}
+
+// --- 1階（ピロティ・玄関）
+(function(){const g=LV[0],z=FL(0),h=H(0)-B.SLAB;
+  box(0,W,0,D,B.SITE_Z,z,MT.slab,g);
+  B.COL.xs.forEach(x=>B.COL.vs.forEach(v=>{if(B.COL.skip.some(s=>s[0]===x&&s[1]===v))return;box(x-B.COL.b/2,x+B.COL.b/2,v-B.COL.d/2,v+B.COL.d/2,z,FL(1)-B.SLAB,MT.col,g);}));
+  core(0,z,h,g);stair(0,LV[0]);
+  wallRun({hz:false,c:W-T/2,t:T,a0:8,a1:D,z0:z,h,g,mats:[[34.7,D,MT.grey]]});
+  wallRun({hz:true,c:D-T/2,t:T,a0:B.EV.x0,a1:W-T,z0:z,h,g,def:MT.grey});
+  wallRun({hz:true,c:8+0.25,t:0.5,a0:S.x0,a1:W-T,z0:z,h,g,def:MT.wood,ops:[[30,34.5,0,8,'sl']]});
+  for(let k=0;k<4;k++)box(29.5,35,8-(k+1)*1.2,8-k*1.2,B.SITE_Z,B.SITE_Z+(4-k)*(z-B.SITE_Z)/4,MT.slab,g);
+  const rp=new THREE.Mesh(new THREE.BoxGeometry(14*FT,0.3*FT,Math.hypot(8,z-B.SITE_Z)*FT),MT.slab);rp.rotation.x=Math.atan2(z-B.SITE_Z,8);rp.position.set(wx(9),(B.SITE_Z+z)/2*FT-0.1*FT,wz(-4));g.add(rp);
+  [[6,10],[15,10]].forEach(c=>{box(c[0]-3,c[0]+3,c[1]-7.5,c[1]+7.5,z+0.6,z+3,MT.car,g);box(c[0]-2.6,c[0]+2.6,c[1]-3.5,c[1]+3.5,z+3,z+4.6,MT.glass,g);});
+  [[9,6],[9,24],[22,12],[31,20]].forEach(p=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(0.4*FT,0.4*FT,0.05*FT,16),MT.lamp);l.position.set(wx(p[0]),(FL(1)-B.SLAB-0.03)*FT,wz(p[1]));g.add(l);});
+  plant(27.2,6.5,B.SITE_Z,3,g);plant(37.5,6,B.SITE_Z,3,g);})();
+
+// --- 住戸階 1F〜6F
+for(let i=1;i<=B.N;i++){const g=LV[i],z=FL(i),h=H(i),BA=B.BAL;
+  slab(i,z,g);core(i,z,h,g);stair(i,g);
+  wallRun({hz:true,c:T/2,t:T,a0:0,a1:W,z0:z,h,g,mats:[[0,BA.x0,MT.grey]],ops:[[2.25,4.25,3.5,7,'win'],[BA.x0,BA.x1,0,h,'void'],[26,32,3,7,'win']]});
+  box(BA.x0-T,BA.x0,0,BA.d,z,z+h,MT.cream,g);box(BA.x1,BA.x1+T,0,BA.d,z,z+h,MT.cream,g);
+  wallRun({hz:true,c:BA.d+T/2,t:T,a0:BA.x0-T,a1:BA.x1+T,z0:z,h,g,ops:[[BA.x0+1,BA.x1-1,0,7.5,'sl']]});
+  box(BA.x0,BA.x1,0.1,0.25,z+3.35,z+3.5,MT.rail,g);box(BA.x0,BA.x1,0.1,0.25,z+0.3,z+0.4,MT.rail,g);
+  for(let x=BA.x0+0.35;x<BA.x1-0.2;x+=0.42)box(x-0.04,x+0.04,0.13,0.22,z+0.3,z+3.35,MT.rail,g);
+  plant(BA.x0+1.2,1.4,z,2.4,g);plant(BA.x1-1.5,1.6,z,1.8,g);
+  [BA.x0+4,BA.x1-4].forEach(x=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(0.25*FT,0.25*FT,0.05*FT,12),MT.lamp);l.position.set(wx(x),(z+h-B.SLAB-0.03)*FT,wz(2.5));g.add(l);});
+  box(BA.x0-T,W,-0.35,0,z-B.SLAB,z+0.6,MT.band,g);box(25.5,32.5,-1.5,0,z+7.3,z+7.6,MT.band,g);
+  wallRun({hz:false,c:T/2,t:T,a0:0,a1:D,z0:z,h,g,ops:[[6,10,3,7,'win'],[17,21,3,7,'win'],[28,32,3,7,'win'],[39,43,3,7,'win']]});
+  [3,14,25,36,47].forEach(v=>box(-1,0,v-0.3,v+0.3,z,z+h,MT.band,g));
+  wallRun({hz:false,c:W-T/2,t:T,a0:0,a1:D,z0:z,h,g,mats:[[S.v0,D,MT.grey]],ops:[[4,10,3,7,'win'],[16,19,5,7,'win'],[24,30,3,7,'win']]});
+  wallRun({hz:true,c:D-T/2,t:T,a0:0,a1:W,z0:z,h,g,mats:[[B.EV.x0,W,MT.grey]],ops:[[3,8,3,7,'win'],[11,16,3,7,'win'],[28.5,33.5,6.5,9.3,'win']]});}
+
+// --- 屋上
+(function(){const g=LV[B.N+1],z=ROOF,rh=B.ROOF.room,E=B.EV;
+  slab(B.N+1,z,g);core(B.N+1,z,rh,g);
+  wallRun({hz:false,c:W-T/2,t:T,a0:S.v0,a1:D,z0:z,h:rh,g,def:MT.grey});
+  wallRun({hz:true,c:D-T/2,t:T,a0:E.x0,a1:W,z0:z,h:rh,g,def:MT.grey});
+  box(S.x0,W,S.v0,D,z+rh-B.SLAB,z+rh,MT.grey,g);box(E.x0,S.x0,E.v0,D,z+rh-B.SLAB,z+rh,MT.grey,g);
+  const p=B.PAR,pt=0.5;
+  box(0,W,0,pt,z,z+p,MT.cream,g);box(0,pt,0,D,z,z+p,MT.cream,g);box(W-pt,W,0,S.v0,z,z+p,MT.cream,g);box(0,E.x0,D-pt,D,z,z+p,MT.cream,g);
+  box(0,W,-0.35,0,z-B.SLAB,z+0.6,MT.band,g);
+  for(let x=4;x<33;x+=6){box(x-2,x+2,1,2.6,z,z+1.6,MT.pot,g);plant(x,1.8,z+1.6,1.6,g);}
+  const k=B.ROOF.tank;box(k[0],k[1],k[2],k[3],z+rh,z+rh+k[4],MT.tank,LV[B.N+2]);})();
+
+// --- 寸法
+const dimG=new THREE.Group();sc.add(dimG);
+const lm=new THREE.LineBasicMaterial({color:0x1c2226});
+function seg(a,b){dimG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]),lm));}
+const X0=wx(0),X1=wx(W),Zf=wz(0),Zb=wz(D),yb=B.SITE_Z*FT+0.05,o=2.2;
+seg([X0,yb,Zf+o],[X1,yb,Zf+o]);seg([X1+o,yb,Zf],[X1+o,yb,Zb]);seg([X1+o,FL(0)*FT,Zf+o],[X1+o,ROOF*FT,Zf+o]);
+const labels=[{p:[0,yb,Zf+o],t:"36′-0″"},{p:[X1+o,yb,0],t:"52′-0″"},{p:[X1+o,(FL(0)+ROOF)/2*FT,Zf+o],t:"72′-0″"}].map(d=>{const e=document.createElement('div');e.className='dim';e.textContent=d.t;view.appendChild(e);d.e=e;return d;});
+let showDims=true;
+
+sc.add(new THREE.AmbientLight(0xffffff,0.55));const hl=new THREE.HemisphereLight(0xfff4e0,0x8a8a80,0.25);sc.add(hl);const dl=new THREE.DirectionalLight(0xfff1dc,0.7);dl.position.set(30,60,40);sc.add(dl);
+
+let th=0.55,ph=0.32,dist=48;const tgt=new THREE.Vector3(0,11,0);
+function render(){cam.position.set(tgt.x+dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),tgt.z+dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);R.render(sc,cam);
+  const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});}
+const views={persp:{th:0.55,ph:0.32,dist:48,y:11},street:{th:0.18,ph:0.04,dist:34,y:9},front:{th:0,ph:0.05,dist:55,y:11},top:{th:0,ph:1.55,dist:60,y:0}};
+function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
+function setView(k){press(k);const v=views[k];th=v.th;ph=v.ph;dist=v.dist;tgt.y=v.y;document.getElementById('zm').value=dist;render();}
+document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
+document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims;render();});
+function lvLabel(){const n=+document.getElementById('lv').value;document.getElementById('lvName').textContent=TXT[lang].lv[n];}
+document.getElementById('lv').addEventListener('input',e=>{const n=+e.target.value;LV.forEach((g,i)=>g.visible=i<=n);lvLabel();render();});
+let drag=false,px=0,py=0;
+view.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;view.style.cursor='grabbing';view.setPointerCapture(e.pointerId);});
+view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;th-=dx*0.008;ph=Math.max(0.02,Math.min(1.55,ph+dy*0.006));press('');render();});
+view.addEventListener('pointerup',()=>{drag=false;view.style.cursor='grab';});
+view.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(15,Math.min(120,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
+document.getElementById('zm').addEventListener('input',e=>{dist=+e.target.value;render();});
+
+function stamp(){const d=new Date();return String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');}
+function saveGLB(obj,name,hide){if(!THREE.GLTFExporter){alert(TXT[lang].glbErr);return;}const hid=hide.filter(o=>o&&o.visible);hid.forEach(o=>o.visible=false);
+  new THREE.GLTFExporter().parse(obj,buf=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'model/gltf-binary'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},{binary:true,onlyVisible:true,maxTextureSize:4096});
+  hid.forEach(o=>o.visible=true);}
+const rev=()=>document.querySelector('[data-i="kRev"]+span').textContent.trim();
+document.getElementById('glbB').onclick=()=>saveGLB(sc,'CM-03_Rev'+rev()+'_'+stamp()+'.glb',[dimG,dl,hl]);
+new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
+try{if(localStorage.getItem('bg6-lang')==='ja')setLang('ja')}catch(e){}
+render();
+</script>

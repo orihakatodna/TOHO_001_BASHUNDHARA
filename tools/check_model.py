@@ -24,6 +24,7 @@
 終了コード: 検出 0 件なら 0、1 件以上なら 1。
 """
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -243,6 +244,95 @@ def check_open(op, iw, idp, h_ft, boxes, cat, ex, wall_y, found, notes):
     notes.append(f"間仕切り {len(pts)} 本・扉 {sum(o[6] == 'door' for o in ops)} か所・窓 {sum(o[6] != 'door' for o in ops)} か所")
 
 
+# 建物モデル（BLD）の照合値。出典は 01_法規/建築条件_4カタ_階段1本_v1_261016.md（同ファイルで官報と照合済み。
+# このスクリプトの作成時に官報の原文は見直していない）
+LAW = {
+    "front_min": 1.5,   # m  DBR 規則41(1)（道路中心から 4.5 m との大きい方）
+    "side_min": 1.00,   # m  DBR 表1（7階まで）
+    "rear_min": 1.25,   # m  同上
+    "stair_w": 1.15,    # m  DBR 第57条(ঘ)・表10
+    "riser_max": 0.175, "tread_min": 0.225, "rt_min": 0.400, "flight_max": 20, "headroom": 2.15,
+    "ev_height": 18.0,  # m  DBR 規則59(1): 最上階の屋根がこれを超えると EV が要る
+    "tank_max": 5.0,    # m  DBR 規則49(ঘ): 高架水槽は屋根の仕上げ面から 5 m 以内
+}
+
+
+def check_building(js, found, notes):
+    m = re.search(r"const BLD=(\{.*?\}\});", js, re.S)
+    if not m:
+        found.append("建物のデータ（BLD）が読めない")
+        return
+    b = json.loads(m.group(1))
+    st, ev, lb, si = b["STAIR"], b["EV"], b["LOBBY"], b["SITE"]
+    fl = lambda i: b["PL"] if i == 0 else b["PL"] + b["GF"] + (i - 1) * b["TYP"]
+    roof = fl(b["N"] + 1)
+    # A. 規模（ユーザー指定: 建物 36×52 ft、敷地 45×65 ft、GF 12 ft・1〜6F 10 ft、G+6、前面道路 40 ft）
+    want = {"W": 36, "D": 52, "GF": 12, "TYP": 10, "N": 6}
+    for k, v in want.items():
+        if b[k] != v:
+            found.append(f"規模が指定と違う: {k}={b[k]}（指定 {v}）")
+    if (si["W"], si["D"], si["ROAD"]) != (45, 65, 40):
+        found.append(f"敷地・道路が指定と違う: {si['W']}×{si['D']}、道路 {si['ROAD']}")
+    # B. 敷地に収まり、後退が足りるか
+    if abs(si["S"] * 2 + b["W"] - si["W"]) > TOL or abs(si["F"] + b["D"] + si["R"] - si["D"]) > TOL:
+        found.append("建物と後退の合計が敷地と合わない")
+    front_req = max(LAW["front_min"], 4.5 - si["ROAD"] / 2 * FT)
+    for name, val, req in (("前面", si["F"] * FT, front_req), ("側面", si["S"] * FT, LAW["side_min"]), ("背面", si["R"] * FT, LAW["rear_min"])):
+        if val < req - 1e-6:
+            found.append(f"後退の不足: {name} {val:.2f} m < {req:.2f} m")
+    # C. 階段
+    xi0, xi1 = st["x0"] + st["wall"], st["x1"] - b["T"]
+    vi0, vi1 = st["v0"] + st["wall"], st["v1"] - b["T"]
+    cw, cl = (xi1 - xi0) * FT, (vi1 - vi0) * FT
+    if 2 * st["w"] + st["gap"] > cw + 1e-6:
+        found.append(f"階段室の内法幅 {cw:.3f} m < 2×{st['w']}+{st['gap']}")
+    if st["w"] < LAW["stair_w"]:
+        found.append(f"階段の幅 {st['w']} m < {LAW['stair_w']} m")
+    if st["tread"] < LAW["tread_min"]:
+        found.append(f"踏面 {st['tread']} m < {LAW['tread_min']} m")
+    rows = []
+    for i in range(b["N"] + 1):
+        h = (fl(i + 1) - fl(i)) * FT
+        n = math.ceil(h / st["rmax"] - 1e-9)
+        n += n % 2
+        r = h / n
+        run = (n / 2 - 1) * st["tread"]
+        rows.append(f"{'GF' if i == 0 else str(i) + 'F'} {n}段×{r * 1000:.1f}")
+        if r > LAW["riser_max"] + 1e-9 or r + st["tread"] < LAW["rt_min"] - 1e-9 or n / 2 > LAW["flight_max"]:
+            found.append(f"階段の寸法が規定外: {rows[-1]} mm")
+        if st["land"] + run + st["land"] > cl + 1e-6:
+            found.append(f"階段室の内法長さ {cl:.3f} m に踊り場・階段が収まらない（{rows[-1]}）")
+        if h - r - 0.6 * FT < LAW["headroom"]:
+            found.append(f"階段の頭上 {h - r - 0.6 * FT:.2f} m < {LAW['headroom']} m")
+        land_end = vi1 - (st["land"] + run) / FT
+        if not (vi0 <= st["door"][0] and st["door"][1] <= land_end):
+            found.append(f"階段室の扉が階の踊り場（v {vi0:.2f}〜{land_end:.2f}）に入らない")
+    notes.append("階段: " + "、".join(rows[:2]) + f" mm、室内法 {cw:.2f} × {cl:.2f} m")
+    # D. コアの配置（重なり・建物内）
+    rects = {"階段室": (st["x0"], st["x1"], st["v0"], st["v1"]), "昇降路": (ev["x0"], ev["x1"], ev["v0"], ev["v1"]),
+             "ホール": (lb["x0"], lb["x1"], lb["v0"], lb["v1"])}
+    for k, r in rects.items():
+        if r[0] < -TOL or r[1] > b["W"] + TOL or r[2] < -TOL or r[3] > b["D"] + TOL:
+            found.append(f"{k}が建物の外に出る")
+    ks = list(rects)
+    for i in range(len(ks)):
+        for j in range(i + 1, len(ks)):
+            if overlap(rects[ks[i]], rects[ks[j]]):
+                found.append(f"{ks[i]}と{ks[j]}が重なる")
+    if not (lb["x0"] <= ev["door"][0] and ev["door"][1] <= lb["x1"] and abs(ev["v0"] - lb["v1"]) < TOL):
+        found.append("EV の扉がホールに面していない")
+    if abs(st["x0"] - lb["x1"]) > TOL or not (lb["v0"] <= st["door"][0] and st["door"][1] <= lb["v1"]):
+        found.append("階段室の扉がホールに面していない")
+    # E. EV の要否と高架水槽
+    top = (roof - fl(0)) * FT
+    notes.append(f"屋上スラブは1階床から {top:.2f} m（EV が要る高さ {LAW['ev_height']} m）")
+    tank_top = (b["ROOF"]["room"] + b["ROOF"]["tank"][4]) * FT
+    if tank_top > LAW["tank_max"] + 1e-6:
+        found.append(f"高架水槽の上端が屋上から {tank_top:.2f} m（上限 {LAW['tank_max']} m）")
+    notes.append(f"保留 1: 階段1本（消防規則 2014 第13別表(৯)は7層以上で階段2本。施主の判断で保留）")
+    notes.append("未照合: 容積率・建蔽率の上限、消防水槽、上階の柱・梁、住戸の間取り")
+
+
 def check_file(path):
     found = []
     notes = []
@@ -277,6 +367,10 @@ def check_file(path):
         found.append("GLTFExporter の読み込みが無いか、three.js と版が合わない")
     if 'id="glbB"' not in html or "saveGLB(" not in js:
         found.append("GLB の保存ボタン（glbB）か saveGLB が無い")
+
+    if "const BLD=" in js:
+        check_building(js, found, notes)
+        return found, notes, revs, None
 
     dims = parse_dims(js)
     op = parse_open(js)
