@@ -33,6 +33,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
 .bar .grp{display:flex;flex-wrap:wrap;gap:6px}
 .bar label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);flex:1;min-width:180px}
 .bar input[type=range]{flex:1;accent-color:var(--accent)}
+.bar .tag{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
 .hint{font-size:12px;color:var(--ink-2);padding:0 12px 10px}
 .spec{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:16px;min-width:0}
 .spec h2{font-family:var(--f-display);font-weight:600;font-size:20px;letter-spacing:.02em;margin:0 0 8px}
@@ -82,7 +83,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
         <label for="zm"><span data-i="zoom">Distance</span><input type="range" id="zm" min="6" max="60" value="30"></label>
         <button class="btn" id="dimT" aria-pressed="true" data-i="dims">Dimensions</button>
       </div>
-      <p class="hint" data-i="hint">Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft.</p>
+      <div class="bar">
+        <span class="tag" data-i="csTag">For Clip Studio (GLB)</span>
+        <button class="btn" id="glbB" data-i="glbAll">Save the unit as GLB</button>
+      </div>
+      <p class="hint" data-i="hint">Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
     </section>
 
     <aside class="spec">
@@ -110,11 +115,13 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
 <script>
 const TXT={
-en:{title:"Dwelling unit shell — exposed concrete",sub:"36′ × 52′, 10′ high, open top. Fair-faced concrete walls with a 1,800 × 900 mm formwork grid. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",hint:"Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft.",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sH:"Wall height",sW:"Walls",sWv:"Reinforced concrete, 250 mm (provisional), fair-faced finish both sides",sJ:"Panel joints",sJv:"1,800 W × 900 H, laid horizontally, panel centred on the wall centre line, set out from floor level",sP:"Form-tie cones",sPv:"@600 horizontal × @450 vertical, six per panel (300 and 225 from joints), aligned inside and out",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sPt:"Partitions",sPtv:"125 mm, painted, full height (provisional; material not decided)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sC:"Ceiling",sCv:"None — open model",kJ:"Panel joint",kP:"Form-tie cone",note:"Concept model for discussion. Partitions, doors and windows follow the CM-01 proposal. Formwork and tie-cone setting-out around openings is not yet planned and is shown cut at the openings. Not for construction."},
-ja:{title:"住戸の躯体モデル — コンクリート打ち放し",sub:"36′ × 52′、高さ 10′、天井なし。打ち放しの壁、型枠目地 1,800 × 900 mm。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。床のグリッドは 1 ft、5 ft ごとに太線。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sH:"壁高さ",sW:"壁",sWv:"鉄筋コンクリート 250 mm（仮定）、内外とも打ち放し",sJ:"型枠目地",sJv:"幅 1,800 × 高さ 900（横使い）、壁の中心線にパネル中央を合わせ、床面から割付け",sP:"Pコン",sPv:"横 @600 × 縦 @450、1枚に6個（目地から 300・225）、内外で位置をそろえる",sF:"床",sFv:"スラブ 125 mm（仮定）",sPt:"間仕切り",sPtv:"125 mm、塗装仕上げ、壁の天端まで（仮定。材料は未決定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sC:"天井",sCv:"なし（開放モデル）",kJ:"型枠目地",kP:"Pコン",note:"協議用の概念モデルです。間仕切り・扉・窓は CM-01 の提案と同じです。開口まわりの型枠・Pコンの割付けは未検討で、開口で切れたまま表示しています。施工用ではありません。"}};
-function setLang(l){document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(t)e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');try{localStorage.setItem('csh-lang',l)}catch(e){}}
+en:{title:"Dwelling unit shell — exposed concrete",sub:"36′ × 52′, 10′ high, open top. Fair-faced concrete walls with a 1,800 × 900 mm formwork grid. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",csTag:"For Clip Studio (GLB)",glbAll:"Save the unit as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",hint:"Drag to rotate. Scroll or use the slider to zoom. Floor grid: 1 ft, heavy line every 5 ft. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sH:"Wall height",sW:"Walls",sWv:"Reinforced concrete, 250 mm (provisional), fair-faced finish both sides",sJ:"Panel joints",sJv:"1,800 W × 900 H, laid horizontally, panel centred on the wall centre line, set out from floor level",sP:"Form-tie cones",sPv:"@600 horizontal × @450 vertical, six per panel (300 and 225 from joints), aligned inside and out",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sPt:"Partitions",sPtv:"125 mm, painted, full height (provisional; material not decided)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sC:"Ceiling",sCv:"None — open model",kJ:"Panel joint",kP:"Form-tie cone",note:"Concept model for discussion. Partitions, doors and windows follow the CM-01 proposal. Formwork and tie-cone setting-out around openings is not yet planned and is shown cut at the openings. Not for construction."},
+ja:{title:"住戸の躯体モデル — コンクリート打ち放し",sub:"36′ × 52′、高さ 10′、天井なし。打ち放しの壁、型枠目地 1,800 × 900 mm。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",csTag:"Clip Studio 用（GLB）",glbAll:"住戸を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",hint:"ドラッグで回転、スクロールまたはスライダーで拡大縮小。床のグリッドは 1 ft、5 ft ごとに太線。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sH:"壁高さ",sW:"壁",sWv:"鉄筋コンクリート 250 mm（仮定）、内外とも打ち放し",sJ:"型枠目地",sJv:"幅 1,800 × 高さ 900（横使い）、壁の中心線にパネル中央を合わせ、床面から割付け",sP:"Pコン",sPv:"横 @600 × 縦 @450、1枚に6個（目地から 300・225）、内外で位置をそろえる",sF:"床",sFv:"スラブ 125 mm（仮定）",sPt:"間仕切り",sPtv:"125 mm、塗装仕上げ、壁の天端まで（仮定。材料は未決定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sC:"天井",sCv:"なし（開放モデル）",kJ:"型枠目地",kP:"Pコン",note:"協議用の概念モデルです。間仕切り・扉・窓は CM-01 の提案と同じです。開口まわりの型枠・Pコンの割付けは未検討で、開口で切れたまま表示しています。施工用ではありません。"}};
+let lang='en';
+function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(t)e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');try{localStorage.setItem('csh-lang',l)}catch(e){}}
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
 try{if(localStorage.getItem('csh-lang')==='ja')setLang('ja')}catch(e){}
 
@@ -221,6 +228,12 @@ view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy
 view.addEventListener('pointerup',()=>{drag=false;view.style.cursor='grab';});
 view.addEventListener('wheel',e=>{if(mode!=='orbit')return;e.preventDefault();dist=Math.max(6,Math.min(60,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
 document.getElementById('zm').addEventListener('input',e=>{if(mode!=='orbit')setView('persp');dist=+e.target.value;render();});
+function stamp(){const d=new Date();return String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');}
+function saveGLB(obj,name,hide){if(!THREE.GLTFExporter){alert(TXT[lang].glbErr);return;}const hid=hide.filter(o=>o&&o.visible);hid.forEach(o=>o.visible=false);
+  new THREE.GLTFExporter().parse(obj,buf=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'model/gltf-binary'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},{binary:true,onlyVisible:true,maxTextureSize:4096});
+  hid.forEach(o=>o.visible=true);}
+const rev=()=>document.querySelector('[data-i="kRev"]+span').textContent.trim();
+document.getElementById('glbB').onclick=()=>saveGLB(sc,'CM-02_Rev'+rev()+'_'+stamp()+'.glb',[gr,pm,dimG,dl]);
 new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
 render();
 </script>

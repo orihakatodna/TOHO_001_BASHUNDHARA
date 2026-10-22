@@ -270,6 +270,14 @@ def check_file(path):
     if len(revs) != 1:
         found.append(f"表題欄の版が1つに決まらない: {sorted(revs)}")
 
+    # 14. GLB の書き出し（Clip Studio 用）: three.js と書き出し機能の版がそろい、保存ボタンがあるか
+    core = re.search(r"three\.js/r(\d+)/three\.min\.js", html)
+    gexp = re.search(r"three@0\.(\d+)\.0/examples/js/exporters/GLTFExporter\.js", html)
+    if not (core and gexp and core.group(1) == gexp.group(1)):
+        found.append("GLTFExporter の読み込みが無いか、three.js と版が合わない")
+    if 'id="glbB"' not in html or "saveGLB(" not in js:
+        found.append("GLB の保存ボタン（glbB）か saveGLB が無い")
+
     dims = parse_dims(js)
     op = parse_open(js)
     if dims is None:
