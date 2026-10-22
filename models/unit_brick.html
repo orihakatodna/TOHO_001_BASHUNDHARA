@@ -85,6 +85,7 @@ select{padding:7px 8px;max-width:100%}
         </div>
         <label for="zm"><span data-i="zoom">Distance</span><input type="range" id="zm" min="6" max="60" value="30"></label>
         <button class="btn" id="dimT" aria-pressed="true" data-i="dims">Dimensions</button>
+        <button class="btn" id="fixT" aria-pressed="true" data-i="fix">Fans, lights, AC</button>
       </div>
       <div class="bar">
         <span class="tag" data-i="fTag">Furniture</span>
@@ -109,6 +110,7 @@ select{padding:7px 8px;max-width:100%}
         <div class="row"><dt data-i="sIn">Inside clear</dt><dd>34′-4″ × 50′-4″<span class="m">10.47 × 15.35 m</span></dd></div>
         <div class="row"><dt data-i="sArea">Floor area</dt><dd><span data-i="sAreaV">1,872 sft gross / 1,731 sft net</span><span class="m">173.9 m² / 160.8 m²</span></dd></div>
         <div class="row"><dt data-i="sL">Layout</dt><dd data-i="sLv">3 bedrooms, 3 baths, living, dining, kitchen (proposal; partitions not yet drawn)</dd></div>
+        <div class="row"><dt data-i="sS">Services</dt><dd data-i="sSv">Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.</dd></div>
         <div class="row"><dt data-i="sH">Wall height</dt><dd>10′-0″<span class="m" data-i="sHm">3.05 m · 38 courses</span></dd></div>
         <div class="row"><dt data-i="sW">Walls</dt><dd data-i="sWv">250 mm (10″) first-class burnt clay brick, cement mortar, English bond</dd></div>
         <div class="row"><dt data-i="sF">Floor</dt><dd data-i="sFv">Slab, 125 mm (provisional)</dd></div>
@@ -120,7 +122,7 @@ select{padding:7px 8px;max-width:100%}
         <span><i class="sw" style="background:rgba(200,140,110,.55)"></i><span data-i="zK">Kitchen</span></span>
         <span><i class="sw" style="background:rgba(100,170,170,.6)"></i><span data-i="zW">Baths</span></span>
       </div>
-      <p class="note" data-i="note">Concept model for discussion. Room zones and furniture are a first proposal; partitions, windows and doors follow in the next revision. Furniture you move is kept only in your own browser. Not for construction.</p>
+      <p class="note" data-i="note">Concept model for discussion. Room zones, furniture, fans, lights and AC are a first proposal; partitions, windows and doors follow in the next revision. Furniture you move is kept only in your own browser. Not for construction.</p>
     </aside>
   </div>
 </div>
@@ -128,8 +130,8 @@ select{padding:7px 8px;max-width:100%}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const TXT={
-en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Brick walls in English bond, 10′ high, open top. Three-bedroom furniture layout. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",fTag:"Furniture",selNone:"Nothing selected",rot:"Rotate 90°",del:"Remove",add:"Add",reset:"Restore proposal",hint:"Drag a piece of furniture to move it; drag empty space to rotate the view. The Top view is easiest for arranging. Floor grid: 1 ft, heavy line every 5 ft.",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sL:"Layout",sLv:"3 bedrooms, 3 baths, living, dining, kitchen (proposal; partitions not yet drawn)",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",zL:"Living, dining",zB:"Bedrooms",zK:"Kitchen",zW:"Baths",note:"Concept model for discussion. Room zones and furniture are a first proposal; partitions, windows and doors follow in the next revision. Furniture you move is kept only in your own browser. Not for construction."},
-ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。3寝室の家具配置。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",fTag:"家具",selNone:"未選択",rot:"90° 回転",del:"削除",add:"追加",reset:"提案の配置に戻す",hint:"家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。配置は「上から」が操作しやすいです。床のグリッドは 1 ft、5 ft ごとに太線。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sL:"間取り",sLv:"寝室3・浴室3・居間・食堂・台所（提案。間仕切りは未作図）",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",zL:"居間・食堂",zB:"寝室",zK:"台所",zW:"浴室",note:"協議用の概念モデルです。部屋の区分と家具は最初の提案で、間仕切り・窓・扉は次の版で追加します。動かした家具の位置は、見ている方のブラウザーにだけ残ります。施工用ではありません。"}};
+en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Brick walls in English bond, 10′ high, open top. Three-bedroom furniture layout. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",fix:"Fans, lights, AC",fTag:"Furniture",selNone:"Nothing selected",rot:"Rotate 90°",del:"Remove",add:"Add",reset:"Restore proposal",hint:"Drag a piece of furniture to move it; drag empty space to rotate the view. The Top view is easiest for arranging. Floor grid: 1 ft, heavy line every 5 ft.",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / 1,731 sft net",sS:"Services",sSv:"Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.",sL:"Layout",sLv:"3 bedrooms, 3 baths, living, dining, kitchen (proposal; partitions not yet drawn)",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",zL:"Living, dining",zB:"Bedrooms",zK:"Kitchen",zW:"Baths",note:"Concept model for discussion. Room zones, furniture, fans, lights and AC are a first proposal; partitions, windows and doors follow in the next revision. Furniture you move is kept only in your own browser. Not for construction."},
+ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。3寝室の家具配置。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",fix:"天井扇・照明・エアコン",fTag:"家具",selNone:"未選択",rot:"90° 回転",del:"削除",add:"追加",reset:"提案の配置に戻す",hint:"家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。配置は「上から」が操作しやすいです。床のグリッドは 1 ft、5 ft ごとに太線。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 内法 1,731 sft",sS:"設備",sSv:"天井扇 56″（羽根の高さは床から約 2.7 m、仮定）、LED 天井照明、壁掛けエアコン室内機。位置は提案。天井は未作図。",sL:"間取り",sLv:"寝室3・浴室3・居間・食堂・台所（提案。間仕切りは未作図）",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",zL:"居間・食堂",zB:"寝室",zK:"台所",zW:"浴室",note:"協議用の概念モデルです。部屋の区分・家具・天井扇・照明・エアコンは最初の提案で、間仕切り・窓・扉は次の版で追加します。動かした家具の位置は、見ている方のブラウザーにだけ残ります。施工用ではありません。"}};
 let lang='en';
 
 const FT=0.3048,M={W:36,D:52,H:10,T:0.25,slab:0.125};
@@ -179,6 +181,7 @@ sc.add(new THREE.AmbientLight(0xffffff,0.55));const dl=new THREE.DirectionalLigh
 
 const MAT={fabric:0x6f7f95,wood:0x9a7350,wood2:0x7c5c40,linen:0xe6e0d4,white:0xf1f1ec,white2:0xdcdcd6,stone:0xc9c2b4,pot:0xa0583a,leaf:0x4f7a3a,leaf2:0x6f9a4c};
 Object.keys(MAT).forEach(k=>MAT[k]=new THREE.MeshLambertMaterial({color:MAT[k]}));
+MAT.lamp=new THREE.MeshLambertMaterial({color:0xfff6d8,emissive:0xfff0c0,emissiveIntensity:0.9});MAT.metal=new THREE.MeshLambertMaterial({color:0xb8bcc0});MAT.acw=new THREE.MeshLambertMaterial({color:0xf4f4f2});
 const CAT={
 sofa:{en:'3-seat sofa',ja:'3人掛けソファ',w:7,d:3,type:'sofa'},
 arm:{en:'Armchair',ja:'1人掛けソファ',w:2.6,d:2.6,type:'sofa'},
@@ -198,7 +201,12 @@ wc:{en:'WC',ja:'便器',w:1.3,d:2.3,h:0.75,c:'white'},
 basin:{en:'Wash basin',ja:'洗面台',w:2,d:1.5,h:0.85,c:'white'},
 shower:{en:'Shower area',ja:'シャワースペース',w:3,d:3,h:0.06,c:'white'},
 plantL:{en:'Floor plant, large',ja:'観葉植物（大）',w:1.6,d:1.6,h:1.6,type:'plant'},
-plantS:{en:'Floor plant, small',ja:'観葉植物（小）',w:1.1,d:1.1,h:0.8,type:'plant'}};
+plantS:{en:'Floor plant, small',ja:'観葉植物（小）',w:1.1,d:1.1,h:0.8,type:'plant'},
+fan:{en:'Ceiling fan, 56″',ja:'天井扇（56″）',w:4.67,d:4.67,type:'fan',mount:'ceiling'},
+clight:{en:'Ceiling light, round',ja:'天井照明（丸型）',w:1.2,d:1.2,type:'clight',mount:'ceiling'},
+pendant:{en:'Pendant light',ja:'ペンダント照明',w:1.3,d:1.3,type:'pendant',mount:'ceiling'},
+tube:{en:'LED tube light, 4 ft',ja:'LED 直管照明（4 ft）',w:4,d:0.3,type:'tube',mount:'wall'},
+ac:{en:'Split AC indoor unit',ja:'エアコン室内機（壁掛け）',w:3.1,d:0.8,type:'ac',mount:'wall'}};
 const INIT=[['tv',10,0.85,180],['sofa',10,13.5,0],['coffee',10,9.5,0],['arm',3.5,8.5,90],['arm',16.5,8.5,-90],
 ['dtable',8,22,0],['dchair',6.5,19.4,180],['dchair',9.5,19.4,180],['dchair',6.5,24.6,0],['dchair',9.5,24.6,0],['dchair',4.2,22,90],['dchair',11.8,22,-90],
 ['counter',33.3,19.2,-90],['counter',30.3,24.9,0],['fridge',23.6,24.7,0],
@@ -208,7 +216,10 @@ const INIT=[['tv',10,0.85,180],['sofa',10,13.5,0],['coffee',10,9.5,0],['arm',3.5
 ['wc',1.25,34,90],['basin',5,35.2,0],['shower',6.4,31.6,0],
 ['wc',33.1,34,-90],['basin',29.4,35.2,0],['shower',27.9,31.6,0],
 ['wc',33.1,14.6,-90],['basin',29.5,15.2,0],['shower',27.6,12.6,0],
-['plantL',1.2,1.2,0],['plantL',18.8,1.2,0],['plantS',1,27,0],['plantS',14,37.2,0]];
+['plantL',1.2,1.2,0],['plantL',18.8,1.2,0],['plantS',1,27,0],['plantS',14,37.2,0],
+['fan',10,8,0],['fan',8,22,0],['fan',7.5,43,0],['fan',26.86,43,0],['fan',27,6,0],
+['clight',4,8,0],['clight',16,8,0],['clight',7.5,38.5,0],['clight',26.86,38.5,0],['clight',22.5,6,0],['clight',28,21,0],['clight',4,33,0],['clight',30.36,33,0],['clight',30,13.5,0],['clight',19,22,0],['clight',17.5,33,0],
+['ac',0,8,90],['ac',0,22,90],['ac',0,46,90],['ac',34.36,46,-90],['ac',30,0,180]];
 
 function build(k){const c=CAT[k],g=new THREE.Group(),w=c.w*FT,d=c.d*FT;
   const box=(bw,bh,bd,x,y,z,col)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(bw,bh,bd),MAT[col]);m.position.set(x,y+bh/2,z);g.add(m);};
@@ -216,18 +227,24 @@ function build(k){const c=CAT[k],g=new THREE.Group(),w=c.w*FT,d=c.d*FT;
   else if(c.type==='chair'){box(w,0.45,d,0,0,0,'wood');box(w,0.45,0.05,0,0.45,-d/2+0.025,'wood');}
   else if(c.type==='bed'){box(w,0.5,d,0,0,0,'linen');box(w*0.9,0.12,0.45,0,0.5,-d/2+0.35,'white');box(w+0.06,1.0,0.08,0,0,-d/2-0.04,'wood');}
   else if(c.type==='plant'){const pr=w*0.32,ph=c.h*0.22;const pot=new THREE.Mesh(new THREE.CylinderGeometry(pr,pr*0.8,ph,16),MAT.pot);pot.position.y=ph/2;g.add(pot);const tr=new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.025,c.h*0.6,6),MAT.wood2);tr.position.y=ph+c.h*0.3;g.add(tr);const n=c.h>1?5:3;for(let i=0;i<n;i++){const rr=w*(0.26+0.04*(i%3));const a=i*2.4,sd=i?w*0.16:0;const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rr,1),i%2?MAT.leaf2:MAT.leaf);m.position.set(Math.cos(a)*sd,ph+(c.h-ph)*(0.35+0.5*i/n),Math.sin(a)*sd);g.add(m);}}
+  else if(c.type==='fan'){const hy=2.7;box(0.024,Y-hy,0.024,0,hy,0,'metal');box(0.14,0.05,0.14,0,Y-0.05,0,'metal');const hub=new THREE.Mesh(new THREE.CylinderGeometry(0.09,0.09,0.1,16),MAT.metal);hub.position.y=hy;g.add(hub);const len=w/2-0.09,rc=0.09+len/2;for(let i=0;i<3;i++){const a=i*2*Math.PI/3,b=new THREE.Mesh(new THREE.BoxGeometry(len,0.012,0.13),MAT.wood2);b.position.set(Math.cos(a)*rc,hy-0.01,Math.sin(a)*rc);b.rotation.y=-a;g.add(b);}}
+  else if(c.type==='clight'){const m=new THREE.Mesh(new THREE.CylinderGeometry(w/2,w/2,0.05,24),MAT.lamp);m.position.y=Y-0.025;g.add(m);}
+  else if(c.type==='pendant'){const py=2.1;box(0.01,Y-py-0.18,0.01,0,py+0.18,0,'metal');const m=new THREE.Mesh(new THREE.CylinderGeometry(0.06,w/2,0.18,20),MAT.lamp);m.position.y=py+0.09;g.add(m);}
+  else if(c.type==='tube'){box(w,0.04,0.06,0,2.3,-d/2+0.03,'lamp');}
+  else if(c.type==='ac'){box(w,0.3,d,0,2.3,0,'acw');box(w*0.9,0.02,0.02,0,2.31,d/2,'metal');}
   else box(w,c.h,d,0,0,0,c.c);
   return g;}
-let items=[],sel=null,helper=null;
+let items=[],sel=null,helper=null,showFix=true;
 function place(it){it.g.position.set(-X/2+T+it.x*FT,0,Z/2-T-it.v*FT);it.g.rotation.y=it.r*Math.PI/180;}
 function ext(it){const c=CAT[it.k],q=((it.r%180)+180)%180===90;return q?[c.d/2,c.w/2]:[c.w/2,c.d/2];}
 function clamp(it){const e=ext(it);it.x=Math.max(e[0],Math.min(IW-e[0],it.x));it.v=Math.max(e[1],Math.min(ID-e[1],it.v));}
-function addItem(k,x,v,r){const it={k,x,v,r,g:build(k)};it.g.userData.it=it;sc.add(it.g);place(it);items.push(it);return it;}
+function snapWall(it){const c=CAT[it.k],ds=[it.x,IW-it.x,it.v,ID-it.v],m=ds.indexOf(Math.min(...ds));it.r=[90,-90,180,0][m];if(m===0)it.x=c.d/2;else if(m===1)it.x=IW-c.d/2;else if(m===2)it.v=c.d/2;else it.v=ID-c.d/2;const e=ext(it);if(m<2)it.v=Math.max(e[1],Math.min(ID-e[1],it.v));else it.x=Math.max(e[0],Math.min(IW-e[0],it.x));}
+function addItem(k,x,v,r){const it={k,x,v,r,g:build(k)};it.g.userData.it=it;sc.add(it.g);if(CAT[k].mount==='wall')snapWall(it);it.g.visible=!CAT[k].mount||showFix;place(it);items.push(it);return it;}
 function clearItems(){select(null);items.forEach(it=>sc.remove(it.g));items=[];}
 function load(list){clearItems();list.forEach(a=>{if(CAT[a[0]])addItem(a[0],+a[1],+a[2],+a[3]);});}
 function save(){try{localStorage.setItem('ush-layout-b',JSON.stringify(items.map(i=>[i.k,i.x,i.v,i.r])));}catch(e){}}
 function fmt(f){let ft=Math.floor(f+1e-6),inch=Math.round((f-ft)*12);if(inch===12){ft++;inch=0;}return ft+'′-'+inch+'″';}
-function info(){const el=document.getElementById('selInfo');document.getElementById('rotB').disabled=!sel;document.getElementById('delB').disabled=!sel;
+function info(){const el=document.getElementById('selInfo');document.getElementById('rotB').disabled=!sel||CAT[sel.k].mount==='wall';document.getElementById('delB').disabled=!sel;
   if(!sel){el.className='none';el.textContent=TXT[lang].selNone;return;}const c=CAT[sel.k];el.className='';el.textContent=c[lang]+' · '+fmt(c.w)+' × '+fmt(c.d);}
 function select(it){if(helper){sc.remove(helper);helper=null;}sel=it;if(it){helper=new THREE.BoxHelper(it.g,0xe0662f);sc.add(helper);}info();}
 
@@ -261,11 +278,11 @@ function setRay(e){const r=view.getBoundingClientRect();ndc.set((e.clientX-r.lef
 function groundFt(){if(!ray.ray.intersectPlane(ground,hitP))return null;return [(hitP.x+X/2-T)/FT,(Z/2-T-hitP.z)/FT];}
 let drag=null,px=0,py=0,sx=0,sy=0,off=[0,0];
 view.addEventListener('pointerdown',e=>{px=sx=e.clientX;py=sy=e.clientY;view.setPointerCapture(e.pointerId);setRay(e);
-  const hits=ray.intersectObjects(items.map(i=>i.g),true);
+  const hits=ray.intersectObjects(items.filter(i=>i.g.visible).map(i=>i.g),true);
   if(hits.length){let o=hits[0].object;while(o&&!o.userData.it)o=o.parent;const it=o.userData.it;select(it);const gp=groundFt();off=gp?[it.x-gp[0],it.v-gp[1]]:[0,0];drag={type:'item',it};view.style.cursor='move';render();}
   else{drag={type:'view'};view.style.cursor='grabbing';}});
 view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;
-  if(drag.type==='item'){setRay(e);const gp=groundFt();if(!gp)return;const it=drag.it;it.x=Math.round((gp[0]+off[0])*4)/4;it.v=Math.round((gp[1]+off[1])*4)/4;clamp(it);place(it);render();return;}
+  if(drag.type==='item'){setRay(e);const gp=groundFt();if(!gp)return;const it=drag.it;it.x=Math.round((gp[0]+off[0])*4)/4;it.v=Math.round((gp[1]+off[1])*4)/4;if(CAT[it.k].mount==='wall')snapWall(it);else clamp(it);place(it);render();return;}
   if(mode==='orbit'){th-=dx*0.008;ph=Math.max(0.02,Math.min(1.55,ph+dy*0.006));press('');}else{yaw-=dx*0.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*0.004));}render();});
 view.addEventListener('pointerup',e=>{if(!drag)return;const moved=Math.hypot(e.clientX-sx,e.clientY-sy)>4;
   if(drag.type==='item'){if(moved)save();}else if(!moved){select(null);render();}
@@ -273,10 +290,12 @@ view.addEventListener('pointerup',e=>{if(!drag)return;const moved=Math.hypot(e.c
 view.addEventListener('wheel',e=>{if(mode!=='orbit')return;e.preventDefault();dist=Math.max(6,Math.min(60,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
 document.getElementById('zm').addEventListener('input',e=>{if(mode!=='orbit')setView('persp');dist=+e.target.value;render();});
 
+function toggleFix(){showFix=!showFix;document.getElementById('fixT').setAttribute('aria-pressed',showFix);items.forEach(i=>{if(CAT[i.k].mount)i.g.visible=showFix;});if(sel&&!sel.g.visible)select(null);render();}
+document.getElementById('fixT').addEventListener('click',toggleFix);
 function rotateSel(){if(!sel)return;sel.r=(sel.r+90)%360;clamp(sel);place(sel);save();render();}
 function deleteSel(){if(!sel)return;sc.remove(sel.g);items=items.filter(i=>i!==sel);select(null);save();render();}
 document.getElementById('rotB').onclick=rotateSel;document.getElementById('delB').onclick=deleteSel;
-document.getElementById('addB').onclick=()=>{const k=document.getElementById('addK').value;const it=addItem(k,IW/2,22,0);clamp(it);place(it);select(it);save();render();};
+document.getElementById('addB').onclick=()=>{const k=document.getElementById('addK').value;if(CAT[k].mount&&!showFix)toggleFix();const it=addItem(k,IW/2,22,0);if(CAT[k].mount!=='wall')clamp(it);place(it);select(it);save();render();};
 document.getElementById('resetB').onclick=()=>{load(INIT);try{localStorage.removeItem('ush-layout-b')}catch(e){}render();};
 document.addEventListener('keydown',e=>{if(!sel||/SELECT|INPUT/.test(document.activeElement.tagName))return;if(e.key==='r'||e.key==='R'){rotateSel();}else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();deleteSel();}});
 
