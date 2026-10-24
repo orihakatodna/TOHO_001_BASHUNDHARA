@@ -423,7 +423,7 @@ def data():
     }
 
 
-def html(material, rev="D", date="2026-10-24"):
+def html(material, rev="E", date="2026-10-24"):
     """モデルの HTML。CSS と家具（CAT・build）・床仕上げ（FIN・paint）は CM-01 から取る。"""
     b = (ROOT / "models" / "unit_brick.html").read_text(encoding="utf-8")
     cut = lambda a, z: b[b.index(a):b.index(z, b.index(a))]
@@ -465,7 +465,7 @@ def html(material, rev="D", date="2026-10-24"):
                      bathL="Baths: anti-slip tile 300 × 300", bathSuf="; baths: anti-slip tile", grid="1 m grid", zones="Room names", csTag="For Clip Studio (GLB)", glbAll="Save the unit as GLB",
                      glbFL="Include furniture, fans, lights, AC", glbOne="Save the furniture chosen in the list as GLB",
                      glbErr="The GLB exporter could not be loaded. Check the internet connection and reload the page.",
-                     hint="Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. The Top view is easiest for arranging. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",
+                     hint="Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The Top view is easiest for arranging. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",
                      specH="Specification", sSrc="Source", sSrcM="Plan read from the DXF (rooms, walls, openings, RC columns, balconies, core)", sOut="Outside", sL="Layout", sW="Walls", sRc="Structure",
                      sH="Height", sOp="Doors, windows", sCo="Core", sF="Floor"),
           "ja": dict(kDrawing="図番", kScale="縮尺", kDate="日付", kRev="版", vPersp="パース", vTop="上から", vFront="正面", vInside="室内・目線", zoom="距離", dims="寸法表示",
@@ -473,7 +473,7 @@ def html(material, rev="D", date="2026-10-24"):
                      bathL="浴室は防滑タイル 300 × 300", bathSuf="、浴室は防滑タイル", grid="1 m グリッド", zones="部屋名", csTag="Clip Studio 用（GLB）", glbAll="住戸を GLB で保存",
                      glbFL="家具・天井扇・照明・エアコンを含める", glbOne="一覧で選んだ家具を GLB で保存",
                      glbErr="GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",
-                     hint="家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。右ドラッグか Shift＋ドラッグで視点を平行移動します（画面をクリックしたあとは矢印キーでも動きます）。視点のボタンを押すと元に戻ります。配置は「上から」が操作しやすいです。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",
+                     hint="家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。右ドラッグか Shift＋ドラッグで視点を平行移動します（画面をクリックしたあとは矢印キーでも動きます）。視点のボタンを押すと元に戻ります。スマートフォン・タブレットでは、2本指でドラッグすると平行移動、指でつまむと拡大縮小します。配置は「上から」が操作しやすいです。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",
                      specH="仕様", sSrc="元の図", sSrcM="DXF から読んだ平面（部屋・壁・開口・RC の柱・バルコニー・コア）", sOut="外形", sL="間取り", sW="壁", sRc="構造",
                      sH="高さ", sOp="扉・窓", sCo="コア", sF="床")}
     txt = {}

@@ -59,7 +59,7 @@
         </div>
         <button class="btn" id="glbK" data-i="glbOne">Save the furniture chosen in the list as GLB</button>
       </div>
-      <p class="hint" data-i="hint">Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. The Top view is easiest for arranging. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
+      <p class="hint" data-i="hint">Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The Top view is easiest for arranging. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
     </section>
 
     <aside class="spec">
@@ -226,6 +226,13 @@ const ray=new THREE.Raycaster(),ndc=new THREE.Vector2(),ground=new THREE.Plane(n
 function setRay(e){const r=view.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,cam);}
 function groundMm(){if(!ray.ray.intersectPlane(ground,hitP))return null;return [hitP.x*1000+OX,-hitP.z*1000+OY];}
 let drag=null,px=0,py=0,sx=0,sy=0,off=[0,0];
+// タッチ操作（スマートフォン・タブレット）: 1本指は従来どおり、2本指でドラッグすると平行移動、つまむと拡大縮小
+const tp=new Map();let pinch=null;
+function pinchState(){const p=[...tp.values()];return {x:(p[0][0]+p[1][0])/2,y:(p[0][1]+p[1][1])/2,d:Math.max(1,Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]))};}
+view.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')return;tp.set(e.pointerId,[e.clientX,e.clientY]);if(tp.size===2){pinch=pinchState();drag=null;e.stopImmediatePropagation();}},true);
+view.addEventListener('pointermove',e=>{if(!tp.has(e.pointerId))return;tp.set(e.pointerId,[e.clientX,e.clientY]);if(!pinch||tp.size<2)return;e.stopImmediatePropagation();const s=pinchState();
+  if(typeof mode==='undefined'||mode==='orbit'){dist=Math.max(6,Math.min(60,dist*pinch.d/s.d));document.getElementById('zm').value=dist;}pan(s.x-pinch.x,s.y-pinch.y);pinch=s;},true);
+['pointerup','pointercancel'].forEach(t=>view.addEventListener(t,e=>{if(!tp.delete(e.pointerId))return;if(pinch&&tp.size<2){pinch=null;drag=null;e.stopImmediatePropagation();}},true));
 view.addEventListener('contextmenu',e=>e.preventDefault());
 view.addEventListener('pointerdown',e=>{px=sx=e.clientX;py=sy=e.clientY;view.setPointerCapture(e.pointerId);setRay(e);
   if(e.button===1||e.button===2||e.shiftKey){drag={type:'pan'};view.style.cursor='move';return;}
