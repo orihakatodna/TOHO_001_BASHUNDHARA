@@ -601,7 +601,8 @@ def main():
     total += len(cf)
     # 13. 修正指示用の DXF（dxf/ の最新）が、現行のモデルから書き出したものと同じか
     # export_dxf.py が書き出す名前（unit_plan_Rev<版>_<YYMMDD>.dxf）だけ。ユーザーから受け取った DXF は対象外
-    dxfs = sorted(p for p in (ROOT / "dxf").glob("unit_plan_*.dxf") if re.fullmatch(r"unit_plan_Rev[A-Z]+_\d{6}\.dxf", p.name))
+    pat = re.compile(r"unit_plan_(?:CM-01_)?Rev([A-Z]+)_(\d{6})\.dxf")
+    dxfs = sorted((p for p in (ROOT / "dxf").glob("unit_plan_*.dxf") if pat.fullmatch(p.name)), key=lambda p: pat.fullmatch(p.name).group(2, 1))
     if dxfs:
         import export_dxf as xd
         E, info = xd.build()

@@ -7,7 +7,7 @@
 - 文字は Shift_JIS（cp932）、DXF R12（AC1009）。JW-CAD などで読める形にしている。
 - 間仕切り・扉・窓は両モデルで同じデータなので、CM-01（レンガ）から作る。家具・器具は CM-01 のもの。
 
-使い方:  python tools/export_dxf.py            → dxf/unit_plan_Rev<版>_<YYMMDD>.dxf
+使い方:  python tools/export_dxf.py            → dxf/unit_plan_CM-01_Rev<版>_<YYMMDD>.dxf（受け取った DXF と名前が紛れないよう図番を入れる）
          python tools/export_dxf.py --svg 出力.svg   （確認用の SVG も書く）
 """
 import datetime
@@ -254,7 +254,7 @@ def build():
         f"TOHO_001 Bashundhara 住戸平面（修正指示用）  CM-01／CM-02  Rev.{rev}  {date}  単位 mm  縮尺なし",
         "概念モデルから書き出した協議用の図。施工用ではない。",
         "座標: 内法の左下を (x, v) = (0, 0) ft とする。グリッドの番号はモデルの家具の座標と同じ。",
-        "未確認の前提: 外壁 250・間仕切り 125（材料未決定）・扉高さ 7′・窓の腰高 3′（台所 3′-6″）・上端 7′・換気窓 6′〜7′。法規との照合は未実施。",
+        "未確認の前提: 外壁 250・間仕切り 125（レンガ長手積み）・扉高さ 7′・窓の腰高 3′（台所 3′-6″）・上端 7′・換気窓 6′〜7′。法規との照合は未実施。",
         "右奥の網掛けは共用コア（CM-03 の階段・EV・ホール、壁 200）で、住戸の外。正面中央はバルコニーのくぼみ。",
         "切断高さ 1,200。換気窓（下端 6′）は破線。天井扇・照明は破線の円（A-CLNG）。家具・器具の寸法は代表値。",
         "画層: " + "、".join(f"{k} {v[1]}" for k, v in LAYERS.items()),
@@ -361,7 +361,7 @@ def main():
     if "--svg" in sys.argv:
         Path(sys.argv[sys.argv.index("--svg") + 1]).write_text(to_svg(E, info), encoding="utf-8")
     OUT.mkdir(exist_ok=True)
-    path = OUT / f"unit_plan_Rev{info['rev']}_{datetime.date.today():%y%m%d}.dxf"
+    path = OUT / f"unit_plan_CM-01_Rev{info['rev']}_{datetime.date.today():%y%m%d}.dxf"
     if path.exists():
         print(f"既にある: {path.relative_to(ROOT).as_posix()}（上書きしない。消すか日付を変えること）")
         return 1
