@@ -109,14 +109,19 @@ function tileCanvas(){const W=Math.round(TILE*P),Hh=Math.round(HM*P),c=document.
     for(let i=0;i<3;i++)for(let y=225;y<HM-100;y+=450){g.beginPath();g.arc((300+600*i)*P,Hh-y*P,15*P,0,Math.PI*2);g.fillStyle='#8d8c86';g.fill();g.lineWidth=1.2;g.strokeStyle='#5f5e59';g.stroke();}}
   return c;}
 const tex=new THREE.CanvasTexture(tileCanvas());tex.wrapS=THREE.RepeatWrapping;tex.anisotropy=AN;
+// 内壁（間仕切り 125 mm）: 両案ともレンガブロックの長手積み（半枚積み）
+function stretcherCanvas(){const W=Math.round(2000*P),Hh=Math.round(HM*P),c=document.createElement('canvas');c.width=W;c.height=Hh;const g=c.getContext('2d');g.fillStyle='#cfc5b6';g.fillRect(0,0,W,Hh);let n=0;
+  for(let r=0;r*80<HM;r++){const y=Hh-(r+1)*80*P+5*P,o=r%2?125:0;for(let x=-o;x<2000;x+=250){const v=(rnd(n++ +7000)-0.5)*34;g.fillStyle='rgb('+((194+v)|0)+','+((104+v*0.7)|0)+','+((63+v*0.5)|0)+')';const a=Math.max(x+5,0),b=Math.min(x+245,2000);if(b>a)g.fillRect(a*P,y,(b-a)*P,70*P);}}
+  return c;}
+const texI=new THREE.CanvasTexture(stretcherCanvas());texI.wrapS=THREE.RepeatWrapping;texI.anisotropy=AN;
 const L=c=>new THREE.MeshLambertMaterial({color:c});
-const M={ext:new THREE.MeshLambertMaterial({map:tex}),int:L(0xe6e1d6),core:L(0xbab8b2),rc:MATERIAL==='brick'?L(0xb3b1aa):new THREE.MeshLambertMaterial({map:tex}),top:L(MATERIAL==='brick'?0xb9ab98:0xb4b2ab),
+const M={ext:new THREE.MeshLambertMaterial({map:tex}),int:new THREE.MeshLambertMaterial({map:texI}),core:L(0xbab8b2),rc:MATERIAL==='brick'?L(0xb3b1aa):new THREE.MeshLambertMaterial({map:tex}),top:L(MATERIAL==='brick'?0xb9ab98:0xb4b2ab),
   slab:L(0x9c9a94),fr:L(0xd6d7d3),leaf:L(0x8a6446),leafX:L(0x5e3f2a),metal:L(0xa9adb1),rail:L(0x2a2c2e),dark:L(0x55585b),
   gl:new THREE.MeshLambertMaterial({color:0x9fc0d0,transparent:true,opacity:0.35,depthWrite:false}),vt:new THREE.MeshLambertMaterial({color:0xe4ecee,transparent:true,opacity:0.7,depthWrite:false})};
 // 箱（mm）。側面の模様は世界座標で貼る（横 = 壁に沿った位置、縦 = 床からの高さ）
 function bx(x0,y0,x1,y1,z0,z1,m,top,g){const w=(x1-x0)/1000,d=(y1-y0)/1000,h=(z1-z0)/1000;if(w<1e-4||d<1e-4||h<1e-4)return null;
   const geo=new THREE.BoxGeometry(w,h,d);geo.translate(wx((x0+x1)/2),(z0+z1)/2000,wz((y0+y1)/2));
-  if(m&&m.map){const p=geo.attributes.position,uv=geo.attributes.uv,T=TILE/1000;for(let f=0;f<6;f++)for(let i=f*4;i<f*4+4;i++){const X=p.getX(i),Yv=p.getY(i),Z=p.getZ(i);uv.setXY(i,f<2?Z/T:f<4?X/T:X/T,f<2||f>3?Yv/Y:Z/T);}uv.needsUpdate=true;}
+  if(m&&m.map){const p=geo.attributes.position,uv=geo.attributes.uv,T=(m.map===texI?2000:TILE)/1000;for(let f=0;f<6;f++)for(let i=f*4;i<f*4+4;i++){const X=p.getX(i),Yv=p.getY(i),Z=p.getZ(i);uv.setXY(i,f<2?Z/T:f<4?X/T:X/T,f<2||f>3?Yv/Y:Z/T);}uv.needsUpdate=true;}
   const ms=top?[m,m,top,m,m,m]:m;const mesh=new THREE.Mesh(geo,ms);(g||sc).add(mesh);return mesh;}
 // 床（外形とバルコニーのスラブ、上面に床仕上げ）
 const fc=document.createElement('canvas'),FK=0.08;fc.width=Math.round((E[2]-E[0])*FK);fc.height=Math.round((E[3]-E[1])*FK);

@@ -413,7 +413,7 @@ def data():
     }
 
 
-def html(material, rev="A", date="2026-10-24"):
+def html(material, rev="B", date="2026-10-24"):
     """モデルの HTML。CSS と家具（CAT・build）・床仕上げ（FIN・paint）は CM-01 から取る。"""
     b = (ROOT / "models" / "unit_brick.html").read_text(encoding="utf-8")
     cut = lambda a, z: b[b.index(a):b.index(z, b.index(a))]
@@ -436,14 +436,14 @@ def html(material, rev="A", date="2026-10-24"):
     lay_en = ", ".join(f"{q['en']} {q['area'].replace('㎡', ' m²')}" for q in names)
     t = {
         "en": {"title": f"Dwelling unit (plan Rev.E) — {mname[0].split(',')[0]}", "sub": "3D model built from the user's plan DXF: four bedrooms, family rooms, kitchen, two baths; lift and stair core at the rear right. Concept model.",
-               "layout": lay_en, "walls": f"Outer walls 250 mm, partitions 125 mm, {mname[0]}. Interior faces painted.",
+               "layout": lay_en, "walls": f"Outer walls 250 mm, {mname[0]}. Partitions 125 mm, brick in stretcher bond (half-brick), exposed. Core walls concrete.",
                "rc": "RC columns (11, from DXF layer 4) shown in concrete, full height. Core walls around the stair and lift in concrete.",
                "h": "Floor to floor 10′ (3,048 mm), open top (assumed, as CM-01/02).",
                "op": "Doors and passages 7′ high; windows sill 3′, head 7′ (kitchen 3′-6″); bath and stair vents 6′–7′; glazed doors to the balconies. Door swings assumed. All provisional.",
                "core": f"Stair 2 × 1.15 m flights, {d['stair']['n']} risers × {H / d['stair']['n']:.0f} mm, treads 250 mm; lift 1,600 kg; pressurised stair (from the DXF).",
                "note": "Concept model for discussion, not for construction. Walls, rooms, openings, RC columns and balconies come from the DXF; heights, door swings and furniture are assumptions. Furniture you move is kept only in your own browser."},
         "ja": {"title": f"住戸（平面 Rev.E）— {mname[1].split('（')[0]}", "sub": "ユーザー提供の平面 DXF から作った3Dモデル。4寝室・家族室・台所・浴室2、右奥に階段・EV のコア。概念モデル。",
-               "layout": lay_ja, "walls": f"外壁 250 mm、間仕切り 125 mm、{mname[1]}。室内側は塗装。",
+               "layout": lay_ja, "walls": f"外壁 250 mm、{mname[1]}。間仕切り 125 mm はレンガブロックの長手積み（半枚積み）、現し。コアの壁はコンクリート。",
                "rc": "RC の柱 11 本（DXF の画層 4）をコンクリートで床から天井まで表示。階段・EV まわりのコアの壁もコンクリート。",
                "h": "階高 10′（3,048 mm）、天井なし（仮定。CM-01/02 と同じ）。",
                "op": "扉・通路の上端 7′、窓は腰高 3′・上端 7′（台所は腰高 3′-6″）、浴室・階段の換気窓 6′〜7′、バルコニーへは掃出し窓。扉の開き勝手は仮定。いずれも仮の値。",
