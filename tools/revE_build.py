@@ -176,6 +176,7 @@ def classify(d):
 FH = {"coffee": 0.42, "tv": 0.5, "dtable": 0.75, "side": 0.55, "ward": 2.1, "desk": 0.75, "counter": 0.9, "fridge": 1.8, "wc": 0.75,
       "basin": 0.85, "shower": 0.06, "plantL": 1.6, "plantS": 0.8}  # 高さ m（CM-01 の CAT と同じ）
 AC_Y = 2300  # エアコンの下端 mm（CM-01 と同じ）
+PARAPET = {"h": 1100, "brick": 125, "concrete": 150}  # バルコニーの手すり壁（仮定）: 高さ、厚さ（レンガ案はブロック積み、打ち放し案は RC）
 TOL = 3      # mm
 
 
@@ -280,6 +281,12 @@ def check(d=None):
         return [str(e)], notes
     fs = furniture(d)
     spaces = d["rooms"] + d["bal"]
+    o, t = d["outline"], max(PARAPET["brick"], PARAPET["concrete"])
+    parapets = []
+    for b in d["bal"]:
+        front = b[3] <= o[1] + 1
+        parapets += [(b[0], b[1], b[2], b[1] + t) if front else (b[0], b[3] - t, b[2], b[3]),
+                     (b[0], b[1], b[0] + t, b[3]), (b[2] - t, b[1], b[2], b[3])]
     swings = [swing_rect(q) for q in drs if q["sw"]]
     for i, (k, x, y, r, m, b) in enumerate(fs):
         if b is None:
@@ -291,6 +298,9 @@ def check(d=None):
             for c in d["cols"] + d["eps"]:
                 if ov(b, c):
                     found.append(f"家具が柱・EPS と重なる: {k} ({x:.0f}, {y:.0f})")
+            for c in parapets:
+                if ov(b, c):
+                    found.append(f"家具がバルコニーの手すり壁と重なる: {k} ({x:.0f}, {y:.0f})")
             for s in swings:
                 if ov(b, s):
                     found.append(f"家具が扉の開きと重なる: {k} ({x:.0f}, {y:.0f})")
@@ -409,11 +419,11 @@ def data():
         "opens": [{"r": p["r"], "side": p["side"], "kind": p["kind"], "z": [round(p["z"][0], 1), round(p["z"][1], 1)]} for p in ops],
         "doors": [dict(q, main=q is main) for q in drs],
         "stair": {"r": st, "n": n, "tread": 250, "w": 1150, "land": 1150},
-        "furn": FURN, "eye": [6197, 8200], "person": [4250, 1800], "src": SRC.name,
+        "parapet": PARAPET, "furn": FURN, "eye": [6197, 8200], "person": [4250, 1800], "src": SRC.name,
     }
 
 
-def html(material, rev="B", date="2026-10-24"):
+def html(material, rev="C", date="2026-10-24"):
     """モデルの HTML。CSS と家具（CAT・build）・床仕上げ（FIN・paint）は CM-01 から取る。"""
     b = (ROOT / "models" / "unit_brick.html").read_text(encoding="utf-8")
     cut = lambda a, z: b[b.index(a):b.index(z, b.index(a))]
@@ -436,15 +446,15 @@ def html(material, rev="B", date="2026-10-24"):
     lay_en = ", ".join(f"{q['en']} {q['area'].replace('㎡', ' m²')}" for q in names)
     t = {
         "en": {"title": f"Dwelling unit (plan Rev.E) — {mname[0].split(',')[0]}", "sub": "3D model built from the user's plan DXF: four bedrooms, family rooms, kitchen, two baths; lift and stair core at the rear right. Concept model.",
-               "layout": lay_en, "walls": f"Outer walls 250 mm, {mname[0]}. Partitions 125 mm, brick in stretcher bond (half-brick), exposed. Core walls concrete.",
-               "rc": "RC columns (11, from DXF layer 4) shown in concrete, full height. Core walls around the stair and lift in concrete.",
+               "layout": lay_en, "walls": f"Outer walls 250 mm, {mname[0]}. Partitions 125 mm, brick in stretcher bond (half-brick), exposed. Balcony parapets " + {"brick": "in brick block, 125 mm", "concrete": "in fair-faced RC, 150 mm"}[material] + ", 1,100 mm high (provisional).",
+               "rc": {"brick": "RC frame — 11 columns (DXF layer 4) and the core walls around the stair and lift — finished in brick-block style.", "concrete": "RC columns (11, from DXF layer 4) shown in concrete, full height. Core walls around the stair and lift in concrete."}[material],
                "h": "Floor to floor 10′ (3,048 mm), open top (assumed, as CM-01/02).",
                "op": "Doors and passages 7′ high; windows sill 3′, head 7′ (kitchen 3′-6″); bath and stair vents 6′–7′; glazed doors to the balconies. Door swings assumed. All provisional.",
                "core": f"Stair 2 × 1.15 m flights, {d['stair']['n']} risers × {H / d['stair']['n']:.0f} mm, treads 250 mm; lift 1,600 kg; pressurised stair (from the DXF).",
                "note": "Concept model for discussion, not for construction. Walls, rooms, openings, RC columns and balconies come from the DXF; heights, door swings and furniture are assumptions. Furniture you move is kept only in your own browser."},
         "ja": {"title": f"住戸（平面 Rev.E）— {mname[1].split('（')[0]}", "sub": "ユーザー提供の平面 DXF から作った3Dモデル。4寝室・家族室・台所・浴室2、右奥に階段・EV のコア。概念モデル。",
-               "layout": lay_ja, "walls": f"外壁 250 mm、{mname[1]}。間仕切り 125 mm はレンガブロックの長手積み（半枚積み）、現し。コアの壁はコンクリート。",
-               "rc": "RC の柱 11 本（DXF の画層 4）をコンクリートで床から天井まで表示。階段・EV まわりのコアの壁もコンクリート。",
+               "layout": lay_ja, "walls": f"外壁 250 mm、{mname[1]}。間仕切り 125 mm はレンガブロックの長手積み（半枚積み）、現し。バルコニーの手すりは" + {"brick": "ブロック積み 125 mm", "concrete": "RC 打ち放し 150 mm"}[material] + "、高さ 1,100 mm（仮定）。",
+               "rc": {"brick": "RC 躯体（柱 11 本〔DXF の画層 4〕と階段・EV まわりのコアの壁）は、レンガブロック調の仕上げ。", "concrete": "RC の柱 11 本（DXF の画層 4）をコンクリートで床から天井まで表示。階段・EV まわりのコアの壁もコンクリート。"}[material],
                "h": "階高 10′（3,048 mm）、天井なし（仮定。CM-01/02 と同じ）。",
                "op": "扉・通路の上端 7′、窓は腰高 3′・上端 7′（台所は腰高 3′-6″）、浴室・階段の換気窓 6′〜7′、バルコニーへは掃出し窓。扉の開き勝手は仮定。いずれも仮の値。",
                "core": f"階段は 1.15 m × 2 の折返し、{d['stair']['n']} 段 × {H / d['stair']['n']:.0f} mm、踏面 250 mm。EV 1,600 kg。階段は加圧（DXF による）。",

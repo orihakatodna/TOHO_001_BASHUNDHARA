@@ -115,7 +115,9 @@ function stretcherCanvas(){const W=Math.round(2000*P),Hh=Math.round(HM*P),c=docu
   return c;}
 const texI=new THREE.CanvasTexture(stretcherCanvas());texI.wrapS=THREE.RepeatWrapping;texI.anisotropy=AN;
 const L=c=>new THREE.MeshLambertMaterial({color:c});
-const M={ext:new THREE.MeshLambertMaterial({map:tex}),int:new THREE.MeshLambertMaterial({map:texI}),core:L(0xbab8b2),rc:MATERIAL==='brick'?L(0xb3b1aa):new THREE.MeshLambertMaterial({map:tex}),top:L(MATERIAL==='brick'?0xb9ab98:0xb4b2ab),
+const M={ext:new THREE.MeshLambertMaterial({map:tex}),int:new THREE.MeshLambertMaterial({map:texI}),step:L(0xbab8b2),
+  // RC 躯体（柱・コアの壁）: レンガ案はレンガブロック調の仕上げ、打ち放し案はコンクリート
+  core:MATERIAL==='brick'?new THREE.MeshLambertMaterial({map:texI}):L(0xbab8b2),rc:new THREE.MeshLambertMaterial({map:MATERIAL==='brick'?texI:tex}),top:L(MATERIAL==='brick'?0xb9ab98:0xb4b2ab),
   slab:L(0x9c9a94),fr:L(0xd6d7d3),leaf:L(0x8a6446),leafX:L(0x5e3f2a),metal:L(0xa9adb1),rail:L(0x2a2c2e),dark:L(0x55585b),
   gl:new THREE.MeshLambertMaterial({color:0x9fc0d0,transparent:true,opacity:0.35,depthWrite:false}),vt:new THREE.MeshLambertMaterial({color:0xe4ecee,transparent:true,opacity:0.7,depthWrite:false})};
 // 箱（mm）。側面の模様は世界座標で貼る（横 = 壁に沿った位置、縦 = 床からの高さ）
@@ -147,7 +149,7 @@ const gr=new THREE.Mesh(new THREE.PlaneGeometry(90,90),L(0x9aa08f));gr.rotation.
 // 壁・柱・EPS
 D.walls.forEach(w=>bx(w[0],w[1],w[2],w[3],w[4],w[5],M[w[6]],M.top));
 D.cols.forEach(c=>bx(c[0],c[1],c[2],c[3],0,D.H+1,M.rc,M.top));
-D.eps.forEach(c=>bx(c[0],c[1],c[2],c[3],0,D.H,M.core,M.top));
+D.eps.forEach(c=>bx(c[0],c[1],c[2],c[3],0,D.H,M.step,M.top));
 bx(D.ev[0],D.ev[1],D.ev[2],D.ev[3],-1,1,M.dark);
 // 窓・掃出し窓・換気窓（壁の厚さの中央に枠とガラス）
 D.opens.forEach(p=>{if(!p.side)return;const r=p.r,vert=r[2]-r[0]<r[3]-r[1],c=vert?(r[0]+r[2])/2:(r[1]+r[3])/2,a=vert?r[1]:r[0],b=vert?r[3]:r[2],z0=p.z[0],z1=p.z[1],f=50,dp=80;
@@ -162,13 +164,13 @@ D.doors.forEach(q=>{const w=q.a1-q.a0-40,h=D.door_h-20;
   q.vert?bx(s0,q.a0+20,s1,q.a0+60,0,h,m):bx(q.a0+20,s0,q.a0+60,s1,0,h,m);});
 // 階段（折返し、1層分）: 左半分を奥へ上がり、奥の踊り場で折り返して右半分を手前へ
 (function(){const s=D.stair,n=s.n,r=D.H/n,m=n/2,t=s.tread,w=s.w,ve=s.r[3]-s.land,rn=(m-1)*t,x0=s.r[0],x1=s.r[2];
-  for(let j=1;j<m;j++){const top=j*r;bx(x0,ve-rn+(j-1)*t,x0+w,ve-rn+j*t,Math.max(0,top-r-150),top,M.core,M.top);}
-  bx(x0,ve,x1,s.r[3],D.H/2-150,D.H/2,M.core,M.top);
-  for(let j=1;j<m;j++){const top=D.H/2+j*r;bx(x1-w,ve-j*t,x1,ve-(j-1)*t,top-r-150,top,M.core,M.top);}})();
-// バルコニーの手すり（建物の側を除く3辺）、高さ 1,100
-D.bal.forEach(b=>{const front=b[3]<=O[1]+1,yo=front?b[1]:b[3],hh=1100;
-  bx(b[0],yo-25,b[2],yo+25,hh-40,hh,M.rail);bx(b[0],yo-25,b[2],yo+25,100,140,M.rail);for(let x=b[0]+120;x<b[2];x+=120)bx(x-12,yo-12,x+12,yo+12,100,hh,M.rail);
-  [b[0]+25,b[2]-25].forEach(x=>{const y0=front?b[1]:O[3],y1=front?O[1]:b[3];bx(x-25,y0,x+25,y1,hh-40,hh,M.rail);for(let y=y0+120;y<y1;y+=120)bx(x-12,y-12,x+12,y+12,100,hh,M.rail);});});
+  for(let j=1;j<m;j++){const top=j*r;bx(x0,ve-rn+(j-1)*t,x0+w,ve-rn+j*t,Math.max(0,top-r-150),top,M.step,M.top);}
+  bx(x0,ve,x1,s.r[3],D.H/2-150,D.H/2,M.step,M.top);
+  for(let j=1;j<m;j++){const top=D.H/2+j*r;bx(x1-w,ve-j*t,x1,ve-(j-1)*t,top-r-150,top,M.step,M.top);}})();
+// バルコニーの手すり（建物の側を除く3辺）、高さ 1,100。レンガ案はブロック積み、打ち放し案は RC 打ち放し
+D.bal.forEach(b=>{const front=b[3]<=O[1]+1,t=D.parapet[MATERIAL],hh=D.parapet.h,m=MATERIAL==='brick'?M.int:M.ext;
+  front?bx(b[0],b[1],b[2],b[1]+t,0,hh,m,M.top):bx(b[0],b[3]-t,b[2],b[3],0,hh,m,M.top);
+  const y0=front?b[1]+t:O[3],y1=front?O[1]:b[3]-t;bx(b[0],y0,b[0]+t,y1,0,hh,m,M.top);bx(b[2]-t,y0,b[2],y1,0,hh,m,M.top);});
 sc.add(new THREE.AmbientLight(0xffffff,0.55));const dl=new THREE.DirectionalLight(0xffffff,0.75);dl.position.set(20,40,30);sc.add(dl);
 const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),L(0x2f5d8a));pm.position.set(wx(D.person[0]),0.85,wz(D.person[1]));sc.add(pm);
 
