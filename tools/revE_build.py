@@ -423,7 +423,7 @@ def data():
     }
 
 
-def html(material, rev="E", date="2026-10-24"):
+def html(material, rev="F", date="2026-10-24"):
     """モデルの HTML。CSS と家具（CAT・build）・床仕上げ（FIN・paint）は CM-01 から取る。"""
     b = (ROOT / "models" / "unit_brick.html").read_text(encoding="utf-8")
     cut = lambda a, z: b[b.index(a):b.index(z, b.index(a))]
@@ -451,21 +451,21 @@ def html(material, rev="E", date="2026-10-24"):
                "h": "Floor to floor 10′ (3,048 mm), open top (assumed, as CM-01/02).",
                "op": "Doors and passages 7′ high; windows sill 3′, head 7′ (kitchen 3′-6″); bath and stair vents 6′–7′; glazed doors to the balconies. Door swings assumed. All provisional.",
                "core": f"Stair 2 × 1.15 m flights, {d['stair']['n']} risers × {H / d['stair']['n']:.0f} mm, treads 250 mm; lift 1,600 kg; pressurised stair (from the DXF).",
-               "note": "Concept model for discussion, not for construction. Walls, rooms, openings, RC columns and balconies come from the DXF; heights, door swings and furniture are assumptions. Furniture you move is kept only in your own browser."},
+               "note": "Concept model for discussion, not for construction. Walls, rooms, openings, RC columns and balconies come from the DXF; heights, door swings and furniture are assumptions."},
         "ja": {"title": f"住戸（平面 Rev.E）— {mname[1].split('（')[0]}", "sub": "ユーザー提供の平面 DXF から作った3Dモデル。4寝室・家族室・台所・浴室2、右奥に階段・EV のコア。概念モデル。",
                "layout": lay_ja, "walls": f"外壁 250 mm、{mname[1]}。間仕切り 125 mm はレンガブロックの長手積み（半枚積み）、現し。バルコニーの手すりは" + {"brick": "ブロック積み 125 mm", "concrete": "RC 打ち放し 150 mm"}[material] + "、高さ 1,100 mm（仮定）。",
                "rc": {"brick": "RC 躯体（柱 11 本〔DXF の画層 4〕と階段・EV まわりのコアの壁）は、レンガブロック調の仕上げ。", "concrete": "RC の柱 11 本（DXF の画層 4）をコンクリートで床から天井まで表示。階段・EV まわりのコアの壁もコンクリート。"}[material],
                "h": "階高 10′（3,048 mm）、天井なし（仮定。CM-01/02 と同じ）。",
                "op": "扉・通路の上端 7′、窓は腰高 3′・上端 7′（台所は腰高 3′-6″）、浴室・階段の換気窓 6′〜7′、バルコニーへは掃出し窓。扉の開き勝手は仮定。いずれも仮の値。",
                "core": f"階段は 1.15 m × 2 の折返し、{d['stair']['n']} 段 × {H / d['stair']['n']:.0f} mm、踏面 250 mm。EV 1,600 kg。階段は加圧（DXF による）。",
-               "note": "協議用の概念モデルで、施工用ではありません。壁・部屋・開口・RC の柱・バルコニーは DXF から、高さ・扉の開き勝手・家具は仮定です。動かした家具の位置は、見ている方のブラウザーにだけ残ります。"},
+               "note": "協議用の概念モデルで、施工用ではありません。壁・部屋・開口・RC の柱・バルコニーは DXF から、高さ・扉の開き勝手・家具は仮定です。"},
     }
     ui = {"en": dict(kDrawing="Drawing", kScale="Scale", kDate="Date", kRev="Rev.", vPersp="Perspective", vTop="Top", vFront="Front", vInside="Inside, eye level", zoom="Distance", dims="Dimensions",
                      fix="Fans, lights, AC", fTag="Furniture", selNone="Nothing selected", rot="Rotate 90°", del_="Remove", add="Add", reset="Restore proposal", finTag="Floor finish",
                      bathL="Baths: anti-slip tile 300 × 300", bathSuf="; baths: anti-slip tile", grid="1 m grid", zones="Room names", csTag="For Clip Studio (GLB)", glbAll="Save the unit as GLB",
                      glbFL="Include furniture, fans, lights, AC", glbOne="Save the furniture chosen in the list as GLB",
                      glbErr="The GLB exporter could not be loaded. Check the internet connection and reload the page.",
-                     hint="Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The Top view is easiest for arranging. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",
+                     hint="Drag to rotate the view about the centre of the model (furniture is fixed in place). Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",
                      specH="Specification", sSrc="Source", sSrcM="Plan read from the DXF (rooms, walls, openings, RC columns, balconies, core)", sOut="Outside", sL="Layout", sW="Walls", sRc="Structure",
                      sH="Height", sOp="Doors, windows", sCo="Core", sF="Floor"),
           "ja": dict(kDrawing="図番", kScale="縮尺", kDate="日付", kRev="版", vPersp="パース", vTop="上から", vFront="正面", vInside="室内・目線", zoom="距離", dims="寸法表示",
@@ -473,7 +473,7 @@ def html(material, rev="E", date="2026-10-24"):
                      bathL="浴室は防滑タイル 300 × 300", bathSuf="、浴室は防滑タイル", grid="1 m グリッド", zones="部屋名", csTag="Clip Studio 用（GLB）", glbAll="住戸を GLB で保存",
                      glbFL="家具・天井扇・照明・エアコンを含める", glbOne="一覧で選んだ家具を GLB で保存",
                      glbErr="GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",
-                     hint="家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。右ドラッグか Shift＋ドラッグで視点を平行移動します（画面をクリックしたあとは矢印キーでも動きます）。視点のボタンを押すと元に戻ります。スマートフォン・タブレットでは、2本指でドラッグすると平行移動、指でつまむと拡大縮小します。配置は「上から」が操作しやすいです。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",
+                     hint="ドラッグすると、モデルの中央を中心に視点が回ります（家具は固定）。右ドラッグか Shift＋ドラッグで視点を平行移動します（画面をクリックしたあとは矢印キーでも動きます）。視点のボタンを押すと元に戻ります。スマートフォン・タブレットでは、2本指でドラッグすると平行移動、指でつまむと拡大縮小します。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",
                      specH="仕様", sSrc="元の図", sSrcM="DXF から読んだ平面（部屋・壁・開口・RC の柱・バルコニー・コア）", sOut="外形", sL="間取り", sW="壁", sRc="構造",
                      sH="高さ", sOp="扉・窓", sCo="コア", sF="床")}
     txt = {}

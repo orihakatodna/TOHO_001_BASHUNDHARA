@@ -34,15 +34,15 @@
       </div>
       <div class="bar">
         <span class="tag" data-i="fTag">Furniture</span>
-        <span id="selInfo" class="none" data-i="selNone">Nothing selected</span>
+        <span hidden id="selInfo" class="none" data-i="selNone">Nothing selected</span>
         <div class="grp">
-          <button class="btn" id="rotB" disabled data-i="rot">Rotate 90°</button>
-          <button class="btn" id="delB" disabled data-i="del">Remove</button>
+          <button class="btn" hidden id="rotB" disabled data-i="rot">Rotate 90°</button>
+          <button class="btn" hidden id="delB" disabled data-i="del">Remove</button>
         </div>
         <div class="grp">
           <select id="addK" aria-label="Furniture to add"></select>
-          <button class="btn" id="addB" data-i="add">Add</button>
-          <button class="btn" id="resetB" data-i="reset">Restore proposal</button>
+          <button class="btn" hidden id="addB" data-i="add">Add</button>
+          <button class="btn" hidden id="resetB" data-i="reset">Restore proposal</button>
         </div>
       </div>
       <div class="bar">
@@ -59,7 +59,7 @@
         </div>
         <button class="btn" id="glbK" data-i="glbOne">Save the furniture chosen in the list as GLB</button>
       </div>
-      <p class="hint" data-i="hint">Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The Top view is easiest for arranging. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
+      <p class="hint" data-i="hint">Drag to rotate the view about the centre of the model (furniture is fixed in place). Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
     </section>
 
     <aside class="spec">
@@ -172,7 +172,7 @@ D.bal.forEach(b=>{const front=b[3]<=O[1]+1,t=D.parapet[MATERIAL],hh=D.parapet.h,
   front?bx(b[0],b[1],b[2],b[1]+t,0,hh,m,M.top):bx(b[0],b[3]-t,b[2],b[3],0,hh,m,M.top);
   const y0=front?b[1]+t:O[3],y1=front?O[1]:b[3]-t;bx(b[0],y0,b[0]+t,y1,0,hh,m,M.top);bx(b[2]-t,y0,b[2],y1,0,hh,m,M.top);});
 sc.add(new THREE.AmbientLight(0xffffff,0.55));const dl=new THREE.DirectionalLight(0xffffff,0.75);dl.position.set(20,40,30);sc.add(dl);
-const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),L(0x2f5d8a));pm.position.set(wx(D.person[0]),0.85,wz(D.person[1]));sc.add(pm);
+const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),L(0x2f5d8a));pm.position.set(wx(D.person[0]),0.85,wz(D.person[1]));
 
 __MAT__JS
 __CAT__
@@ -209,9 +209,12 @@ let showDims=true;
 
 let mode='orbit',th=0.6,ph=0.75,dist=28,yaw=0,pitch=-0.12;const tgt=new THREE.Vector3(0,0.8,0);const eye=new THREE.Vector3(wx(D.eye[0]),1.6,wz(D.eye[1]));const TGT0=tgt.clone(),EYE0=eye.clone();
 // 平行移動: 視点の中心（室内・目線では立つ位置）を床と平行に動かす。画面を掴んで動かす向き
-function pan(dx,dy){const a=mode==='orbit'?th:yaw,f=mode==='orbit'?[-Math.sin(a),-Math.cos(a)]:[Math.sin(a),Math.cos(a)],r=[-f[1],f[0]],s=mode==='orbit'?dist*0.0016:0.01,p=mode==='orbit'?tgt:eye,lim=20;
-  p.x=Math.max(-lim,Math.min(lim,p.x+(-r[0]*dx+f[0]*dy)*s));p.z=Math.max(-lim,Math.min(lim,p.z+(-r[1]*dx+f[1]*dy)*s));press('');render();}
-function render(){
+let panX=0,panY=0;
+// 平行移動: 外から見る視点では画面をずらすだけ（回転の基点はモデルの中央のまま）。室内・目線では立つ位置が動く
+function pan(dx,dy){if(mode==='orbit'){const w=view.clientWidth,h=view.clientHeight;panX=Math.max(-w,Math.min(w,panX+dx));panY=Math.max(-h,Math.min(h,panY+dy));}
+  else{const f=[Math.sin(yaw),Math.cos(yaw)],r=[-f[1],f[0]],s=0.01,lim=20;eye.x=Math.max(-lim,Math.min(lim,eye.x+(-r[0]*dx+f[0]*dy)*s));eye.z=Math.max(-lim,Math.min(lim,eye.z+(-r[1]*dx+f[1]*dy)*s));}
+  press('');render();}
+function render(){{const w=view.clientWidth,h=view.clientHeight;if((typeof mode==='undefined'||mode==='orbit')&&(panX||panY))cam.setViewOffset(w,h,-panX,-panY,w,h);else cam.clearViewOffset();}
   if(mode==='orbit'){cam.position.set(dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);}
   else{cam.position.copy(eye);cam.lookAt(eye.x+Math.sin(yaw)*Math.cos(pitch),eye.y+Math.sin(pitch),eye.z+Math.cos(yaw)*Math.cos(pitch));}
   if(helper)helper.update();R.render(sc,cam);
@@ -219,7 +222,7 @@ function render(){
   labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&mode==='orbit'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});}
 const views={persp:{th:0.6,ph:0.75,dist:28},top:{th:0,ph:1.55,dist:32},front:{th:0,ph:0.12,dist:28}};
 function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
-function setView(k){press(k);if(k==='inside'){mode='inside';yaw=0;pitch=-0.12;eye.copy(EYE0);dimG.visible=false;}else{mode='orbit';tgt.copy(TGT0);dimG.visible=showDims;th=views[k].th;ph=views[k].ph;dist=views[k].dist;document.getElementById('zm').value=dist;}render();}
+function setView(k){press(k);if(k==='inside'){mode='inside';yaw=0;pitch=-0.12;eye.copy(EYE0);dimG.visible=false;}else{mode='orbit';tgt.copy(TGT0);panX=panY=0;dimG.visible=showDims;th=views[k].th;ph=views[k].ph;dist=views[k].dist;document.getElementById('zm').value=dist;}render();}
 document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
 document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims&&mode==='orbit';render();});
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2(),ground=new THREE.Plane(new THREE.Vector3(0,1,0),0),hitP=new THREE.Vector3();
@@ -236,7 +239,7 @@ view.addEventListener('pointermove',e=>{if(!tp.has(e.pointerId))return;tp.set(e.
 view.addEventListener('contextmenu',e=>e.preventDefault());
 view.addEventListener('pointerdown',e=>{px=sx=e.clientX;py=sy=e.clientY;view.setPointerCapture(e.pointerId);setRay(e);
   if(e.button===1||e.button===2||e.shiftKey){drag={type:'pan'};view.style.cursor='move';return;}
-  const hits=ray.intersectObjects(items.filter(i=>i.g.visible).map(i=>i.g),true);
+  const hits=[];  // 家具は固定（掴めない）
   if(hits.length){let ob=hits[0].object;while(ob&&!ob.userData.it)ob=ob.parent;const it=ob.userData.it;select(it);const gp=groundMm();off=gp?[it.x-gp[0],it.y-gp[1]]:[0,0];drag={type:'item',it};view.style.cursor='move';render();}
   else{drag={type:'view'};view.style.cursor='grabbing';}});
 view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;
@@ -275,7 +278,7 @@ document.getElementById('glbK').onclick=()=>{const k=document.getElementById('ad
 function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(typeof t==='string'&&e.id!=='selInfo')e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');fillSelect();fillFin();updateFin();info();drawFloor();render();try{localStorage.setItem('reve-lang',l)}catch(e){}}
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
 let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
-load(Array.isArray(saved)&&saved.length?saved:D.furn);
+load(D.furn);  // 家具は提案の配置で固定
 fillSelect();fillFin();updateFin();info();
 new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
 try{if(localStorage.getItem('reve-lang')==='ja')setLang('ja');}catch(e){}

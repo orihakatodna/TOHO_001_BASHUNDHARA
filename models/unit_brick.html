@@ -67,7 +67,7 @@ select{padding:7px 8px;max-width:100%}
         <b data-i="kDrawing">Drawing</b><span>CM-01</span>
         <b data-i="kScale">Scale</b><span>N.T.S.</span>
         <b data-i="kDate">Date</b><span>2026-10-22</span>
-        <b data-i="kRev">Rev.</b><span>G</span>
+        <b data-i="kRev">Rev.</b><span>H</span>
       </div>
       <div class="lang" role="group" aria-label="Language">
         <button class="btn" id="lEn" aria-pressed="true">EN</button>
@@ -92,15 +92,15 @@ select{padding:7px 8px;max-width:100%}
       </div>
       <div class="bar">
         <span class="tag" data-i="fTag">Furniture</span>
-        <span id="selInfo" class="none" data-i="selNone">Nothing selected</span>
+        <span hidden id="selInfo" class="none" data-i="selNone">Nothing selected</span>
         <div class="grp">
-          <button class="btn" id="rotB" disabled data-i="rot">Rotate 90°</button>
-          <button class="btn" id="delB" disabled data-i="del">Remove</button>
+          <button class="btn" hidden id="rotB" disabled data-i="rot">Rotate 90°</button>
+          <button class="btn" hidden id="delB" disabled data-i="del">Remove</button>
         </div>
         <div class="grp">
           <select id="addK" aria-label="Furniture to add"></select>
-          <button class="btn" id="addB" data-i="add">Add</button>
-          <button class="btn" id="resetB" data-i="reset">Restore proposal</button>
+          <button class="btn" hidden id="addB" data-i="add">Add</button>
+          <button class="btn" hidden id="resetB" data-i="reset">Restore proposal</button>
         </div>
       </div>
       <div class="bar">
@@ -117,7 +117,7 @@ select{padding:7px 8px;max-width:100%}
         </div>
         <button class="btn" id="glbK" data-i="glbOne">Save the furniture chosen in the list as GLB</button>
       </div>
-      <p class="hint" data-i="hint">Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The Top view is easiest for arranging. The 1 ft grid (heavy line every 5 ft) can be switched on below. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
+      <p class="hint" data-i="hint">Drag to rotate the view about the centre of the model (furniture is fixed in place). Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The 1 ft grid (heavy line every 5 ft) can be switched on below. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).</p>
     </section>
 
     <aside class="spec">
@@ -141,7 +141,7 @@ select{padding:7px 8px;max-width:100%}
         <span><i class="sw" style="background:rgba(200,140,110,.55)"></i><span data-i="zK">Kitchen</span></span>
         <span><i class="sw" style="background:rgba(100,170,170,.6)"></i><span data-i="zW">Baths</span></span>
       </div>
-      <p class="note" data-i="note">Concept model for discussion. Room zones, partitions, doors, windows, furniture, fans, lights and AC are a first proposal. Furniture you move is kept only in your own browser. Not for construction.</p>
+      <p class="note" data-i="note">Concept model for discussion. Room zones, partitions, doors, windows, furniture, fans, lights and AC are a first proposal. Not for construction.</p>
     </aside>
   </div>
 </div>
@@ -150,8 +150,8 @@ select{padding:7px 8px;max-width:100%}
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
 <script>
 const TXT={
-en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Brick walls in English bond, 10′ high, open top. Three-bedroom unit fitted around the common core of building CM-03. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",fix:"Fans, lights, AC",finTag:"Floor finish",bathL:"Baths: anti-slip tile 300 × 300",grid:"1 ft grid",zones:"Room zones",csTag:"For Clip Studio (GLB)",glbAll:"Save the unit as GLB",glbFL:"Include furniture, fans, lights, AC",glbOne:"Save the furniture chosen in the list as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",sFv2:"On 125 mm slab (provisional)",bathSuf:"; baths: anti-slip tile",fTag:"Furniture",selNone:"Nothing selected",rot:"Rotate 90°",del:"Remove",add:"Add",reset:"Restore proposal",hint:"Drag a piece of furniture to move it; drag empty space to rotate the view. Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The Top view is easiest for arranging. The 1 ft grid (heavy line every 5 ft) can be switched on below. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / unit 1,372 sft (core and balcony excluded)",sS:"Services",sSv:"Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.",sL:"Layout",sLv:"3 bedrooms, 3 baths (one shared), living with balcony, dining, kitchen, store, entrance hall; common core of CM-03 at the rear right (proposal)",sPt:"Partitions",sPtv:"125 mm brick in stretcher bond (half-brick), exposed, full height (provisional)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",zL:"Living, dining",zB:"Bedrooms",zK:"Kitchen",zW:"Baths",note:"Concept model for discussion. Room zones, partitions, doors, windows, furniture, fans, lights and AC are a first proposal. Furniture you move is kept only in your own browser. Not for construction."},
-ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。建物 CM-03 の共用コアを空けた3寝室の住戸。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",fix:"天井扇・照明・エアコン",finTag:"床仕上げ",bathL:"浴室は防滑タイル 300 × 300",grid:"1 ft グリッド",zones:"部屋の区分",csTag:"Clip Studio 用（GLB）",glbAll:"住戸を GLB で保存",glbFL:"家具・天井扇・照明・エアコンを含める",glbOne:"一覧で選んだ家具を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",sFv2:"スラブ 125 mm（仮定）の上",bathSuf:"、浴室は防滑タイル",fTag:"家具",selNone:"未選択",rot:"90° 回転",del:"削除",add:"追加",reset:"提案の配置に戻す",hint:"家具をドラッグすると移動、何もない所をドラッグすると視点が回ります。右ドラッグか Shift＋ドラッグで視点を平行移動します（画面をクリックしたあとは矢印キーでも動きます）。視点のボタンを押すと元に戻ります。スマートフォン・タブレットでは、2本指でドラッグすると平行移動、指でつまむと拡大縮小します。配置は「上から」が操作しやすいです。1 ft のグリッド（5 ft ごとに太線）は下のボタンで表示できます。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 住戸 1,372 sft（コア・バルコニーを除く）",sS:"設備",sSv:"天井扇 56″（羽根の高さは床から約 2.7 m、仮定）、LED 天井照明、壁掛けエアコン室内機。位置は提案。天井は未作図。",sL:"間取り",sLv:"寝室3・浴室3（1室は共用）・居間（バルコニー付き）・食堂・台所・物入れ・玄関ホール。右奥は CM-03 の共用コア（提案）",sPt:"間仕切り",sPtv:"125 mm、レンガブロックの長手積み（半枚積み）、現し、壁の天端まで（仮定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",zL:"居間・食堂",zB:"寝室",zK:"台所",zW:"浴室",note:"協議用の概念モデルです。部屋の区分・間仕切り・扉・窓・家具・天井扇・照明・エアコンは最初の提案です。動かした家具の位置は、見ている方のブラウザーにだけ残ります。施工用ではありません。"}};
+en:{title:"Dwelling unit shell — 36′ × 52′",sub:"Brick walls in English bond, 10′ high, open top. Three-bedroom unit fitted around the common core of building CM-03. Concept model.",kDrawing:"Drawing",kScale:"Scale",kDate:"Date",kRev:"Rev.",vPersp:"Perspective",vTop:"Top",vFront:"Front",vInside:"Inside, eye level",zoom:"Distance",dims:"Dimensions",fix:"Fans, lights, AC",finTag:"Floor finish",bathL:"Baths: anti-slip tile 300 × 300",grid:"1 ft grid",zones:"Room zones",csTag:"For Clip Studio (GLB)",glbAll:"Save the unit as GLB",glbFL:"Include furniture, fans, lights, AC",glbOne:"Save the furniture chosen in the list as GLB",glbErr:"The GLB exporter could not be loaded. Check the internet connection and reload the page.",sFv2:"On 125 mm slab (provisional)",bathSuf:"; baths: anti-slip tile",fTag:"Furniture",selNone:"Nothing selected",rot:"Rotate 90°",del:"Remove",add:"Add",reset:"Restore proposal",hint:"Drag to rotate the view about the centre of the model (furniture is fixed in place). Right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. The 1 ft grid (heavy line every 5 ft) can be switched on below. GLB files open in Clip Studio as 3D materials (1 unit = 1 m).",specH:"Specification",sOut:"Outside",sIn:"Inside clear",sArea:"Floor area",sAreaV:"1,872 sft gross / unit 1,372 sft (core and balcony excluded)",sS:"Services",sSv:"Ceiling fans 56″ (blades about 2.7 m above floor, provisional), LED ceiling lights, wall-mounted split AC units. Positions proposed; ceiling not modelled.",sL:"Layout",sLv:"3 bedrooms, 3 baths (one shared), living with balcony, dining, kitchen, store, entrance hall; common core of CM-03 at the rear right (proposal)",sPt:"Partitions",sPtv:"125 mm brick in stretcher bond (half-brick), exposed, full height (provisional)",sOp:"Doors, windows",sOpv:"Doors 7′ high; main, bedrooms and kitchen 3′, baths and store 2′-6″; leaves shown open. Windows: sill 3′ (kitchen 3′-6″), head 7′. Bath vents 6′–7′. All provisional.",sH:"Wall height",sHm:"3.05 m · 38 courses",sW:"Walls",sWv:"250 mm (10″) first-class burnt clay brick, cement mortar, English bond",sF:"Floor",sFv:"Slab, 125 mm (provisional)",sC:"Ceiling",sCv:"None — open model",zL:"Living, dining",zB:"Bedrooms",zK:"Kitchen",zW:"Baths",note:"Concept model for discussion. Room zones, partitions, doors, windows, furniture, fans, lights and AC are a first proposal. Not for construction."},
+ja:{title:"住戸の躯体モデル 36′ × 52′",sub:"イングリッシュボンドのレンガ壁、高さ 10′、天井なし。建物 CM-03 の共用コアを空けた3寝室の住戸。概念モデル。",kDrawing:"図番",kScale:"縮尺",kDate:"日付",kRev:"版",vPersp:"パース",vTop:"上から",vFront:"正面",vInside:"室内・目線",zoom:"距離",dims:"寸法表示",fix:"天井扇・照明・エアコン",finTag:"床仕上げ",bathL:"浴室は防滑タイル 300 × 300",grid:"1 ft グリッド",zones:"部屋の区分",csTag:"Clip Studio 用（GLB）",glbAll:"住戸を GLB で保存",glbFL:"家具・天井扇・照明・エアコンを含める",glbOne:"一覧で選んだ家具を GLB で保存",glbErr:"GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",sFv2:"スラブ 125 mm（仮定）の上",bathSuf:"、浴室は防滑タイル",fTag:"家具",selNone:"未選択",rot:"90° 回転",del:"削除",add:"追加",reset:"提案の配置に戻す",hint:"ドラッグすると、モデルの中央を中心に視点が回ります（家具は固定）。右ドラッグか Shift＋ドラッグで視点を平行移動します（画面をクリックしたあとは矢印キーでも動きます）。視点のボタンを押すと元に戻ります。スマートフォン・タブレットでは、2本指でドラッグすると平行移動、指でつまむと拡大縮小します。1 ft のグリッド（5 ft ごとに太線）は下のボタンで表示できます。GLB は Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",specH:"仕様",sOut:"外形",sIn:"内法",sArea:"床面積",sAreaV:"外形 1,872 sft ／ 住戸 1,372 sft（コア・バルコニーを除く）",sS:"設備",sSv:"天井扇 56″（羽根の高さは床から約 2.7 m、仮定）、LED 天井照明、壁掛けエアコン室内機。位置は提案。天井は未作図。",sL:"間取り",sLv:"寝室3・浴室3（1室は共用）・居間（バルコニー付き）・食堂・台所・物入れ・玄関ホール。右奥は CM-03 の共用コア（提案）",sPt:"間仕切り",sPtv:"125 mm、レンガブロックの長手積み（半枚積み）、現し、壁の天端まで（仮定）",sOp:"扉・窓",sOpv:"扉は高さ 7′、幅は玄関・寝室・台所 3′、浴室・物入れ 2′-6″（扉は開いた状態で表示）。窓は腰高 3′（台所 3′-6″）、上端 7′。浴室の換気窓は 6′〜7′。すべて仮定。",sH:"壁高さ",sHm:"3.05 m・38 段",sW:"壁",sWv:"250 mm（10″）ファーストクラス焼成レンガ、セメントモルタル、イングリッシュボンド",sF:"床",sFv:"スラブ 125 mm（仮定）",sC:"天井",sCv:"なし（開放モデル）",zL:"居間・食堂",zB:"寝室",zK:"台所",zW:"浴室",note:"協議用の概念モデルです。部屋の区分・間仕切り・扉・窓・家具・天井扇・照明・エアコンは最初の提案です。施工用ではありません。"}};
 let lang='en';
 
 const FT=0.3048,M={W:36,D:52,H:10,T:0.25,slab:0.125};
@@ -264,7 +264,7 @@ drawFloor();const gt=new THREE.CanvasTexture(fc);gt.anisotropy=AN;window.gt=gt;
 const slabSide=new THREE.MeshLambertMaterial({color:0x9c9a94});
 const slab=new THREE.Mesh(new THREE.BoxGeometry(X,M.slab,Z),[slabSide,slabSide,new THREE.MeshLambertMaterial({map:gt}),slabSide,slabSide,slabSide]);slab.position.y=-M.slab/2;sc.add(slab);
 const gr=new THREE.Mesh(new THREE.PlaneGeometry(90,90),new THREE.MeshLambertMaterial({color:0x9aa08f}));gr.rotation.x=-Math.PI/2;gr.position.y=-M.slab-0.01;sc.add(gr);
-const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),new THREE.MeshLambertMaterial({color:0x2f5d8a}));pm.position.set(-X/2+T+16*FT,0.85,Z/2-T-8*FT);sc.add(pm);
+const pm=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.7,12),new THREE.MeshLambertMaterial({color:0x2f5d8a}));pm.position.set(-X/2+T+16*FT,0.85,Z/2-T-8*FT);
 sc.add(new THREE.AmbientLight(0xffffff,0.55));const dl=new THREE.DirectionalLight(0xffffff,0.75);dl.position.set(20,40,30);sc.add(dl);
 
 const MAT={fabric:0x6f7f95,wood:0x9a7350,wood2:0x7c5c40,linen:0xe6e0d4,white:0xf1f1ec,white2:0xdcdcd6,stone:0xc9c2b4,pot:0xa0583a,leaf:0x4f7a3a,leaf2:0x6f9a4c};
@@ -355,9 +355,12 @@ let showDims=true;
 let mode='orbit',th=0.6,ph=0.75,dist=30,yaw=Math.PI,pitch=-0.12;const tgt=new THREE.Vector3(0,0.8,0);const eye=new THREE.Vector3(-X/2+T+19*FT,1.6,Z/2-T-17*FT);
 const TGT0=tgt.clone(),EYE0=eye.clone();
 // 平行移動: 視点の中心（室内・目線では立つ位置）を床と平行に動かす。画面を掴んで動かす向き
-function pan(dx,dy){const a=mode==='orbit'?th:yaw,f=mode==='orbit'?[-Math.sin(a),-Math.cos(a)]:[Math.sin(a),Math.cos(a)],r=[-f[1],f[0]],s=mode==='orbit'?dist*0.0016:0.01,p=mode==='orbit'?tgt:eye,lim=20;
-  p.x=Math.max(-lim,Math.min(lim,p.x+(-r[0]*dx+f[0]*dy)*s));p.z=Math.max(-lim,Math.min(lim,p.z+(-r[1]*dx+f[1]*dy)*s));press('');render();}
-function render(){
+let panX=0,panY=0;
+// 平行移動: 外から見る視点では画面をずらすだけ（回転の基点はモデルの中央のまま）。室内・目線では立つ位置が動く
+function pan(dx,dy){if(mode==='orbit'){const w=view.clientWidth,h=view.clientHeight;panX=Math.max(-w,Math.min(w,panX+dx));panY=Math.max(-h,Math.min(h,panY+dy));}
+  else{const f=[Math.sin(yaw),Math.cos(yaw)],r=[-f[1],f[0]],s=0.01,lim=20;eye.x=Math.max(-lim,Math.min(lim,eye.x+(-r[0]*dx+f[0]*dy)*s));eye.z=Math.max(-lim,Math.min(lim,eye.z+(-r[1]*dx+f[1]*dy)*s));}
+  press('');render();}
+function render(){{const w=view.clientWidth,h=view.clientHeight;if((typeof mode==='undefined'||mode==='orbit')&&(panX||panY))cam.setViewOffset(w,h,-panX,-panY,w,h);else cam.clearViewOffset();}
   if(mode==='orbit'){cam.position.set(dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);}
   else{cam.position.copy(eye);cam.lookAt(eye.x+Math.sin(yaw)*Math.cos(pitch),eye.y+Math.sin(pitch),eye.z+Math.cos(yaw)*Math.cos(pitch));}
   if(helper)helper.update();
@@ -367,7 +370,7 @@ function render(){
 }
 const views={persp:{th:0.6,ph:0.75,dist:30},top:{th:0,ph:1.55,dist:34},front:{th:0,ph:0.12,dist:30}};
 function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
-function setView(k){press(k);if(k==='inside'){mode='inside';yaw=Math.PI;pitch=-0.12;eye.copy(EYE0);dimG.visible=false;}else{mode='orbit';tgt.copy(TGT0);dimG.visible=showDims;th=views[k].th;ph=views[k].ph;dist=views[k].dist;document.getElementById('zm').value=dist;}render();}
+function setView(k){press(k);if(k==='inside'){mode='inside';yaw=Math.PI;pitch=-0.12;eye.copy(EYE0);dimG.visible=false;}else{mode='orbit';tgt.copy(TGT0);panX=panY=0;dimG.visible=showDims;th=views[k].th;ph=views[k].ph;dist=views[k].dist;document.getElementById('zm').value=dist;}render();}
 document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
 document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims&&mode==='orbit';render();});
 
@@ -386,7 +389,7 @@ view.addEventListener('contextmenu',e=>e.preventDefault());
 view.addEventListener('keydown',e=>{const k={ArrowLeft:[40,0],ArrowRight:[-40,0],ArrowUp:[0,40],ArrowDown:[0,-40]}[e.key];if(!k)return;e.preventDefault();pan(k[0],k[1]);});
 view.addEventListener('pointerdown',e=>{px=sx=e.clientX;py=sy=e.clientY;view.setPointerCapture(e.pointerId);setRay(e);
   if(e.button===1||e.button===2||e.shiftKey){drag={type:'pan'};view.style.cursor='move';return;}
-  const hits=ray.intersectObjects(items.filter(i=>i.g.visible).map(i=>i.g),true);
+  const hits=[];  // 家具は固定（掴めない）
   if(hits.length){let o=hits[0].object;while(o&&!o.userData.it)o=o.parent;const it=o.userData.it;select(it);const gp=groundFt();off=gp?[it.x-gp[0],it.v-gp[1]]:[0,0];drag={type:'item',it};view.style.cursor='move';render();}
   else{drag={type:'view'};view.style.cursor='grabbing';}});
 view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;
@@ -427,7 +430,7 @@ function setLang(l){lang=l;document.documentElement.lang=l;document.querySelecto
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
 
 let saved=null;try{saved=JSON.parse(localStorage.getItem('ush-layout-d')||'null');}catch(e){}
-load(Array.isArray(saved)&&saved.length?saved:INIT);
+load(INIT);  // 家具は提案の配置で固定
 fillSelect();fillFin();updateFin();info();
 new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
 try{if(localStorage.getItem('ush-lang')==='ja')setLang('ja');}catch(e){}
