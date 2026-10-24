@@ -304,6 +304,26 @@ LAW = {
 }
 
 
+def check_reve(path, html, js, found, notes):
+    """16. RevE のモデル（DXF から生成）: 生成し直した内容と一致するか、家具・扉・柱・窓の干渉、家具の寸法が CM-01 と同じか。"""
+    import revE_build as rb
+    m = re.search(r"const MATERIAL='(\w+)';", js)
+    if not m:
+        found.append("MATERIAL が読めない")
+        return
+    if html != rb.html(m.group(1)):
+        found.append(f"{path.name} が DXF・生成スクリプトからの再生成と一致しない（python tools/revE_build.py --html で作り直す）")
+    f, n = rb.check()
+    found += f
+    notes += n
+    cat = parse_cat((MODELS / "unit_brick.html").read_text(encoding="utf-8"))
+    mm = {"f": "floor", "c": "ceiling", "w": "wall"}
+    bad = [k for k, (w, d, mt) in rb.CATD.items() if k not in cat or abs(cat[k][0] - w) > 1e-6 or abs(cat[k][1] - d) > 1e-6 or cat[k][2] != mm[mt]]
+    if bad:
+        found.append(f"家具の寸法が CM-01 の CAT と違う: {bad}")
+    notes.append(f"元の DXF: {rb.SRC.name}（再生成と照合）")
+
+
 def col_points(b):
     """柱の位置（建物の座標 ft）。コアの位置は除き、移した柱は移した先。"""
     cl, out = b["COL"], []
@@ -486,6 +506,9 @@ def check_file(path):
     if 'id="glbB"' not in html or "saveGLB(" not in js:
         found.append("GLB の保存ボタン（glbB）か saveGLB が無い")
 
+    if "const REVE=" in js:
+        check_reve(path, html, js, found, notes)
+        return found, notes, revs, None
     if "const BLD=" in js:
         check_building(js, found, notes)
         return found, notes, revs, None
@@ -577,7 +600,8 @@ def main():
         print("   ✗ " + t)
     total += len(cf)
     # 13. 修正指示用の DXF（dxf/ の最新）が、現行のモデルから書き出したものと同じか
-    dxfs = sorted((ROOT / "dxf").glob("unit_plan_*.dxf"))
+    # export_dxf.py が書き出す名前（unit_plan_Rev<版>_<YYMMDD>.dxf）だけ。ユーザーから受け取った DXF は対象外
+    dxfs = sorted(p for p in (ROOT / "dxf").glob("unit_plan_*.dxf") if re.fullmatch(r"unit_plan_Rev[A-Z]+_\d{6}\.dxf", p.name))
     if dxfs:
         import export_dxf as xd
         E, info = xd.build()
