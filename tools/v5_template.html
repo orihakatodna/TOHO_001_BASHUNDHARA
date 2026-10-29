@@ -77,6 +77,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
           <button class="btn" data-v="south" aria-pressed="false" data-i="vSouth">South</button>
           <button class="btn" data-v="west" aria-pressed="false" data-i="vWest">West</button>
           <button class="btn" data-v="top" aria-pressed="false" data-i="vTop">Top</button>
+          <button class="btn" data-v="inside" aria-pressed="false" data-i="vInside">Inside, eye level</button>
         </div>
         <label for="zm"><span data-i="zoom">Distance</span><input type="range" id="zm" min="20" max="160" value="54"></label>
         <button class="btn" id="dimT" aria-pressed="true" data-i="dims">Dimensions</button>
@@ -84,6 +85,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
       <div class="bar">
         <label for="lv"><span data-i="lvTag">Floors shown</span><input type="range" id="lv" min="0" max="9" value="9"><span id="lvName" class="lvn">Roof</span></label>
         <button class="btn" id="zoneT" aria-pressed="true" data-i="zones">Room names</button>
+        <button class="btn" id="furnT" aria-pressed="true" data-i="furn">Furniture</button>
       </div>
       <div class="bar">
         <span class="tag" data-i="csTag">For Clip Studio (GLB)</span>
@@ -101,6 +103,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
         <div class="row"><dt data-i="sLv">Levels</dt><dd data-i="sLvv">__sLvv__</dd></div>
         <div class="row"><dt data-i="sFin">Finishes</dt><dd data-i="sFinv">__sFinv__</dd></div>
         <div class="row"><dt data-i="sUnit">Dwelling</dt><dd data-i="sUnitv">__sUnitv__</dd></div>
+        <div class="row"><dt data-i="sFurn">Furniture</dt><dd data-i="sFurnv">__sFurnv__</dd></div>
         <div class="row"><dt data-i="sGf">Ground floor</dt><dd data-i="sGfv">__sGfv__</dd></div>
         <div class="row"><dt data-i="sSt">Stair, lift</dt><dd data-i="sStv">__sStv__</dd></div>
         <div class="row"><dt data-i="sStr">Structure</dt><dd data-i="sStrv">__sStrv__</dd></div>
@@ -200,6 +203,14 @@ paint();
 // ---- 階（GF〜8F・屋上）。各階の箱は階の床からの高さで持ち、ここで階の高さを足す
 const LV=D.levels.map(l=>{const g=new THREE.Group();g.name=l.n;sc.add(g);const B=new Batch(),T=D.types[l.t];
   T.b.forEach(b=>B.box([b[0],b[1],b[2],b[3],b[4]+l.z,b[5]+l.z,b[6]],l.z/1000));B.flush(g);T.p.forEach(p=>clump(p,l.z,g));return g;});
+// ---- 家具（形と寸法は CM-01 の一覧 CAT・build()。配置は tools/v5_build.py の FURN で、v5 の基準階の平面から読んだ仮定）。家具は固定で、掴めない
+// どの住戸の階も同じ間取りなので、家具は「表示する階」で選んだ住戸の階（1F〜8F）にだけ置く
+const FT=0.3048,Y=D.ceil/1000;
+__MATJS____CAT__
+__BUILD__
+const furnG=new THREE.Group();furnG.name='Furniture';sc.add(furnG);
+D.furn.forEach(([k,x,y,r])=>{const g=build(k);g.name=k;g.position.set(wx(x),0,wz(y));g.rotation.y=r*Math.PI/180;furnG.add(g);});
+let showFurn=true;
 // ---- 敷地・道路・塀・植栽・車路の坂・段
 const siteG=new THREE.Group();siteG.name='Site';sc.add(siteG);
 (function(){const B=new Batch();D.siteB.forEach(b=>B.box(b,0));B.flush(siteG);
@@ -217,37 +228,53 @@ const fmm=v=>Math.round(v).toLocaleString('en-US');
 const labels=[{p:[(X0+X1)/2,yb,Zs+o],t:fmm(D.dims.w)},{p:[X1+o,yb,(Zs+Zn)/2],t:fmm(D.dims.d)},{p:[X1+o,RF/2,Zs+o],t:'GF–RF '+fmm(D.dims.rf)}].map(d=>{const e=document.createElement('div');e.className='dim';e.textContent=d.t;view.appendChild(e);d.e=e;return d;});
 let showDims=true;
 sc.add(new THREE.AmbientLight(0xffffff,0.55));const hl=new THREE.HemisphereLight(0xfff4e0,0x8a8a80,0.25);sc.add(hl);const dl=new THREE.DirectionalLight(0xfff1dc,0.7);dl.position.set(-40,60,45);sc.add(dl);
-// ---- 視点（回転の基点はモデルの中央に固定。平行移動は画面をずらすだけ。CM-03 と同じ操作）
-let th=-1.0,ph=0.25,dist=54;const tgt=new THREE.Vector3(0,14,0);
+// ---- 視点。外から: 回転の基点はモデルの中央に固定、平行移動は画面をずらすだけ（CM-03 と同じ操作）。
+// 室内・目線: 「表示する階」で選んだ住戸の階の床から 1.6 m に立ち、ドラッグで見回し、平行移動で立つ位置が動く（CM-04/05 と同じ操作）
+let mode='orbit',th=-1.0,ph=0.25,dist=54,yaw=0,pitch=-0.12;const tgt=new THREE.Vector3(0,14,0);
 let panX=0,panY=0;
-function pan(dx,dy){const w=view.clientWidth,h=view.clientHeight;panX=Math.max(-w,Math.min(w,panX+dx));panY=Math.max(-h,Math.min(h,panY+dy));press('');render();}
-function render(){{const w=view.clientWidth,h=view.clientHeight;if(panX||panY)cam.setViewOffset(w,h,-panX,-panY,w,h);else cam.clearViewOffset();}
-  cam.position.set(tgt.x+dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),tgt.z+dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);R.render(sc,cam);
-  const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});}
+const EYE_H=1.6,eye=new THREE.Vector3(),EX=[wx(BL[0]-1000),wx(BL[2]+1000)],EZ=[wz(BL[3]+1000),wz(BL[1]-1500)];  // 立つ位置は建物の外形の外 1 m（南は 1.5 m）まで
+function pan(dx,dy){if(mode==='orbit'){const w=view.clientWidth,h=view.clientHeight;panX=Math.max(-w,Math.min(w,panX+dx));panY=Math.max(-h,Math.min(h,panY+dy));press('');}
+  else{const f=[Math.sin(yaw),Math.cos(yaw)],r=[-f[1],f[0]],s=0.01;eye.x=Math.max(EX[0],Math.min(EX[1],eye.x+(-r[0]*dx+f[0]*dy)*s));eye.z=Math.max(EZ[0],Math.min(EZ[1],eye.z+(-r[1]*dx+f[1]*dy)*s));}
+  render();}
+function render(){{const w=view.clientWidth,h=view.clientHeight;if(mode==='orbit'&&(panX||panY))cam.setViewOffset(w,h,-panX,-panY,w,h);else cam.clearViewOffset();}
+  if(mode==='orbit'){cam.position.set(tgt.x+dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),tgt.z+dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);}
+  else{cam.position.copy(eye);cam.lookAt(eye.x+Math.sin(yaw)*Math.cos(pitch),eye.y+Math.sin(pitch),eye.z+Math.cos(yaw)*Math.cos(pitch));}
+  R.render(sc,cam);
+  const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&mode==='orbit'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});}
 const views={persp:{th:-1.0,ph:0.25,dist:54,y:14},street:{th:-0.35,ph:0.06,dist:42,y:11},south:{th:0,ph:0.04,dist:72,y:14},west:{th:-Math.PI/2,ph:0.04,dist:72,y:14},top:{th:0,ph:1.55,dist:80,y:0}};
 function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
-function setView(k){press(k);const v=views[k];th=v.th;ph=v.ph;dist=v.dist;tgt.set(0,v.y,0);panX=panY=0;document.getElementById('zm').value=dist;render();}
+// 室内・目線は、表示する階が GF・屋上なら住戸の階（1F・8F）に替えて、玄関 ENT. の内側から始める。画角は外から 40°、室内 60°
+function setView(k){press(k);
+  if(k==='inside'){mode='inside';lvN=Math.max(1,Math.min(NT,lvN));eye.set(wx(D.eye[0]),0,wz(D.eye[1]));yaw=D.eye[2];pitch=-0.12;cam.fov=60;applyLevel();}
+  else{mode='orbit';const v=views[k];th=v.th;ph=v.ph;dist=v.dist;tgt.set(0,v.y,0);panX=panY=0;document.getElementById('zm').value=dist;cam.fov=40;}
+  dimG.visible=showDims&&mode==='orbit';cam.updateProjectionMatrix();render();}
 document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
-document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims;render();});
+document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims&&mode==='orbit';render();});
 document.getElementById('zoneT').addEventListener('click',e=>{showZones=!showZones;e.currentTarget.setAttribute('aria-pressed',showZones);paint();render();});
 function lvLabel(){const n=+document.getElementById('lv').value;document.getElementById('lvName').textContent=TXT[lang].lv[n];}
-document.getElementById('lv').addEventListener('input',e=>{const n=+e.target.value;LV.forEach((g,i)=>g.visible=i<=n);lvLabel();render();});
+// 表示する階: その階より上を隠す。家具はその階が住戸の階（1F〜8F）なら置く。室内・目線では住戸の階に限り、目の高さもその階に合わせる
+const NT=D.levels.length-2;let lvN=+document.getElementById('lv').value;
+function applyLevel(){LV.forEach((g,i)=>g.visible=i<=lvN);const f=lvN>=1&&lvN<=NT;furnG.visible=showFurn&&f;if(f)furnG.position.y=D.levels[lvN].z/1000;
+  if(mode==='inside')eye.y=D.levels[lvN].z/1000+EYE_H;document.getElementById('lv').value=lvN;lvLabel();}
+document.getElementById('lv').addEventListener('input',e=>{lvN=+e.target.value;if(mode==='inside')lvN=Math.max(1,Math.min(NT,lvN));applyLevel();render();});
+document.getElementById('furnT').addEventListener('click',e=>{showFurn=!showFurn;e.currentTarget.setAttribute('aria-pressed',showFurn);applyLevel();render();});
 let drag=false,px=0,py=0;
-// タッチ操作（スマートフォン・タブレット）: 1本指は回転、2本指でドラッグすると平行移動、つまむと拡大縮小
+// タッチ操作（スマートフォン・タブレット）: 1本指は回転（室内では見回し）、2本指でドラッグすると平行移動（室内では歩く）、つまむと拡大縮小（外からのみ）
 const tp=new Map();let pinch=null;
 function pinchState(){const p=[...tp.values()];return {x:(p[0][0]+p[1][0])/2,y:(p[0][1]+p[1][1])/2,d:Math.max(1,Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]))};}
 view.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')return;tp.set(e.pointerId,[e.clientX,e.clientY]);if(tp.size===2){pinch=pinchState();drag=false;e.stopImmediatePropagation();}},true);
 view.addEventListener('pointermove',e=>{if(!tp.has(e.pointerId))return;tp.set(e.pointerId,[e.clientX,e.clientY]);if(!pinch||tp.size<2)return;e.stopImmediatePropagation();const s=pinchState();
-  dist=Math.max(20,Math.min(160,dist*pinch.d/s.d));document.getElementById('zm').value=dist;pan(s.x-pinch.x,s.y-pinch.y);pinch=s;},true);
+  if(mode==='orbit'){dist=Math.max(20,Math.min(160,dist*pinch.d/s.d));document.getElementById('zm').value=dist;}pan(s.x-pinch.x,s.y-pinch.y);pinch=s;},true);
 ['pointerup','pointercancel'].forEach(t=>view.addEventListener(t,e=>{if(!tp.delete(e.pointerId))return;if(pinch&&tp.size<2){pinch=null;drag=false;e.stopImmediatePropagation();}},true));
 view.addEventListener('contextmenu',e=>e.preventDefault());
 view.addEventListener('keydown',e=>{const k={ArrowLeft:[40,0],ArrowRight:[-40,0],ArrowUp:[0,40],ArrowDown:[0,-40]}[e.key];if(!k)return;e.preventDefault();pan(k[0],k[1]);});
 view.addEventListener('pointerdown',e=>{drag=(e.button===1||e.button===2||e.shiftKey)?'pan':'view';px=e.clientX;py=e.clientY;view.style.cursor='grabbing';view.setPointerCapture(e.pointerId);});
-view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;if(drag==='pan'){pan(dx,dy);return;}th-=dx*0.008;ph=Math.max(0.02,Math.min(1.55,ph+dy*0.006));press('');render();});
+view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;if(drag==='pan'){pan(dx,dy);return;}
+  if(mode==='orbit'){th-=dx*0.008;ph=Math.max(0.02,Math.min(1.55,ph+dy*0.006));press('');}else{yaw-=dx*0.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*0.004));}render();});
 view.addEventListener('pointerup',()=>{drag=false;view.style.cursor='grab';});
-view.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(20,Math.min(160,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
-document.getElementById('zm').addEventListener('input',e=>{dist=+e.target.value;render();});
-// ---- GLB（Clip Studio 用）。表示中の階・敷地を書き出す（1 単位 = 1 m、原点は建物の中心・1階の床）
+view.addEventListener('wheel',e=>{if(mode!=='orbit')return;e.preventDefault();dist=Math.max(20,Math.min(160,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
+document.getElementById('zm').addEventListener('input',e=>{const v=+e.target.value;if(mode!=='orbit')setView('persp');dist=v;e.target.value=v;render();});
+// ---- GLB（Clip Studio 用）。表示中の階・家具・敷地を書き出す（1 単位 = 1 m、原点は建物の中心・1階の床）
 function stamp(){const d=new Date();return String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');}
 function saveGLB(obj,name,hide){if(!THREE.GLTFExporter){alert(TXT[lang].glbErr);return;}const hid=hide.filter(o=>o&&o.visible);hid.forEach(o=>o.visible=false);
   new THREE.GLTFExporter().parse(obj,buf=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'model/gltf-binary'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},{binary:true,onlyVisible:true,maxTextureSize:4096});
@@ -258,5 +285,5 @@ function setLang(l){lang=l;document.documentElement.lang=l;document.querySelecto
 document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
 new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
 try{if(localStorage.getItem('v5g8-lang')==='ja')setLang('ja')}catch(e){}
-lvLabel();render();
+applyLevel();render();
 </script>

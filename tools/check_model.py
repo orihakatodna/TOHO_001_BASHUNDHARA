@@ -20,7 +20,9 @@
  16. RevE のモデル（CM-04/05）が DXF・生成スクリプトからの再生成と一致するか、家具・扉・柱・窓の干渉
  17. v5 の建物モデル CM-06 が RevG の DXF・生成スクリプト（tools/v5_build.py）からの再生成と一致するか、
      v5 の記入寸法（幅・奥行・住戸・コア・階高・H ≤ 33 m）・面積表（基準階・建築面積・敷地）との一致、
-     階段の規定（LAW）、平面の整合（開口が壁の上にあるか、扉の開く側、窓・扉と柱の重なり）、了承済みの採り方（西面の窓1本、植栽の位置・幅）
+     階段の規定（LAW）、平面の整合（開口が壁の上にあるか、扉の開く側、窓・扉と柱の重なり）、了承済みの採り方（西面の窓1本、植栽の位置・幅）、
+     家具（一覧にあるか、部屋・植栽に収まるか、柱・扉の開き・植栽の手すりと重ならないか、窓の前に下端より高いものがないか、家具どうしの重なり、
+     埋め込んだ家具の一覧 CAT の種類・寸法・高さが CM-01 と同じか）
  建物 CM-03: 規模、後退、階段・EV・高架水槽の規定、コアの配置、柱がバルコニーに立たないか（値は LAW の出典を参照）
  住戸: 家具が共用コア・バルコニーの壁と重ならないか、バルコニーには植物だけか
 
@@ -336,6 +338,13 @@ def check_v5(path, html, found, notes):
     f, n = vb.check()
     found += f
     notes += n
+    js = re.findall(r"<script>(.*?)</script>", html, re.S)[-1]
+    cm01 = re.findall(r"<script>(.*?)</script>", (MODELS / "unit_brick.html").read_text(encoding="utf-8"), re.S)[-1]
+    a, b = (parse_cat(js), parse_extra(js)), (parse_cat(cm01), parse_extra(cm01))
+    if not a[0] or a != b:
+        bad = sorted(k for k in set(a[0]) | set(b[0]) if a[0].get(k) != b[0].get(k) or a[1].get(k) != b[1].get(k))
+        found.append(f"家具の一覧（CAT）の種類・寸法・高さが CM-01 と違う: {bad or '一覧が読めない'}")
+    notes.append(f"家具の一覧（CAT）: {len(a[0])} 種、CM-01 の種類・寸法・高さと照合")
     d, P, opens, zs = vb.model()
     s, st = P["stair"], vb.STAIR
     cw, cl = (s[2] - s[0]) / 1000, (s[3] - s[1]) / 1000
