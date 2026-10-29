@@ -38,7 +38,7 @@ OUT = ROOT / "models" / "v5_g8.html"
 TPL = ROOT / "tools" / "v5_template.html"
 CM01 = ROOT / "models" / "unit_brick.html"
 FT = 304.8  # mm
-DRAWING, REV, DATE = "CM-06", "F", "2026-10-29"
+DRAWING, REV, DATE = "CM-06", "G", "2026-10-29"
 
 # ---- 記入値（v5 p2。面積は p1 の表）
 W_NOTE = 10995           # 建物の幅 10.995 m（各平面の下の寸法）
@@ -67,8 +67,12 @@ YM = 4112.5              # 通り芯 Ym（RevG の画層 1。ほかは X1 200・
 BEAM_V5 = {
     "S": ((150, 900), 2250),             # 南の端: y 0.14〜0.88 m（幅 0.72）・梁下 2.24 m（9階、2.17〜2.31）。外壁から室内側へ 0.65 m 出る
     "C": ((YM - 125, YM + 125), 2500),   # 中央（通り芯 Ym）: 幅 0.21 m・梁下 2.49 m（8階、2.45〜2.55）。幅は仮定の 250 のまま
-    "N": ((9300, 9750), 2250),           # 北の端: y 9.30〜9.81 m（幅 0.51）・梁下 2.22 m（8階、2.17〜2.27）。南と同じ 2.25 m に丸めた。北の面は外壁の外面 9,750 にそろえた
+    "N": ((9300, 9700), 2250),           # 北の端: y 9.30〜9.81 m（幅 0.51）・梁下 2.22 m（8階、2.17〜2.27）。南と同じ 2.25 m に丸めた。北の面は外壁の中（外面から 50 mm 内）
 }
+# Y 方向（南北に通る）の梁（Rev.G、2026-10-29 ユーザー指摘「Y 方向に梁がない」）。v5 の図（平面・断面）に描かれていないので仮定で、東西の梁にならう:
+# 外周（通り芯 X1・X3）は北の梁と同じく室内側へ 0.2 m 出て梁下 2,250、中央（通り芯 X2）は中央の梁 Ym と同じく幅 250・梁下 2,500。外側の面は外壁の中
+X2 = 5193.75             # 通り芯 X2（RevG）
+BEAM_Y = {"W": ((100, 450), 2250), "X2": ((X2 - 125, X2 + 125), 2500), "E": ((10543.8, 10893.8), 2250)}
 # 東西の外周の梁は、外壁 250 mm の中に納まると仮定する（v5 の断面は南北の切断で、東西の梁は見えない）。
 # テラスの上の南の梁は、南立面のテラスの開口の上端（床から 2.46〜2.50 m）を下端とする（成は BEAM[1]）。断面の南の梁（梁下 2.25 m）と南立面が食い違うため（2026-10-29 ユーザー了承）
 DOOR_H = 7 * FT          # 扉・掃出し窓・1階の開口の上端 7′（RevE と同じ。1階の南の開口は南立面の縮尺読み 床から約 2.11 m）
@@ -172,11 +176,10 @@ FURN = [
     ["tv", 3021, 2105, 90],        # テレビ台（東の間仕切りに付ける）: 図 (3,000, 2,105)
     ["dchair", 1268, 3600, 0], ["side", 1735, 3600, 0], ["dchair", 2202, 3600, 0],  # 北の壁ぎわの椅子2脚と丸テーブル: 図 x 1,315・1,735・2,190。丸テーブルを中心に並べた
     # 寝室3
-    ["double", 1283, 7986, 90],    # ベッド: 図は頭を北の壁に付けて (1,780, 8,620)。北の壁の開口を掃出しのガラス戸にした（Rev.F、ユーザー指示）ので、
-                                   # 戸の前を空けるため頭を西の壁に付けて回した（ユーザー未確認）。北西の柱（y 8,750 から）と戸の前 約 0.8 m を避ける
-    ["side", 479, 7035, 0],        # ナイトテーブル: ベッドの頭の南の脇（図の位置 (1,150・2,400, 9,050) は戸の前）
-    ["dchair", 3006, 7790, -90], ["side", 3020, 8255, 0], ["dchair", 3006, 8720, -90],  # 東の壁ぎわの椅子2脚（西向き）と丸テーブル: 図 y 8,030・8,440・8,850。南へ 130〜240
-    ["tv", 1730, 6804, 0],         # テレビ台（南の間仕切りに付ける）: 図 (1,450, 6,770)。ナイトテーブルを避けて東へ 280
+    ["double", 1720, 8465, 0],     # ベッド: 図 (1,780, 8,620)、頭は北（v5 の向き。Rev.G、2026-10-29 ユーザーが選んだ）。ヘッドボードが北の壁と北西の柱に収まるよう
+                                   # 西へ 60・南へ 155。北の掃出しのガラス戸の西の部分の前をふさぎ、東の 約 0.7 m（x 2,436〜3,150）から出入りする
+    ["dchair", 3006, 7790, -90],   # 東の壁ぎわの椅子（西向き）: 図 y 8,030。扉の開き（y 7,550 まで）の北。丸テーブルともう1脚は、ガラス戸への通り道にかかるので置かない
+    ["tv", 1450, 6804, 0],         # テレビ台（南の間仕切りに付ける）: 図 (1,450, 6,770)
     # リビング・ダイニング
     ["tv", 3604, 4620, 90],        # テレビ台（西の間仕切りに付ける）: 図 (3,570, 4,620)
     ["side", 4100, 4670, 0],       # 丸テーブル（ソファの前）: 図 (4,100, 4,670)
@@ -211,7 +214,7 @@ FURN = [
     ["counter", 9535, 7505, 180],  # 南のカウンター（流し）: 図 x 8,620〜10,590
 ]
 # 図にあって置かないもの（CAT の寸法で入らない、または相当する種類が無い）: 寝室2 の西のナイトテーブル・1人掛けの横の丸テーブル、
-# 寝室3 のナイトテーブル1つ・弧形のソファと丸テーブル（ベッドとテレビ台の間が狭い）、主寝室のナイトテーブル2つ、
+# 寝室3 のナイトテーブル2つ（西は柱、東はガラス戸への通り道）・東の丸テーブルと椅子1脚（同）・弧形のソファと丸テーブル（ベッドとテレビ台の間 0.48 m）、主寝室のナイトテーブル2つ、
 # 玄関（ENT.）の横の台（下足入れか。x 4,870〜5,690）、台所の北の西半分の棚（x 7,090〜8,480）と南の列の西端の四角（x 7,160〜7,690）
 EYE = [6350, 8650, -0.35]   # 室内・目線の初めの位置（玄関 ENT. の内側）と向き（ラジアン。0 は南を向き、負は西へ回す）
 TYPE_H = {"bed": 1000, "sofa": 820, "chair": 900}   # 高さ（mm）。CM-01 の build(): ベッドはヘッドボード 1.0 m、ソファは座 0.42＋背 0.4、椅子は座 0.45＋背 0.45
@@ -559,8 +562,8 @@ def slab_rects(P, level, h_below, h_this):
 
 
 def ceiling_beams(P, kind):
-    """床スラブの下の梁 (x0, y0, x1, y1, 成)。成はスラブの上面から梁の下端まで（mm）。v5 の断面の3本（BEAM_V5）で、
-    1F・2〜8F・屋上のスラブ（kind: l1・typ・rf）とも同じ。東西の外周の梁は外壁の中に納まると仮定して描かない。"""
+    """床スラブの下の梁 (x0, y0, x1, y1, 成)。成はスラブの上面から梁の下端まで（mm）。東西に通る v5 の断面の3本（BEAM_V5）と、
+    南北に通る仮定の3本（BEAM_Y）。1F・2〜8F・屋上のスラブ（kind: l1・typ・rf）とも同じ。"""
     x0, x1 = WALL_T, P["W"] - WALL_T
     out = []
     for key, ((y0, y1), clear) in BEAM_V5.items():
@@ -570,6 +573,7 @@ def ceiling_beams(P, kind):
             out += [(x0, y0, t0, y1, d), (t0, y0, t1, y1, BEAM[1]), (t1, y0, x1, y1, d)]
         else:
             out.append((x0, y0, x1, y1, d))
+    out += [(a0, WALL_T, a1, P["UY"] - WALL_T, TYP_H - clear) for (a0, a1), clear in BEAM_Y.values()]
     return out
 
 
@@ -700,11 +704,11 @@ def model():
         "gf": {"park": park, "drive": list(DRIVE), "tact": [list(t) for t in TACTILE], "stock": list(STOCK["r"]), "wheel": 14500},
         "furn": FURN, "eye": EYE, "ceil": TYP_H - SLAB,
         # 選んだ階の天井の梁（上の階のスラブの下の梁）: r は [x0, y0, x1, y1, 下端, 上端]（z は選んだ階の床から）、
-        # lab は梁下の高さの表示 [x, y, 下端]（南は主寝室・中央と北は居間、1階は車路の上）
+        # lab は梁下の高さの表示 [x, y, 下端]（南は主寝室、中央と北と X2 は居間、西は寝室3、1階は車路の上）
         "beams": {k: {"r": [[*r[:4], round(h - r[4], 1), round(h - SLAB, 1)] for r in ceiling_beams(P, kind)],
-                      "lab": [[x, (y0 + y1) / 2 if key != "N" else 9400, round(h - (TYP_H - c), 1)]
-                              for (key, ((y0, y1), c)), x in zip(BEAM_V5.items(), xs)]}
-                  for k, kind, h, xs in (("gf", "l1", GF_H, (2700, 2700, 2700)), ("typ", "typ", TYP_H, (8500, 5150, 5150)))},
+                      "lab": [[x, y, round(h - (TYP_H - c), 1)] for (x, y), c in zip(pts, [v[1] for v in BEAM_V5.values()] + [BEAM_Y["W"][1], BEAM_Y["X2"][1]])]}
+                  for k, kind, h, pts in (("gf", "l1", GF_H, ((2700, 525), (2700, YM), (2700, 9400), (350, 5000), (X2, 6500))),
+                                          ("typ", "typ", TYP_H, ((8500, 525), (5150, YM), (5150, 9400), (350, 7500), (X2, 6500))))},
         "dims": {"w": W_NOTE, "d": D_NOTE, "rf": round(zs[-1], 1), "top": round(zs[-1] + ROOF_ROOM, 1)},
         "src": [SRC.name, "01_TOHO_BASHUNDHARA_v5_261028_A3.pdf"],
     }, P, opens, zs
@@ -782,7 +786,7 @@ def check():
         side = "W" if r[0] <= 1 else "E" if r[2] >= W - 1 else "S" if r[1] <= 1 else "N" if r[3] >= UY - 1 else None
         if side is None:   # 内側の開口（テラスと居間の間のガラス戸）
             continue
-        exts.append((r, o["z"][0], side, {"W": r[2], "E": r[0], "S": r[3], "N": r[1]}[side]))
+        exts.append((r, o["z"][0], side, {"W": r[2], "E": r[0], "S": r[3], "N": r[1]}[side], o["kind"]))
     for i, f in enumerate(fs):
         k, b, tag = f["k"], f["b"], f"{f['k']} ({f['x']}, {f['y']})"
         if b is None:
@@ -802,14 +806,31 @@ def check():
         for p in walls_pl:
             if ovt(b, p):
                 found.append(f"家具が植栽の手すりと重なる: {tag}")
-        for r, z0, side, face in exts:
+        for r, z0, side, face, kd in exts:
+            if kd == "sl":   # 掃出しのガラス戸は、下の「通り道」で照合する
+                continue
             near = {"W": b[0] < face + 150, "E": b[2] > face - 150, "S": b[1] < face + 150, "N": b[3] > face - 150}[side]
             along = (b[1], b[3], r[1], r[3]) if side in "WE" else (b[0], b[2], r[0], r[2])
             if f["h"] and f["h"] > z0 and near and along[0] < along[3] - T and along[2] < along[1] - T:
-                found.append(f"窓・ガラス戸の前に下端（{z0:.0f}）より高い家具（{f['h']:.0f}）: {tag}")
+                found.append(f"窓の前に下端（{z0:.0f}）より高い家具（{f['h']:.0f}）: {tag}")
         for g in fs[i + 1:]:
             if g["b"] and ovt(b, g["b"]):
                 found.append(f"家具どうしが重なる: {tag} と {g['k']} ({g['x']}, {g['y']})")
+    # 外壁の掃出しのガラス戸: 室内側 600 mm の帯に、幅 600 mm 以上の空き（出入りの通り道）があるか。戸の一部の前に家具があってもよい（寝室3 のベッド、ユーザー選択）
+    paths = []
+    for r, z0, side, face, kd in exts:
+        if kd != "sl":
+            continue
+        zone = {"N": (r[0], face - 600, r[2], face), "S": (r[0], face, r[2], face + 600), "W": (face, r[1], face + 600, r[3]), "E": (face - 600, r[1], face, r[3])}[side]
+        a0, a1 = (zone[0], zone[2]) if side in "NS" else (zone[1], zone[3])
+        free, cur = 0, a0
+        for s0, s1 in sorted((g["b"][0], g["b"][2]) if side in "NS" else (g["b"][1], g["b"][3]) for g in fs if g["b"] and ovt(g["b"], zone)):
+            free, cur = max(free, s0 - cur), max(cur, s1)
+        free = max(free, a1 - cur)
+        paths.append(f"{tuple(round(v) for v in r[:2])} {free:,.0f}")
+        if free < 600:
+            found.append(f"ガラス戸の前に幅 600 mm の通り道が無い（最大 {free:.0f} mm）: {tuple(round(v) for v in r)}")
+    notes.append("外壁のガラス戸の前の通り道（室内側 600 mm の帯の空きの最大幅、mm）: " + "、".join(paths))
     # 梁: 梁の下にある開口の上端と家具の高さが、梁の下端より低いか（梁下の高さ）
     for lv, h, kind, ops in (("1階", GF_H, "l1", opens["gf"]), ("1〜8F", TYP_H, "typ", opens["typ"])):
         rs = ceiling_beams(P, kind)
@@ -817,8 +838,9 @@ def check():
             for b in rs:
                 if ovt(o["r"], b) and o["z"][1] > h - b[4] + 1e-6:
                     found.append(f"{lv}: 開口の上端（{o['z'][1]:.0f}）が梁の下端（{h - b[4]:.0f}）より高い {tuple(round(v) for v in o['r'])}")
-        notes.append(f"梁下（{lv}）: 床から " + "・".join(f"{n} {h - (TYP_H - c):,.0f}" for n, (_, c) in zip(("南", "中央", "北"), BEAM_V5.values()))
-                     + f" mm、テラスの上 {h - BEAM[1]:,.0f} mm（v5 の断面の縮尺読み）、梁 {len(rs)} 本")
+        notes.append(f"梁下（{lv}）: 床から 東西の梁 " + "・".join(f"{n} {h - (TYP_H - c):,.0f}" for n, (_, c) in zip(("南", "中央", "北"), BEAM_V5.values()))
+                     + f" mm、テラスの上 {h - BEAM[1]:,.0f} mm（v5 の断面の縮尺読み）、南北の梁 " + "・".join(f"{n} {h - (TYP_H - c):,.0f}" for n, (_, c) in zip(("西", "X2", "東"), BEAM_Y.values()))
+                     + f" mm（仮定）、梁 {len(rs)} 本")
     for f in fs:
         for b in ceiling_beams(P, "typ"):
             if f["b"] and f["h"] and ovt(f["b"], b) and f["h"] > TYP_H - b[4]:
@@ -855,7 +877,7 @@ def texts(d, P, zs):
             "sFurnv": "As drawn in the v5 plan of floors 1F–8F, at the sizes of the CM-01 furniture list (as CM-04/05): beds, sofa, chairs, tables, TV units, kitchen counters, fridge, WCs, basins. The drawn pieces are smaller than those sizes, so some are moved or left out. The two baths drawn in v5 are shown as shower areas (the list has no bath). Shown on the floor chosen in “Floors shown”; fixed in place.",
             "sGfv": "Parking for 6 (1–4 on the east, 5–6 under the roof at the rear left), brick driveway, steps and tactile paving from the road to the lift hall, lift, stair, stock under the stair.",
             "sStv": f"One stair, flights 1.15 m: GF {n0} risers × {hs[0] / n0:.0f} mm, 1F–8F {n1} × {hs[1] / n1:.0f} mm, treads 250 mm; up the east flight, back on the west (as v5). Lift 1,600 kg (RevG).",
-            "sStrv": f"RC. Four corner columns (v5 plan: “Wide Span”, “No Column”) and one more at the ground floor. Slab {SLAB} mm. Beams as drawn in the v5 section (read at scale): one at each of the south and north ends, standing into the rooms from the outer walls, and one on grid Ym. Clear height under them on floors 1F–8F: {BEAM_V5['S'][1]:,} mm at the south and north ends, {BEAM_V5['C'][1]:,} mm at the centre ({TYP_H - BEAM[1]:,.0f} mm over the terrace opening, as the south elevation); ground floor {GF_H - TYP_H + BEAM_V5['S'][1]:,.0f} and {GF_H - TYP_H + BEAM_V5['C'][1]:,.0f} mm. The east and west perimeter beams are assumed to sit within the outer walls.",
+            "sStrv": f"RC. Four corner columns (v5 plan: “Wide Span”, “No Column”) and one more at the ground floor. Slab {SLAB} mm. Beams as drawn in the v5 section (read at scale): one at each of the south and north ends, standing into the rooms from the outer walls, and one on grid Ym. Clear height under them on floors 1F–8F: {BEAM_V5['S'][1]:,} mm at the south and north ends, {BEAM_V5['C'][1]:,} mm at the centre ({TYP_H - BEAM[1]:,.0f} mm over the terrace opening, as the south elevation); ground floor {GF_H - TYP_H + BEAM_V5['S'][1]:,.0f} and {GF_H - TYP_H + BEAM_V5['C'][1]:,.0f} mm. Beams running north–south are not drawn in v5 and are assumed: on grids X1 and X3, standing 0.2 m into the rooms with {BEAM_Y['W'][1]:,} mm under them; on grid X2, 250 mm wide with {BEAM_Y['X2'][1]:,} mm under it.",
             "sArv": f"Typical floor {a_typ:.2f} m² (table 136.60), building area {a_cov:.2f} m² (table 164.92), plot {a_plot:.2f} m² (table 267.56).",
             "note": "Concept model for discussion, not for construction. Where the v5 drawings disagree, this model takes: the ground-floor height as written (12′; drawn about 3.17 m); the west windows from the elevation (one long window; the plan shows one per room); the north planter from the plan; the south planter 3.3 m wide (the RevG line is 5.6 m). Window sizes, the east and north faces, slab, beams, levels and the positions of doors and furniture (read from the v5 plan at scale) are assumptions. Not checked: building and fire rules, structure.",
         },
@@ -872,7 +894,7 @@ def texts(d, P, zs):
             "sFurnv": "v5 の 1〜8F 平面に描かれた家具を、CM-01 の家具の一覧の寸法で置いた（CM-04/05 と同じ）: ベッド、ソファ、椅子、テーブル、テレビ台、台所のカウンター、冷蔵庫、便器、洗面台。図の家具は一覧より小さいので、一部はずらすか省いた。v5 の浴槽2つは、一覧に浴槽が無いのでシャワースペースで示す。「表示する階」で選んだ階に表示し、動かせない。",
             "sGfv": "駐車 6台（1〜4 は東、5・6 は左奥の屋根の下）、煉瓦敷きの車路、道路から EV ホールまでの段と点字ブロック、EV、階段、階段の下の Stock。",
             "sStv": f"1本、有効幅 1.15 m。GF は蹴上 {hs[0] / n0:.0f} mm × {n0} 段、1F〜8F は {hs[1] / n1:.0f} mm × {n1} 段、踏面 250 mm。東半分を上がり、西半分で戻る（v5 による）。EV 1,600 kg（RevG）。",
-            "sStrv": f"RC。柱は四隅の4本（v5 の平面。注記「Wide Span」「No Column」）と、1階だけにもう1本。スラブ {SLAB} mm。梁は v5 の断面のとおり（縮尺読み）: 南・北の端に外壁から室内側へ出る梁、中央に通り芯 Ym の梁。梁下の高さは 1〜8F で南・北 {BEAM_V5['S'][1]:,} mm、中央 {BEAM_V5['C'][1]:,} mm（テラスの開口の上は南立面のとおり {TYP_H - BEAM[1]:,.0f} mm）、1階 {GF_H - TYP_H + BEAM_V5['S'][1]:,.0f}・{GF_H - TYP_H + BEAM_V5['C'][1]:,.0f} mm。東西の外周の梁は外壁の中に納まると仮定。",
+            "sStrv": f"RC。柱は四隅の4本（v5 の平面。注記「Wide Span」「No Column」）と、1階だけにもう1本。スラブ {SLAB} mm。梁は v5 の断面のとおり（縮尺読み）: 南・北の端に外壁から室内側へ出る梁、中央に通り芯 Ym の梁。梁下の高さは 1〜8F で南・北 {BEAM_V5['S'][1]:,} mm、中央 {BEAM_V5['C'][1]:,} mm（テラスの開口の上は南立面のとおり {TYP_H - BEAM[1]:,.0f} mm）、1階 {GF_H - TYP_H + BEAM_V5['S'][1]:,.0f}・{GF_H - TYP_H + BEAM_V5['C'][1]:,.0f} mm。南北に通る梁は v5 に描かれていないので仮定: 通り芯 X1・X3 は室内側へ 0.2 m 出て梁下 {BEAM_Y['W'][1]:,} mm、X2 は幅 250 mm・梁下 {BEAM_Y['X2'][1]:,} mm。",
             "sArv": f"基準階 {a_typ:.2f} m²（表 136.60）、建築面積 {a_cov:.2f} m²（表 164.92）、敷地 {a_plot:.2f} m²（表 267.56）。",
             "note": "協議用の概念モデルで、施工用ではありません。v5 の図の中で食い違う箇所は次のとおり採りました: 1階の高さは記入値の 12′（図は約 3.17 m）、西面の窓は立面の横長窓1本（平面は部屋ごとの窓）、北の植栽は平面の位置、南の植栽の幅は 3.3 m（RevG の線は 5.6 m）。窓の寸法、東面・北面、スラブ・梁・床の高さ、扉と家具の位置（v5 の平面から縮尺で読んだ）は仮定です。未照合: 建築・消防の法規、構造。",
         },

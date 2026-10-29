@@ -213,7 +213,7 @@ const furnG=new THREE.Group();furnG.name='Furniture';sc.add(furnG);
 D.furn.forEach(([k,x,y,r])=>{const g=build(k);g.name=k;g.position.set(wx(x),0,wz(y));g.rotation.y=r*Math.PI/180;furnG.add(g);});
 let showFurn=true;
 // ---- 梁（選んだ階の天井の梁）。上の階を隠しても見えるよう、上の階のスラブの下の梁を別に描き、梁下の高さを表示する（tools/v5_build.py の ceiling_beams）
-// 梁は v5 の断面の3本（南・中央・北）。東西の外周の梁は外壁の中に納まると仮定して描かない。梁の上面は、壁の上面と重ならないよう 5 mm 上げる
+// 梁は東西に通る v5 の断面の3本（南・中央・北）と、南北に通る仮定の3本（通り芯 X1・X2・X3）。梁の上面は、壁の上面と重ならないよう 5 mm 上げる
 const beamG={};
 ['gf','typ'].forEach(k=>{const g=new THREE.Group(),B=new Batch();g.name='Beams';sc.add(g);beamG[k]=g;
   D.beams[k].r.forEach(r=>B.box([r[0],r[1],r[2],r[3],r[4],r[5]+5,'beam'],0));B.flush(g);});
