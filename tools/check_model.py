@@ -17,6 +17,10 @@
  13. 修正指示用の DXF（dxf/ の最新）が、現行のモデルから書き出したものと同じか
  14. GLB の書き出し機能が three.js と同じ版で読み込まれ、保存ボタンがあるか
  15. 住戸 CM-01 と建物 CM-03 の一致（窓・掃出し窓・バルコニー・共用コア・玄関扉）と、住戸の家具と柱の重なり
+ 16. RevE のモデル（CM-04/05）が DXF・生成スクリプトからの再生成と一致するか、家具・扉・柱・窓の干渉
+ 17. v5 の建物モデル CM-06 が RevG の DXF・生成スクリプト（tools/v5_build.py）からの再生成と一致するか、
+     v5 の記入寸法（幅・奥行・住戸・コア・階高・H ≤ 33 m）・面積表（基準階・建築面積・敷地）との一致、
+     階段の規定（LAW）、平面の整合（開口が壁の上にあるか、扉の開く側、窓・扉と柱の重なり）、了承済みの採り方（西面の窓1本、植栽の位置・幅）
  建物 CM-03: 規模、後退、階段・EV・高架水槽の規定、コアの配置、柱がバルコニーに立たないか（値は LAW の出典を参照）
  住戸: 家具が共用コア・バルコニーの壁と重ならないか、バルコニーには植物だけか
 
@@ -324,6 +328,42 @@ def check_reve(path, html, js, found, notes):
     notes.append(f"元の DXF: {rb.SRC.name}（再生成と照合）")
 
 
+def check_v5(path, html, found, notes):
+    """17. v5 の建物モデル CM-06（RevG の DXF と v5 の変更点から生成）: 再生成との一致、記入寸法・面積表・平面（v5_build.check）、階段の規定（LAW）。"""
+    import v5_build as vb
+    if html != vb.html():
+        found.append(f"{path.name} が DXF・生成スクリプトからの再生成と一致しない（python tools/v5_build.py --html で作り直す）")
+    f, n = vb.check()
+    found += f
+    notes += n
+    d, P, opens, zs = vb.model()
+    s, st = P["stair"], vb.STAIR
+    cw, cl = (s[2] - s[0]) / 1000, (s[3] - s[1]) / 1000
+    if st["w"] / 1000 < LAW["stair_w"] or 2 * st["w"] + 150 > s[2] - s[0] + 1e-6:
+        found.append(f"階段の幅 {st['w'] / 1000} m（規定 {LAW['stair_w']} m 以上）か、階段室の内法幅 {cw:.3f} m が足りない")
+    if st["tread"] / 1000 < LAW["tread_min"]:
+        found.append(f"踏面 {st['tread']} mm < {LAW['tread_min'] * 1000:.0f} mm")
+    door = next(o for o in P["inner"] if o.get("stair"))
+    rows = []
+    for name, h in (("GF", zs[1] - zs[0]), ("1〜8F", zs[2] - zs[1])):
+        n_ = vb.riser(h)
+        r = h / n_ / 1000
+        run = (n_ / 2 - 1) * st["tread"] / 1000
+        rows.append(f"{name} {n_}段×{r * 1000:.1f}")
+        if r > LAW["riser_max"] + 1e-9 or r + st["tread"] / 1000 < LAW["rt_min"] - 1e-9 or n_ / 2 > LAW["flight_max"]:
+            found.append(f"階段の寸法が規定外: {rows[-1]} mm")
+        if 2 * st["land"] / 1000 + run > cl + 1e-6:
+            found.append(f"階段室の内法長さ {cl:.3f} m に踊り場・階段が収まらない（{rows[-1]}）")
+        if h / 1000 - r - 0.6 * FT < LAW["headroom"]:
+            found.append(f"階段の頭上 {h / 1000 - r - 0.6 * FT:.2f} m < {LAW['headroom']} m")
+        land_end = vb.stair_geo(P, h)[1]
+        if not (s[1] <= door["r"][1] and door["r"][3] <= land_end):
+            found.append(f"階段室の扉が {name} の床の踊り場（y {s[1]:,.0f}〜{land_end:,.0f}）に入らない")
+    notes.append("階段: " + "、".join(rows) + f" mm、踏面 {st['tread']} mm、室内法 {cw:.2f} × {cl:.2f} m（規定値は LAW）")
+    notes.append(f"EV: 屋根は1階の床から {zs[-1] / 1000:.2f} m（EV が要る高さ {LAW['ev_height']} m を超える。EV 1台あり）")
+    notes.append(f"元の DXF: {vb.SRC.name}（再生成と照合）。未照合: 建築・消防の法規（後退・容積率・階段の本数）、構造、v5 の図との画素単位の一致")
+
+
 def col_points(b):
     """柱の位置（建物の座標 ft）。コアの位置は除き、移した柱は移した先。"""
     cl, out = b["COL"], []
@@ -506,6 +546,9 @@ def check_file(path):
     if 'id="glbB"' not in html or "saveGLB(" not in js:
         found.append("GLB の保存ボタン（glbB）か saveGLB が無い")
 
+    if "const V5=" in js:
+        check_v5(path, html, found, notes)
+        return found, notes, revs, None
     if "const REVE=" in js:
         check_reve(path, html, js, found, notes)
         return found, notes, revs, None

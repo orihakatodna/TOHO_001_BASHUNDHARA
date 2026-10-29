@@ -1,0 +1,262 @@
+<title>Apartment G+8 — v5</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: drawing-sheet frame — title block band on top, 3D viewport + specification column, stacking on phones (CM-03 と同じ) */
+:root{
+  --paper:#f2f3f3; --sheet:#ffffff; --ink:#1c2226; --ink-2:#5a6469; --rule:#cfd4d6;
+  --accent:#4f6f86; --view:#e3e6e7;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans","IBM Plex Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#14191c;--sheet:#1c2327;--ink:#e5eaec;--ink-2:#99a4a9;--rule:#334046;--accent:#8fb2c9;--view:#252f34;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#14191c;--sheet:#1c2327;--ink:#e5eaec;--ink-2:#99a4a9;--rule:#334046;--accent:#8fb2c9;--view:#252f34;color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+.tb{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;border-top:3px solid var(--ink);border-bottom:1px solid var(--rule);padding-block:12px}
+.tb h1{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,5vw,40px);line-height:1.05;letter-spacing:.01em;margin:0;text-wrap:balance}
+.tb .sub{color:var(--ink-2);margin:4px 0 0}
+.meta{display:grid;grid-template-columns:auto auto;gap:2px 14px;font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.meta b{font-weight:500;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.lang{display:flex;gap:4px;justify-content:flex-end}
+.btn{font:500 13px/1 var(--f-body);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--ink-2)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.stage{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;overflow:hidden;min-width:0}
+#view{position:relative;height:min(68vh,620px);min-height:360px;background:var(--view);cursor:grab;touch-action:none}
+#view canvas{display:block}
+.dim{position:absolute;transform:translate(-50%,-50%);font:500 13px/1 var(--f-mono);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);padding:3px 6px;border-radius:4px;pointer-events:none;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;border-top:1px solid var(--rule)}
+.bar .grp{display:flex;flex-wrap:wrap;gap:6px}
+.bar label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);flex:1;min-width:180px}
+.bar input[type=range]{flex:1;accent-color:var(--accent)}
+.bar .tag{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
+.hint{font-size:12px;color:var(--ink-2);padding:0 12px 10px}
+.spec{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:16px;min-width:0}
+.spec h2{font-family:var(--f-display);font-weight:600;font-size:20px;letter-spacing:.02em;margin:0 0 8px}
+.spec dl{display:grid;margin:0}
+.spec .row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid var(--rule)}
+.spec dt{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);padding-top:2px}
+.spec dd{margin:0;font-variant-numeric:tabular-nums}
+.spec dd .m{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);display:block;overflow-wrap:anywhere}
+.note{margin-top:14px;padding-top:10px;border-top:2px solid var(--accent);font-size:12.5px;color:var(--ink-2)}
+.lvn{font-family:var(--f-mono);font-size:12px;color:var(--ink);min-width:4em}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}.tb{grid-template-columns:1fr}.tb>div:last-child{justify-items:start!important}.lang{justify-content:flex-start}}
+</style>
+
+<div class="wrap">
+  <header class="tb">
+    <div>
+      <h1 data-i="title">__title__</h1>
+      <p class="sub" data-i="sub">__sub__</p>
+    </div>
+    <div style="display:grid;gap:10px;justify-items:end">
+      <div class="meta">
+        <b data-i="kDrawing">Drawing</b><span>__DRAWING__</span>
+        <b data-i="kScale">Scale</b><span>N.T.S.</span>
+        <b data-i="kDate">Date</b><span>__DATE__</span>
+        <b data-i="kRev">Rev.</b><span>__REV__</span>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button class="btn" id="lEn" aria-pressed="true">EN</button>
+        <button class="btn" id="lJa" aria-pressed="false">日本語</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="stage">
+      <div id="view" tabindex="0" aria-label="3D model viewer"></div>
+      <div class="bar">
+        <div class="grp" role="group" aria-label="Views">
+          <button class="btn" data-v="persp" aria-pressed="true" data-i="vPersp">Perspective</button>
+          <button class="btn" data-v="street" aria-pressed="false" data-i="vStreet">From the street</button>
+          <button class="btn" data-v="south" aria-pressed="false" data-i="vSouth">South</button>
+          <button class="btn" data-v="west" aria-pressed="false" data-i="vWest">West</button>
+          <button class="btn" data-v="top" aria-pressed="false" data-i="vTop">Top</button>
+        </div>
+        <label for="zm"><span data-i="zoom">Distance</span><input type="range" id="zm" min="20" max="160" value="54"></label>
+        <button class="btn" id="dimT" aria-pressed="true" data-i="dims">Dimensions</button>
+      </div>
+      <div class="bar">
+        <label for="lv"><span data-i="lvTag">Floors shown</span><input type="range" id="lv" min="0" max="9" value="9"><span id="lvName" class="lvn">Roof</span></label>
+        <button class="btn" id="zoneT" aria-pressed="true" data-i="zones">Room names</button>
+      </div>
+      <div class="bar">
+        <span class="tag" data-i="csTag">For Clip Studio (GLB)</span>
+        <button class="btn" id="glbB" data-i="glbAll">Save what is shown as GLB</button>
+      </div>
+      <p class="hint" data-i="hint">__hint__</p>
+    </section>
+
+    <aside class="spec">
+      <h2 data-i="specH">Specification</h2>
+      <dl>
+        <div class="row"><dt data-i="sSrc">Source</dt><dd><span data-i="sSrcv">__sSrcv__</span><span class="m">__SRC1__ · __SRC0__</span><span class="m" data-i="sSrcM">__sSrcM__</span></dd></div>
+        <div class="row"><dt data-i="sSite">Plot</dt><dd data-i="sSitev">__sSitev__</dd></div>
+        <div class="row"><dt data-i="sBld">Building</dt><dd data-i="sBldv">__sBldv__</dd></div>
+        <div class="row"><dt data-i="sLv">Levels</dt><dd data-i="sLvv">__sLvv__</dd></div>
+        <div class="row"><dt data-i="sFin">Finishes</dt><dd data-i="sFinv">__sFinv__</dd></div>
+        <div class="row"><dt data-i="sUnit">Dwelling</dt><dd data-i="sUnitv">__sUnitv__</dd></div>
+        <div class="row"><dt data-i="sGf">Ground floor</dt><dd data-i="sGfv">__sGfv__</dd></div>
+        <div class="row"><dt data-i="sSt">Stair, lift</dt><dd data-i="sStv">__sStv__</dd></div>
+        <div class="row"><dt data-i="sStr">Structure</dt><dd data-i="sStrv">__sStrv__</dd></div>
+        <div class="row"><dt data-i="sAr">Areas</dt><dd data-i="sArv">__sArv__</dd></div>
+      </dl>
+      <p class="note" data-i="note">__note__</p>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+<script>
+const TXT=__TXT__;
+let lang='en';
+// v5（G+8）のデータ。mm、RevG の座標（原点＝建物の南西の外面の角、x＝東、y＝北）、z は1階の床から上。
+// tools/v5_build.py が RevG の DXF と v5 の変更点から生成する。手で直さない。
+const V5=__DATA__;
+const D=V5,BL=D.bld,CX=(BL[0]+BL[2])/2,CY=(BL[1]+BL[3])/2;
+const wx=x=>(x-CX)/1000,wz=y=>-(y-CY)/1000;
+const view=document.getElementById('view');
+const R=new THREE.WebGLRenderer({antialias:true,alpha:true});R.setPixelRatio(Math.min(window.devicePixelRatio||1,2));R.setSize(view.clientWidth,view.clientHeight);view.appendChild(R.domElement);
+const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,view.clientWidth/view.clientHeight,0.1,1000);
+const AN=R.capabilities.getMaxAnisotropy();
+function rnd(i){const x=Math.sin(i*12.9898+78.233)*43758.5453;return x-Math.floor(x);}
+// ---- 壁の模様（世界座標で貼る）。P は 1 mm あたりの画素
+const P=0.25;
+function tex(w,h,draw){const c=document.createElement('canvas');c.width=Math.round(w*P);c.height=Math.round(h*P);draw(c.getContext('2d'),c.width,c.height);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=AN;return t;}
+// 煉瓦（イングリッシュボンド、1段 80 mm）: 南面・植栽の手すり。CM-04 と同じ描き方
+const tBrick=tex(2000,1600,(g,W,H)=>{g.fillStyle='#cfc5b6';g.fillRect(0,0,W,H);const base={S:[194,104,63],H:[150,72,44]};let n=0;
+  for(let r=0;r*80<1600;r++){const head=r%2===0,len=head?125:250,y=H-(r+1)*80*P+5*P;for(let x=0;x<2000;x+=len){const b=base[head?'H':'S'],v=(rnd(n++)-0.5)*34;g.fillStyle='rgb('+((b[0]+v)|0)+','+((b[1]+v*0.7)|0)+','+((b[2]+v*0.5)|0)+')';g.fillRect((x+5)*P,y,(len-10)*P,70*P);}}});
+// 打ち放し（型枠 1,800 × 900 の横使い、Pコン @600 × @450）: 西・東・北の外壁とコア。目地は各階の床から割り付ける。CM-05 と同じ描き方
+const tConc=tex(1800,1800,(g,W,H)=>{for(let r=0;r<2;r++){const t=(184+(rnd(r*7+3)-0.5)*16)|0;g.fillStyle='rgb('+t+','+(t-1)+','+(t-5)+')';g.fillRect(0,H-(r+1)*900*P,W,900*P);}
+  const n=Math.round(W*H/350);for(let i=0;i<n;i++){g.fillStyle=rnd(i*3.1)>0.5?'rgba(255,255,255,0.10)':'rgba(40,40,40,0.08)';g.fillRect(rnd(i*1.7)*W,rnd(i*2.3)*H,1.2,1.2);}
+  g.fillStyle='rgba(70,70,66,0.6)';g.fillRect(0,0,1.5,H);g.fillRect(0,H-900*P-0.75,W,1.5);g.fillRect(0,H-1.5,W,1.5);
+  for(let i=0;i<3;i++)for(let y=225;y<1800;y+=450){g.beginPath();g.arc((300+600*i)*P,H-y*P,15*P,0,Math.PI*2);g.fillStyle='#8d8c86';g.fill();g.lineWidth=1.2;g.strokeStyle='#5f5e59';g.stroke();}});
+// 間仕切り（煉瓦の長手積み、125 mm）。CM-04 と同じ描き方
+const tStr=tex(2000,1600,(g,W,H)=>{g.fillStyle='#cfc5b6';g.fillRect(0,0,W,H);let n=0;for(let r=0;r*80<1600;r++){const y=H-(r+1)*80*P+5*P,o=r%2?125:0;for(let x=-o;x<2000;x+=250){const v=(rnd(n++ +7000)-0.5)*34;g.fillStyle='rgb('+((194+v)|0)+','+((104+v*0.7)|0)+','+((63+v*0.5)|0)+')';const a=Math.max(x+5,0),b=Math.min(x+245,2000);if(b>a)g.fillRect(a*P,y,(b-a)*P,70*P);}}});
+const L=c=>new THREE.MeshLambertMaterial({color:c});
+const TM=(t,w,h,cont)=>{const m=new THREE.MeshLambertMaterial({map:t});m.userData={kind:'tile',w,h,cont};return m;};
+const M={brick:TM(tBrick,2000,1600,true),conc:TM(tConc,1800,1800,false),part:TM(tStr,2000,1600,false),
+  top:L(0xb9b4a9),soff:L(0xd9d6cf),stair:L(0xc9c4ba),fr:L(0x3a3d40),leaf:L(0x8a6446),leafX:L(0x5e3f2a),metal:L(0xa9adb1),dark:L(0x55585b),eps:L(0xbab8b2),
+  soil:L(0x6b4a33),pave:L(0xc9c2b4),step:L(0xb06a45),tact:L(0xe2c43a),road:L(0x5a5c5f),line:L(0xe8e4d8),ground:L(0xc2bdb2),green:L(0x86a35a),wallS:L(0xe1dccf),
+  lg1:L(0x4f7a3a),lg2:L(0x6f9a4c),ramp:L(0xb5704a),
+  gl:new THREE.MeshLambertMaterial({color:0x8fb4c6,transparent:true,opacity:0.4,depthWrite:false}),vt:new THREE.MeshLambertMaterial({color:0xe4ecee,transparent:true,opacity:0.7,depthWrite:false})};
+M.beam=M.conc;
+// ---- 床の絵（部屋の色と名前、1階の駐車区画・点字ブロック）。FK は 1 mm あたりの画素
+const FK=0.08,FC={},FM={};
+['gf','typ'].forEach(k=>{const c=document.createElement('canvas');c.width=Math.round((BL[2]-BL[0])*FK);c.height=Math.round((BL[3]-BL[1])*FK);FC[k]=c;const t=new THREE.CanvasTexture(c);t.anisotropy=AN;const m=new THREE.MeshLambertMaterial({map:t});m.userData={kind:'floor',r:BL};FM[k]=m;});
+FM.rf=L(0xc4c0b6);
+let showZones=true;
+const TINT={B:'rgba(120,150,190,0.20)',L:'rgba(190,170,120,0.20)',K:'rgba(200,140,110,0.20)',W:'rgba(100,170,170,0.20)',C:'rgba(60,60,60,0.18)',S:'rgba(150,150,150,0.18)',T:'rgba(110,160,90,0.22)'};
+function label(g,s,x,y,size){g.font='500 '+size+'px "IBM Plex Sans","IBM Plex Sans JP",sans-serif';g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';g.lineWidth=4;g.strokeStyle='rgba(255,255,255,0.85)';g.strokeText(s,x,y);g.fillStyle='#22272a';g.fillText(s,x,y);}
+function paint(){const k=FK,px=x=>(x-BL[0])*k,py=y=>(BL[3]-y)*k,t=TXT[lang],nm=q=>lang==='ja'?q.ja:q.en;
+  const poly=(g,p)=>{g.beginPath();p.forEach((q,i)=>i?g.lineTo(px(q[0]),py(q[1])):g.moveTo(px(q[0]),py(q[1])));g.closePath();};
+  const rect=(g,r,c)=>{g.fillStyle=c;g.fillRect(px(r[0]),py(r[3]),(r[2]-r[0])*k,(r[3]-r[1])*k);};
+  // 基準階: タイル 600 角、左奥は 1F の高さの屋根（「Roof」）
+  let g=FC.typ.getContext('2d');rect(g,BL,'#ded9cf');g.fillStyle='rgba(255,255,255,0.55)';
+  for(let x=0;x<=BL[2];x+=600)g.fillRect(px(x)-0.5,0,1,FC.typ.height);for(let y=0;y<=BL[3];y+=600)g.fillRect(0,py(y)-0.5,FC.typ.width,1);
+  const v=D.void;rect(g,v,'#bdb8ae');g.fillStyle='rgba(90,90,85,0.25)';for(let x=v[0];x<=v[2];x+=1000)g.fillRect(px(x)-0.5,py(v[3]),1,(v[3]-v[1])*k);
+  if(showZones){D.rooms.typ.forEach(q=>{poly(g,q.poly);g.fillStyle=TINT[q.cat];g.fill();});
+    D.rooms.typ.forEach(q=>label(g,nm(q),px(q.at[0]),py(q.at[1]),q.cat==='S'||q.cat==='W'?13:16));
+    label(g,t.ent,px(6350),py(8950),15);label(g,t.roof,px((v[0]+v[2])/2),py((v[1]+v[3])/2),18);}
+  // 1階: コンクリートの床、車路の煉瓦敷き、駐車区画と番号、輪止め、点字ブロック、コアの部屋
+  g=FC.gf.getContext('2d');rect(g,BL,'#b3afa6');
+  const dr=D.gf.drive;rect(g,dr,'#c9b7a6');let n=0;for(let y=dr[1];y<dr[3];y+=125)for(let x=dr[0]+((y/125)%2?125:0)-250;x<dr[2];x+=250){const a=Math.max(x+12,dr[0]),b=Math.min(x+238,dr[2]);if(b<=a)continue;const c=(rnd(n++ +300)-0.5)*30;g.fillStyle='rgb('+((186+c)|0)+','+((98+c*0.7)|0)+','+((62+c*0.5)|0)+')';g.fillRect(px(a),py(y+113),(b-a)*k,100*k);}
+  g.strokeStyle='#f7f5ef';g.lineWidth=5;D.gf.park.forEach(r=>g.strokeRect(px(r[0])+2,py(r[3])+2,(r[2]-r[0])*k-4,(r[3]-r[1])*k-4));
+  D.gf.park.forEach((r,i)=>{label(g,String(i+1),px((r[0]+r[2])/2),py((r[1]+r[3])/2),22);if(i>=4)rect(g,[r[0]+600,D.gf.wheel,r[2]-600,D.gf.wheel+150],'#8b8a85');});
+  D.gf.tact.forEach(r=>{rect(g,r,'#e2c43a');g.fillStyle='rgba(150,120,20,0.55)';for(let y=r[1]+75;y<r[3];y+=150)for(let x=r[0]+75;x<r[2];x+=150){g.beginPath();g.arc(px(x),py(y),1.6,0,Math.PI*2);g.fill();}});
+  if(showZones){D.rooms.gf.forEach(q=>{poly(g,q.poly);g.fillStyle=TINT.C;g.fill();label(g,nm(q),px(q.at[0]),py(q.at[1]),15);});
+    const s=D.gf.stock;rect(g,s,'rgba(150,150,150,0.25)');label(g,t.stock,px((s[0]+s[2])/2),py((s[1]+s[3])/2),15);}
+  Object.values(FM).forEach(m=>{if(m.map)m.map.needsUpdate=true;});}
+// ---- 箱を材料ごとにまとめて描く（描画の回数を減らす）
+// 面の順: +x 東・−x 西・+y 上・−y 下・+z 南・−z 北。角は外から見て左回り（[x, 高さ, z] の 0＝小・1＝大。z の 0 は北、1 は南）
+const FACE=[[1,0,0,[[1,0,1],[1,0,0],[1,1,0],[1,1,1]]],[-1,0,0,[[0,0,0],[0,0,1],[0,1,1],[0,1,0]]],[0,1,0,[[0,1,1],[1,1,1],[1,1,0],[0,1,0]]],
+  [0,-1,0,[[0,0,0],[1,0,0],[1,0,1],[0,0,1]]],[0,0,1,[[0,0,1],[1,0,1],[1,1,1],[0,1,1]]],[0,0,-1,[[1,0,0],[0,0,0],[0,1,0],[1,1,0]]]];
+// 材料の名前: brick 煉瓦・conc 打ち放し・part 間仕切り（上面は笠木の色）、fl_* 床スラブ（上面は床の絵）、pl 植栽の床。末尾の S は南の面だけ煉瓦
+function faces(key){const s=key.endsWith('S'),k=s?key.slice(0,-1):key;let f;
+  if(k==='brick'||k==='conc'||k==='part')f=[M[k],M[k],M.top,M.soff,M[k],M[k]];
+  else if(k.startsWith('fl_'))f=[M.conc,M.conc,FM[k.slice(3)],M.soff,M.conc,M.conc];
+  else if(k==='pl')f=[M.brick,M.brick,M.pave,M.soff,M.brick,M.brick];
+  else{const m=M[k];f=[m,m,m,m,m,m];}
+  if(s)f[4]=M.brick;return f;}
+function Batch(){this.m=new Map();}
+Batch.prototype.box=function(b,base){const [x0,y0,x1,y1,z0,z1,key]=b;if(x1-x0<0.1||y1-y0<0.1||z1-z0<0.1)return;
+  const X=[wx(x0),wx(x1)],Yv=[z0/1000,z1/1000],Z=[wz(y1),wz(y0)],ms=faces(key);
+  FACE.forEach((f,fi)=>{const m=ms[fi];if(!m)return;let a=this.m.get(m);if(!a){a={p:[],n:[],u:[],i:[]};this.m.set(m,a);}const u=m.userData||{},o=a.p.length/3;
+    f[3].forEach(c=>{const x=X[c[0]],y=Yv[c[1]],z=Z[c[2]];a.p.push(x,y,z);a.n.push(f[0],f[1],f[2]);
+      if(u.kind==='floor')a.u.push((x*1000+CX-u.r[0])/(u.r[2]-u.r[0]),(-z*1000+CY-u.r[1])/(u.r[3]-u.r[1]));
+      else if(u.kind==='tile'){const tw=u.w/1000,th=u.h/1000;a.u.push(fi<2?z/tw:x/tw,fi===2||fi===3?z/th:(y-(u.cont?0:base))/th);}
+      else a.u.push(0,0);});
+    a.i.push(o,o+1,o+2,o,o+2,o+3);});};
+Batch.prototype.flush=function(g){this.m.forEach((a,m)=>{const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));geo.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(a.u,2));geo.setIndex(a.i);const ms=new THREE.Mesh(geo,m);if(m.transparent)ms.renderOrder=1;g.add(ms);});this.m.clear();};
+// 植物（土の上に3つの球）
+function clump(p,z,g){const [x,y,zz,s]=p,r=Math.min(0.45,s/2400);for(let i=0;i<3;i++){const m=new THREE.Mesh(new THREE.IcosahedronGeometry(r*(1-0.15*i),1),i%2?M.lg2:M.lg1);m.position.set(wx(x)+Math.cos(i*2.1)*r*0.6,(z+zz)/1000+r*(0.7+0.5*i),wz(y)+Math.sin(i*2.1)*r*0.6);g.add(m);}}
+paint();
+// ---- 階（GF〜8F・屋上）。各階の箱は階の床からの高さで持ち、ここで階の高さを足す
+const LV=D.levels.map(l=>{const g=new THREE.Group();g.name=l.n;sc.add(g);const B=new Batch(),T=D.types[l.t];
+  T.b.forEach(b=>B.box([b[0],b[1],b[2],b[3],b[4]+l.z,b[5]+l.z,b[6]],l.z/1000));B.flush(g);T.p.forEach(p=>clump(p,l.z,g));return g;});
+// ---- 敷地・道路・塀・植栽・車路の坂・段
+const siteG=new THREE.Group();siteG.name='Site';sc.add(siteG);
+(function(){const B=new Batch();D.siteB.forEach(b=>B.box(b,0));B.flush(siteG);
+  const r=D.ramp,len=Math.hypot(r[3]-r[1],r[5]-r[4])/1000,t=0.2,m=new THREE.Mesh(new THREE.BoxGeometry((r[2]-r[0])/1000,t,len),M.ramp);
+  m.rotation.x=Math.atan2(r[5]-r[4],r[3]-r[1]);m.position.set(wx((r[0]+r[2])/2),(r[4]+r[5])/2000-t/2,wz((r[1]+r[3])/2));siteG.add(m);})();
+// ---- 寸法
+const dimG=new THREE.Group();sc.add(dimG);
+const lm=new THREE.LineBasicMaterial({color:0x1c2226});
+function seg(a,b){dimG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]),lm));}
+const X0=wx(BL[0]),X1=wx(BL[2]),Zs=wz(BL[1]),Zn=wz(BL[3]),yb=0.02,o=2.2,tk=0.3,RF=D.dims.rf/1000;
+seg([X0,yb,Zs+o],[X1,yb,Zs+o]);seg([X0,yb,Zs+o-tk],[X0,yb,Zs+o+tk]);seg([X1,yb,Zs+o-tk],[X1,yb,Zs+o+tk]);
+seg([X1+o,yb,Zs],[X1+o,yb,Zn]);seg([X1+o-tk,yb,Zs],[X1+o+tk,yb,Zs]);seg([X1+o-tk,yb,Zn],[X1+o+tk,yb,Zn]);
+seg([X1+o,0,Zs+o],[X1+o,RF,Zs+o]);seg([X1+o-tk,RF,Zs+o],[X1+o+tk,RF,Zs+o]);
+const fmm=v=>Math.round(v).toLocaleString('en-US');
+const labels=[{p:[(X0+X1)/2,yb,Zs+o],t:fmm(D.dims.w)},{p:[X1+o,yb,(Zs+Zn)/2],t:fmm(D.dims.d)},{p:[X1+o,RF/2,Zs+o],t:'GF–RF '+fmm(D.dims.rf)}].map(d=>{const e=document.createElement('div');e.className='dim';e.textContent=d.t;view.appendChild(e);d.e=e;return d;});
+let showDims=true;
+sc.add(new THREE.AmbientLight(0xffffff,0.55));const hl=new THREE.HemisphereLight(0xfff4e0,0x8a8a80,0.25);sc.add(hl);const dl=new THREE.DirectionalLight(0xfff1dc,0.7);dl.position.set(-40,60,45);sc.add(dl);
+// ---- 視点（回転の基点はモデルの中央に固定。平行移動は画面をずらすだけ。CM-03 と同じ操作）
+let th=-1.0,ph=0.25,dist=54;const tgt=new THREE.Vector3(0,14,0);
+let panX=0,panY=0;
+function pan(dx,dy){const w=view.clientWidth,h=view.clientHeight;panX=Math.max(-w,Math.min(w,panX+dx));panY=Math.max(-h,Math.min(h,panY+dy));press('');render();}
+function render(){{const w=view.clientWidth,h=view.clientHeight;if(panX||panY)cam.setViewOffset(w,h,-panX,-panY,w,h);else cam.clearViewOffset();}
+  cam.position.set(tgt.x+dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),tgt.z+dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);R.render(sc,cam);
+  const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});}
+const views={persp:{th:-1.0,ph:0.25,dist:54,y:14},street:{th:-0.35,ph:0.06,dist:42,y:11},south:{th:0,ph:0.04,dist:72,y:14},west:{th:-Math.PI/2,ph:0.04,dist:72,y:14},top:{th:0,ph:1.55,dist:80,y:0}};
+function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
+function setView(k){press(k);const v=views[k];th=v.th;ph=v.ph;dist=v.dist;tgt.set(0,v.y,0);panX=panY=0;document.getElementById('zm').value=dist;render();}
+document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
+document.getElementById('dimT').addEventListener('click',e=>{showDims=!showDims;e.currentTarget.setAttribute('aria-pressed',showDims);dimG.visible=showDims;render();});
+document.getElementById('zoneT').addEventListener('click',e=>{showZones=!showZones;e.currentTarget.setAttribute('aria-pressed',showZones);paint();render();});
+function lvLabel(){const n=+document.getElementById('lv').value;document.getElementById('lvName').textContent=TXT[lang].lv[n];}
+document.getElementById('lv').addEventListener('input',e=>{const n=+e.target.value;LV.forEach((g,i)=>g.visible=i<=n);lvLabel();render();});
+let drag=false,px=0,py=0;
+// タッチ操作（スマートフォン・タブレット）: 1本指は回転、2本指でドラッグすると平行移動、つまむと拡大縮小
+const tp=new Map();let pinch=null;
+function pinchState(){const p=[...tp.values()];return {x:(p[0][0]+p[1][0])/2,y:(p[0][1]+p[1][1])/2,d:Math.max(1,Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]))};}
+view.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')return;tp.set(e.pointerId,[e.clientX,e.clientY]);if(tp.size===2){pinch=pinchState();drag=false;e.stopImmediatePropagation();}},true);
+view.addEventListener('pointermove',e=>{if(!tp.has(e.pointerId))return;tp.set(e.pointerId,[e.clientX,e.clientY]);if(!pinch||tp.size<2)return;e.stopImmediatePropagation();const s=pinchState();
+  dist=Math.max(20,Math.min(160,dist*pinch.d/s.d));document.getElementById('zm').value=dist;pan(s.x-pinch.x,s.y-pinch.y);pinch=s;},true);
+['pointerup','pointercancel'].forEach(t=>view.addEventListener(t,e=>{if(!tp.delete(e.pointerId))return;if(pinch&&tp.size<2){pinch=null;drag=false;e.stopImmediatePropagation();}},true));
+view.addEventListener('contextmenu',e=>e.preventDefault());
+view.addEventListener('keydown',e=>{const k={ArrowLeft:[40,0],ArrowRight:[-40,0],ArrowUp:[0,40],ArrowDown:[0,-40]}[e.key];if(!k)return;e.preventDefault();pan(k[0],k[1]);});
+view.addEventListener('pointerdown',e=>{drag=(e.button===1||e.button===2||e.shiftKey)?'pan':'view';px=e.clientX;py=e.clientY;view.style.cursor='grabbing';view.setPointerCapture(e.pointerId);});
+view.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;if(drag==='pan'){pan(dx,dy);return;}th-=dx*0.008;ph=Math.max(0.02,Math.min(1.55,ph+dy*0.006));press('');render();});
+view.addEventListener('pointerup',()=>{drag=false;view.style.cursor='grab';});
+view.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(20,Math.min(160,dist*(1+Math.sign(e.deltaY)*0.08)));document.getElementById('zm').value=dist;render();},{passive:false});
+document.getElementById('zm').addEventListener('input',e=>{dist=+e.target.value;render();});
+// ---- GLB（Clip Studio 用）。表示中の階・敷地を書き出す（1 単位 = 1 m、原点は建物の中心・1階の床）
+function stamp(){const d=new Date();return String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');}
+function saveGLB(obj,name,hide){if(!THREE.GLTFExporter){alert(TXT[lang].glbErr);return;}const hid=hide.filter(o=>o&&o.visible);hid.forEach(o=>o.visible=false);
+  new THREE.GLTFExporter().parse(obj,buf=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'model/gltf-binary'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},{binary:true,onlyVisible:true,maxTextureSize:4096});
+  hid.forEach(o=>o.visible=true);}
+const rev=()=>document.querySelector('[data-i="kRev"]+span').textContent.trim();
+document.getElementById('glbB').onclick=()=>saveGLB(sc,'__DRAWING___Rev'+rev()+'_'+stamp()+'.glb',[dimG,dl,hl]);
+function setLang(l){lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const t=TXT[l][e.dataset.i];if(typeof t==='string')e.textContent=t;});document.getElementById('lEn').setAttribute('aria-pressed',l==='en');document.getElementById('lJa').setAttribute('aria-pressed',l==='ja');lvLabel();paint();render();try{localStorage.setItem('v5g8-lang',l)}catch(e){}}
+document.getElementById('lEn').onclick=()=>setLang('en');document.getElementById('lJa').onclick=()=>setLang('ja');
+new ResizeObserver(()=>{const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();render();}).observe(view);
+try{if(localStorage.getItem('v5g8-lang')==='ja')setLang('ja')}catch(e){}
+lvLabel();render();
+</script>
