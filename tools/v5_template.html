@@ -213,12 +213,12 @@ const furnG=new THREE.Group();furnG.name='Furniture';sc.add(furnG);
 D.furn.forEach(([k,x,y,r])=>{const g=build(k);g.name=k;g.position.set(wx(x),0,wz(y));g.rotation.y=r*Math.PI/180;furnG.add(g);});
 let showFurn=true;
 // ---- 梁（選んだ階の天井の梁）。上の階を隠しても見えるよう、上の階のスラブの下の梁を別に描き、梁下の高さを表示する（tools/v5_build.py の ceiling_beams）
-// 外周の梁は外壁の中に納まると仮定して描かない。梁の上面は、間仕切りの上面と重ならないよう 5 mm 上げる
+// 梁は v5 の断面の3本（南・中央・北）。東西の外周の梁は外壁の中に納まると仮定して描かない。梁の上面は、壁の上面と重ならないよう 5 mm 上げる
 const beamG={};
-['gf','typ'].forEach(k=>{const g=new THREE.Group(),c=D.beams[k],B=new Batch();g.name='Beams';sc.add(g);beamG[k]=g;
-  c.r.forEach(r=>B.box([r[0],r[1],r[2],r[3],c.z[0],c.z[1]+5,'beam'],0));B.flush(g);});
+['gf','typ'].forEach(k=>{const g=new THREE.Group(),B=new Batch();g.name='Beams';sc.add(g);beamG[k]=g;
+  D.beams[k].r.forEach(r=>B.box([r[0],r[1],r[2],r[3],r[4],r[5]+5,'beam'],0));B.flush(g);});
 let showBeams=true;
-const beamL=document.createElement('div');beamL.className='dim';view.appendChild(beamL);
+const beamL=D.beams.typ.lab.map(()=>{const e=document.createElement('div');e.className='dim';view.appendChild(e);return e;});
 // ---- 敷地・道路・塀・植栽・車路の坂・段
 const siteG=new THREE.Group();siteG.name='Site';sc.add(siteG);
 (function(){const B=new Batch();D.siteB.forEach(b=>B.box(b,0));B.flush(siteG);
@@ -249,11 +249,12 @@ function render(){{const w=view.clientWidth,h=view.clientHeight;if(mode==='orbit
   else{cam.position.copy(eye);cam.lookAt(eye.x+Math.sin(yaw)*Math.cos(pitch),eye.y+Math.sin(pitch),eye.z+Math.cos(yaw)*Math.cos(pitch));}
   R.render(sc,cam);
   const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&mode==='orbit'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});
-  // 梁下の高さ（梁の下端の位置に表示。外からも室内からも）
-  const bk=beamKey();let bv=false;
-  if(showBeams&&bk){const c=D.beams[bk],v=new THREE.Vector3(wx(c.at[0]),(D.levels[lvN].z+c.z[0])/1000,wz(c.at[1])).project(cam);bv=v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;
-    if(bv){beamL.textContent=TXT[lang].ub+' '+fmm(c.z[0])+' mm';beamL.style.left=((v.x+1)/2*w)+'px';beamL.style.top=((1-v.y)/2*h)+'px';}}
-  beamL.hidden=!bv;}
+  // 梁下の高さ（梁ごとに下端の位置に表示。外からも室内からも）
+  const bk=beamKey();
+  beamL.forEach((e,i)=>{const a=showBeams&&bk?D.beams[bk].lab[i]:null;let bv=false;
+    if(a){const v=new THREE.Vector3(wx(a[0]),(D.levels[lvN].z+a[2])/1000,wz(a[1])).project(cam);bv=v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;
+      if(bv){e.textContent=TXT[lang].ub+' '+fmm(a[2])+' mm';e.style.left=((v.x+1)/2*w)+'px';e.style.top=((1-v.y)/2*h)+'px';}}
+    e.hidden=!bv;});}
 const views={persp:{th:-1.0,ph:0.25,dist:54,y:14},street:{th:-0.35,ph:0.06,dist:42,y:11},south:{th:0,ph:0.04,dist:72,y:14},west:{th:-Math.PI/2,ph:0.04,dist:72,y:14},top:{th:0,ph:1.55,dist:80,y:0}};
 function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
 // 室内・目線は、表示する階が GF・屋上なら住戸の階（1F・8F）に替えて、玄関 ENT. の内側から始める。画角は外から 40°、室内 60°

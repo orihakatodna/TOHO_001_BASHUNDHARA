@@ -38,7 +38,7 @@ OUT = ROOT / "models" / "v5_g8.html"
 TPL = ROOT / "tools" / "v5_template.html"
 CM01 = ROOT / "models" / "unit_brick.html"
 FT = 304.8  # mm
-DRAWING, REV, DATE = "CM-06", "D", "2026-10-29"
+DRAWING, REV, DATE = "CM-06", "E", "2026-10-29"
 
 # ---- 記入値（v5 p2。面積は p1 の表）
 W_NOTE = 10995           # 建物の幅 10.995 m（各平面の下の寸法）
@@ -58,10 +58,19 @@ AREA = {"plot": 267.56, "coverage": 164.92, "typical": 136.60}  # p1 の面積�
 PL = 1.5 * FT            # 1階の床は道路から +1′-6″（CM-03 と同じ）
 SITE_UP = 0.5 * FT       # 植栽の地盤は道路から +0′-6″（CM-03 と同じ）
 SLAB = 125               # スラブ
-BEAM = (250, 600)        # 梁 幅 × 成（スラブ込み）。中央の梁は RevG の通り芯 Ym（y 4,112.5）に置く
+BEAM = (250, 600)        # 梁の仮定 幅 × 成（スラブ込み、了承済み）。Rev.E からは、テラスの南の開口の上端（階高 − 成）とその上の南の梁に使う。ほかの梁は BEAM_V5
 YM = 4112.5              # 通り芯 Ym（RevG の画層 1。ほかは X1 200・X2 5,193.8・X3 10,693.8、Y1 300・Y2 9,650・Y3 14,700）
-# 参考（v5 p2 の断面の縮尺読み、2026-10-29。南の植栽の外端を y −1.0 として読んだ）: 梁は各階に3本。中央 y 約 4.0〜4.2・スラブ下 約 0.3 m、
-# 南の端 y 約 0.15〜0.87・スラブ下 約 0.55〜0.6 m、北の端 y 約 9.3〜9.8・スラブ下 約 0.6 m。手描きで寸法の記入が無いので、梁は上の仮定のまま
+# 梁（Rev.E、2026-10-29 ユーザー指示「v5 に合わせる」）: v5 p2 の断面の縮尺読み。各階に3本、東西に通る。((南北の範囲 y0, y1), 梁下の高さ)。
+# 梁下の高さは基準階の床から梁の下端まで（mm）で、梁の成（スラブの上面から）は 階高 − 梁下。1階・屋上のスラブの梁も同じ成とする（仮定）。
+# 読み方: 断面のスラブの線と梁の灰色の画素を拾い、縦は階高の記入値 10′（177 px）、横は 58.4 px/m。断面の左端（南の植栽の外端）は、
+# 中央の梁の中心を Ym に合わせて y −1.007。値は各階の中央値を 50 mm に丸めた（読みのばらつき ±0.05 m 程度）
+BEAM_V5 = {
+    "S": ((150, 900), 2250),             # 南の端: y 0.14〜0.88 m（幅 0.72）・梁下 2.24 m（9階、2.17〜2.31）。外壁から室内側へ 0.65 m 出る
+    "C": ((YM - 125, YM + 125), 2500),   # 中央（通り芯 Ym）: 幅 0.21 m・梁下 2.49 m（8階、2.45〜2.55）。幅は仮定の 250 のまま
+    "N": ((9300, 9750), 2250),           # 北の端: y 9.30〜9.81 m（幅 0.51）・梁下 2.22 m（8階、2.17〜2.27）。南と同じ 2.25 m に丸めた。北の面は外壁の外面 9,750 にそろえた
+}
+# 東西の外周の梁は、外壁 250 mm の中に納まると仮定する（v5 の断面は南北の切断で、東西の梁は見えない）。
+# テラスの上の南の梁は、南立面のテラスの開口の上端（床から 2.46〜2.50 m）を下端とする（成は BEAM[1]）。断面の南の梁（梁下 2.25 m）と南立面が食い違うため
 DOOR_H = 7 * FT          # 扉・掃出し窓・1階の開口の上端 7′（RevE と同じ。1階の南の開口は南立面の縮尺読み 床から約 2.11 m）
 WIN = (3.5 * FT, 7 * FT)   # 窓 3′-6″〜7′（南立面の縮尺読み 床から 1.03〜2.12 m。東面・北面も同じとする）
 VENT = (6 * FT, 7 * FT)    # 浴室・階段の換気窓（RevE と同じ）
@@ -113,11 +122,12 @@ SWING = {  # RevG の扉の中心 (x, y) → 開く向き（仮定。v5 に弧�
     (8144, 10550): 1,     # 階段室: 階段室へ（v5 基準階。1階は EV ホールへ、v5 1階平面）
     (6819, 12050): "ev",  # EV
 }
+TERRACE_OPEN = (3375, 5271.7)   # テラスの南の開口の x の範囲（RevG）。その上の南の梁は浅くする（BEAM_V5 の注記）
 # 外壁の窓・開口（1〜8F）: (x0, y0, x1, y1, 種類, 下端, 上端, ガラスの割り)。種類 win 窓・vent 換気窓・open 開口（ガラスなし）
 WIN_TYP = [
     (0, 1200, 250, 8400, "win", 1250, 2150, 8),         # 西面の横長窓（西立面: ガラス y 1,250〜8,360・床から 1.37〜2.05 m、枠を含めて約 1.26〜2.15 m、8枚割り。平面の部屋ごとの窓ではなく立面を採る、了承済み）
     (1100, 0, 3150, 250, "win", *WIN, 2),               # 寝室2 の南（x は RevG、高さと2枚割りは南立面）
-    (3375, 0, 5271.7, 250, "open", 1250, TYP_H - BEAM[1], 0),  # テラスの南（南立面 床から 1.26〜2.46 m、下は煉瓦の手すり壁。上端は梁の下端）
+    (TERRACE_OPEN[0], 0, TERRACE_OPEN[1], 250, "open", 1250, TYP_H - BEAM[1], 0),  # テラスの南（南立面 床から 1.26〜2.46 m、下は煉瓦の手すり壁。上端は梁の下端）
     (7693.8, 0, 9893.8, 250, "win", *WIN, 2),           # 主寝室の南（v5 平面 x 7,620〜9,920。左端は南の植栽の左端、右端は RevG の開口の右端）
     (10743.8, 1100, 10993.8, 3712.5, "win", *WIN, 3),   # 主寝室の東（RevG）
     (10743.8, 4512.5, 10993.8, 6350, "vent", *VENT, 1), # 主寝室浴室の東（RevG）
@@ -547,11 +557,17 @@ def slab_rects(P, level, h_below, h_this):
 
 
 def ceiling_beams(P, kind):
-    """床スラブの下の梁の平面 (x0, y0, x1, y1)。kind はスラブのある階（l1 1F・typ 2〜8F・rf 屋上）。
-    外周の梁は外壁（250 mm）の中に納まると仮定して描かない（室内に出ない）。"""
-    out = [(WALL_T, YM - BEAM[0] / 2, P["W"] - WALL_T, YM + BEAM[0] / 2)]   # 中央の梁（通り芯 Ym）
-    if kind == "l1":   # 1階の左奥（駐車 5・6）の南の縁の梁。2階より上は壁の中
-        out.append((WALL_T, P["UY"] - BEAM[0], P["CX0"], P["UY"]))
+    """床スラブの下の梁 (x0, y0, x1, y1, 成)。成はスラブの上面から梁の下端まで（mm）。v5 の断面の3本（BEAM_V5）で、
+    1F・2〜8F・屋上のスラブ（kind: l1・typ・rf）とも同じ。東西の外周の梁は外壁の中に納まると仮定して描かない。"""
+    x0, x1 = WALL_T, P["W"] - WALL_T
+    out = []
+    for key, ((y0, y1), clear) in BEAM_V5.items():
+        d = TYP_H - clear
+        if key == "S":   # テラスの上は浅くする（南立面のテラスの開口の上端を梁の下端に）
+            t0, t1 = TERRACE_OPEN
+            out += [(x0, y0, t0, y1, d), (t0, y0, t1, y1, BEAM[1]), (t1, y0, x1, y1, d)]
+        else:
+            out.append((x0, y0, x1, y1, d))
     return out
 
 
@@ -624,7 +640,7 @@ def storey(P, kind, h, h_below=None):
         lvl = {"l1": 1, "typ": 2, "rf": 9}[kind]
         for r in slab_rects(P, lvl, h_below, h if kind != "rf" else None):
             out.append([*r, -SLAB, 0, ("fl_rf" if kind == "rf" else "fl_typ") + ("S" if r[1] <= 1 else "")])
-        out += [[*r, -BEAM[1], -SLAB, "beam"] for r in ceiling_beams(P, kind)]
+        out += [[*r[:4], -r[4], -SLAB, "beam"] for r in ceiling_beams(P, kind)]
     if kind != "rf":
         out += stair_geo(P, h)[0]
     return [[round(v, 1) if isinstance(v, float) else v for v in b] for b in out], plants, opens
@@ -681,9 +697,12 @@ def model():
         "rooms": {"typ": rooms, "gf": gf_core},
         "gf": {"park": park, "drive": list(DRIVE), "tact": [list(t) for t in TACTILE], "stock": list(STOCK["r"]), "wheel": 14500},
         "furn": FURN, "eye": EYE, "ceil": TYP_H - SLAB,
-        # 選んだ階の天井の梁（上の階のスラブの下の梁）。z は選んだ階の床から。at は梁下の高さの表示の位置（居間・車路の上）
-        "beams": {"gf": {"r": ceiling_beams(P, "l1"), "z": [round(GF_H - BEAM[1], 1), round(GF_H - SLAB, 1)], "at": [2700, YM]},
-                  "typ": {"r": ceiling_beams(P, "typ"), "z": [round(TYP_H - BEAM[1], 1), round(TYP_H - SLAB, 1)], "at": [5150, YM]}},
+        # 選んだ階の天井の梁（上の階のスラブの下の梁）: r は [x0, y0, x1, y1, 下端, 上端]（z は選んだ階の床から）、
+        # lab は梁下の高さの表示 [x, y, 下端]（南は主寝室・中央と北は居間、1階は車路の上）
+        "beams": {k: {"r": [[*r[:4], round(h - r[4], 1), round(h - SLAB, 1)] for r in ceiling_beams(P, kind)],
+                      "lab": [[x, (y0 + y1) / 2 if key != "N" else 9400, round(h - (TYP_H - c), 1)]
+                              for (key, ((y0, y1), c)), x in zip(BEAM_V5.items(), xs)]}
+                  for k, kind, h, xs in (("gf", "l1", GF_H, (2700, 2700, 2700)), ("typ", "typ", TYP_H, (8500, 5150, 5150)))},
         "dims": {"w": W_NOTE, "d": D_NOTE, "rf": round(zs[-1], 1), "top": round(zs[-1] + ROOF_ROOM, 1)},
         "src": [SRC.name, "01_TOHO_BASHUNDHARA_v5_261028_A3.pdf"],
     }, P, opens, zs
@@ -789,15 +808,17 @@ def check():
                 found.append(f"家具どうしが重なる: {tag} と {g['k']} ({g['x']}, {g['y']})")
     # 梁: 梁の下にある開口の上端と家具の高さが、梁の下端より低いか（梁下の高さ）
     for lv, h, kind, ops in (("1階", GF_H, "l1", opens["gf"]), ("1〜8F", TYP_H, "typ", opens["typ"])):
-        bot, rs = h - BEAM[1], ceiling_beams(P, kind)
+        rs = ceiling_beams(P, kind)
         for o in ops:
-            if any(ovt(o["r"], b) for b in rs) and o["z"][1] > bot + 1e-6:
-                found.append(f"{lv}: 開口の上端（{o['z'][1]:.0f}）が梁の下端（{bot:.0f}）より高い {tuple(round(v) for v in o['r'])}")
-        notes.append(f"梁下（{lv}）: 床から {bot:,.0f} mm（階高 {h:,.1f} − 梁成 {BEAM[1]}。梁 {BEAM[0]} × {BEAM[1]} mm は仮定）、室内に出る梁 {len(rs)} 本")
-    bot = TYP_H - BEAM[1]
+            for b in rs:
+                if ovt(o["r"], b) and o["z"][1] > h - b[4] + 1e-6:
+                    found.append(f"{lv}: 開口の上端（{o['z'][1]:.0f}）が梁の下端（{h - b[4]:.0f}）より高い {tuple(round(v) for v in o['r'])}")
+        notes.append(f"梁下（{lv}）: 床から " + "・".join(f"{n} {h - (TYP_H - c):,.0f}" for n, (_, c) in zip(("南", "中央", "北"), BEAM_V5.values()))
+                     + f" mm、テラスの上 {h - BEAM[1]:,.0f} mm（v5 の断面の縮尺読み）、梁 {len(rs)} 本")
     for f in fs:
-        if f["b"] and f["h"] and f["h"] > bot and any(ovt(f["b"], b) for b in ceiling_beams(P, "typ")):
-            found.append(f"家具が梁の下端（{bot:.0f}）より高い: {f['k']} ({f['x']}, {f['y']})")
+        for b in ceiling_beams(P, "typ"):
+            if f["b"] and f["h"] and ovt(f["b"], b) and f["h"] > TYP_H - b[4]:
+                found.append(f"家具が梁の下端（{TYP_H - b[4]:.0f}）より高い: {f['k']} ({f['x']}, {f['y']})")
     from collections import Counter
     cnt = Counter(f["k"] for f in fs)
     notes.append(f"家具: {len(fs)} 点（" + "・".join(f"{k} {n}" for k, n in sorted(cnt.items())) + "）、床置き、CM-01 の CAT の寸法。部屋・植栽・柱・扉の開き・窓・重なりを照合")
@@ -830,7 +851,7 @@ def texts(d, P, zs):
             "sFurnv": "As drawn in the v5 plan of floors 1F–8F, at the sizes of the CM-01 furniture list (as CM-04/05): beds, sofa, chairs, tables, TV units, kitchen counters, fridge, WCs, basins. The drawn pieces are smaller than those sizes, so some are moved or left out. The two baths drawn in v5 are shown as shower areas (the list has no bath). Shown on the floor chosen in “Floors shown”; fixed in place.",
             "sGfv": "Parking for 6 (1–4 on the east, 5–6 under the roof at the rear left), brick driveway, steps and tactile paving from the road to the lift hall, lift, stair, stock under the stair.",
             "sStv": f"One stair, flights 1.15 m: GF {n0} risers × {hs[0] / n0:.0f} mm, 1F–8F {n1} × {hs[1] / n1:.0f} mm, treads 250 mm; up the east flight, back on the west (as v5). Lift 1,600 kg (RevG).",
-            "sStrv": f"RC. Four corner columns (v5 plan: “Wide Span”, “No Column”) and one more at the ground floor. Slab {SLAB} mm, beams {BEAM[0]} × {BEAM[1]} mm (assumed); the perimeter beams sit within the 250 mm outer walls, so inside only the beam on grid Ym shows. Clear height under the beams {TYP_H - BEAM[1]:,.0f} mm on floors 1F–8F, {GF_H - BEAM[1]:,.0f} mm on the ground floor.",
+            "sStrv": f"RC. Four corner columns (v5 plan: “Wide Span”, “No Column”) and one more at the ground floor. Slab {SLAB} mm. Beams as drawn in the v5 section (read at scale): one at each of the south and north ends, standing into the rooms from the outer walls, and one on grid Ym. Clear height under them on floors 1F–8F: {BEAM_V5['S'][1]:,} mm at the south and north ends, {BEAM_V5['C'][1]:,} mm at the centre ({TYP_H - BEAM[1]:,.0f} mm over the terrace opening, as the south elevation); ground floor {GF_H - TYP_H + BEAM_V5['S'][1]:,.0f} and {GF_H - TYP_H + BEAM_V5['C'][1]:,.0f} mm. The east and west perimeter beams are assumed to sit within the outer walls.",
             "sArv": f"Typical floor {a_typ:.2f} m² (table 136.60), building area {a_cov:.2f} m² (table 164.92), plot {a_plot:.2f} m² (table 267.56).",
             "note": "Concept model for discussion, not for construction. Where the v5 drawings disagree, this model takes: the ground-floor height as written (12′; drawn about 3.17 m); the west windows from the elevation (one long window; the plan shows one per room); the north planter from the plan; the south planter 3.3 m wide (the RevG line is 5.6 m). Window sizes, the east and north faces, slab, beams, levels and the positions of doors and furniture (read from the v5 plan at scale) are assumptions. Not checked: building and fire rules, structure.",
         },
@@ -847,7 +868,7 @@ def texts(d, P, zs):
             "sFurnv": "v5 の 1〜8F 平面に描かれた家具を、CM-01 の家具の一覧の寸法で置いた（CM-04/05 と同じ）: ベッド、ソファ、椅子、テーブル、テレビ台、台所のカウンター、冷蔵庫、便器、洗面台。図の家具は一覧より小さいので、一部はずらすか省いた。v5 の浴槽2つは、一覧に浴槽が無いのでシャワースペースで示す。「表示する階」で選んだ階に表示し、動かせない。",
             "sGfv": "駐車 6台（1〜4 は東、5・6 は左奥の屋根の下）、煉瓦敷きの車路、道路から EV ホールまでの段と点字ブロック、EV、階段、階段の下の Stock。",
             "sStv": f"1本、有効幅 1.15 m。GF は蹴上 {hs[0] / n0:.0f} mm × {n0} 段、1F〜8F は {hs[1] / n1:.0f} mm × {n1} 段、踏面 250 mm。東半分を上がり、西半分で戻る（v5 による）。EV 1,600 kg（RevG）。",
-            "sStrv": f"RC。柱は四隅の4本（v5 の平面。注記「Wide Span」「No Column」）と、1階だけにもう1本。スラブ {SLAB} mm、梁 {BEAM[0]} × {BEAM[1]} mm（仮定）。外周の梁は外壁 250 mm の中に納まるので、室内に出るのは通り芯 Ym の梁だけ。梁下の高さは 1〜8F {TYP_H - BEAM[1]:,.0f} mm、1階 {GF_H - BEAM[1]:,.0f} mm。",
+            "sStrv": f"RC。柱は四隅の4本（v5 の平面。注記「Wide Span」「No Column」）と、1階だけにもう1本。スラブ {SLAB} mm。梁は v5 の断面のとおり（縮尺読み）: 南・北の端に外壁から室内側へ出る梁、中央に通り芯 Ym の梁。梁下の高さは 1〜8F で南・北 {BEAM_V5['S'][1]:,} mm、中央 {BEAM_V5['C'][1]:,} mm（テラスの開口の上は南立面のとおり {TYP_H - BEAM[1]:,.0f} mm）、1階 {GF_H - TYP_H + BEAM_V5['S'][1]:,.0f}・{GF_H - TYP_H + BEAM_V5['C'][1]:,.0f} mm。東西の外周の梁は外壁の中に納まると仮定。",
             "sArv": f"基準階 {a_typ:.2f} m²（表 136.60）、建築面積 {a_cov:.2f} m²（表 164.92）、敷地 {a_plot:.2f} m²（表 267.56）。",
             "note": "協議用の概念モデルで、施工用ではありません。v5 の図の中で食い違う箇所は次のとおり採りました: 1階の高さは記入値の 12′（図は約 3.17 m）、西面の窓は立面の横長窓1本（平面は部屋ごとの窓）、北の植栽は平面の位置、南の植栽の幅は 3.3 m（RevG の線は 5.6 m）。窓の寸法、東面・北面、スラブ・梁・床の高さ、扉と家具の位置（v5 の平面から縮尺で読んだ）は仮定です。未照合: 建築・消防の法規、構造。",
         },
@@ -856,14 +877,14 @@ def texts(d, P, zs):
                      vInside="Inside, eye level", zoom="Distance", dims="Dimensions", lvTag="Floors shown", zones="Room names", furn="Furniture", beams="Beams", ub="Under beam",
                      csTag="For Clip Studio (GLB)", glbAll="Save what is shown as GLB",
                      glbErr="The GLB exporter could not be loaded. Check the internet connection and reload the page.",
-                     hint="Outside views: drag to rotate about the centre of the model; right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. Scroll or use the slider to zoom. Lower the floors slider to hide the floors above and look into a floor; furniture is shown on that floor (1F–8F) and is fixed in place. Inside, eye level: you stand 1.6 m above the floor chosen with the slider; drag to look around, and right-drag, Shift-drag, the arrow keys or a two-finger drag to walk. Beams shows or hides the beams under the floor above the chosen floor (250 × 600 mm, assumed) and the clear height under them. The GLB holds what is shown and opens in Clip Studio as a 3D material (1 unit = 1 m).",
+                     hint="Outside views: drag to rotate about the centre of the model; right-drag or Shift-drag moves the view sideways (arrow keys too, after clicking the view); a view button resets it. On a phone or tablet, drag with two fingers to move and pinch to zoom. Scroll or use the slider to zoom. Lower the floors slider to hide the floors above and look into a floor; furniture is shown on that floor (1F–8F) and is fixed in place. Inside, eye level: you stand 1.6 m above the floor chosen with the slider; drag to look around, and right-drag, Shift-drag, the arrow keys or a two-finger drag to walk. Beams shows or hides the beams under the floor above the chosen floor (read at scale from the v5 section) and the clear height under them. The GLB holds what is shown and opens in Clip Studio as a 3D material (1 unit = 1 m).",
                      specH="Specification", sSrc="Source", sSite="Plot", sBld="Building", sLv="Levels", sFin="Finishes", sUnit="Dwelling", sFurn="Furniture", sGf="Ground floor", sSt="Stair, lift", sStr="Structure", sAr="Areas",
                      lv=[f"{n}" for n in ["GF"] + [f"{i}F" for i in range(1, N_TYP + 1)] + ["Roof"]], roof="Roof", ent="ENT.", stock="Stock"),
           "ja": dict(kDrawing="図番", kScale="縮尺", kDate="日付", kRev="版", vPersp="パース", vStreet="道路から", vSouth="南面", vWest="西面", vTop="上から",
                      vInside="室内・目線", zoom="距離", dims="寸法表示", lvTag="表示する階", zones="部屋名", furn="家具", beams="梁", ub="梁下",
                      csTag="Clip Studio 用（GLB）", glbAll="表示中のモデルを GLB で保存",
                      glbErr="GLB の書き出し機能を読み込めませんでした。インターネット接続を確かめて、ページを読み込み直してください。",
-                     hint="外からの視点: ドラッグでモデルの中央を中心に回転、右ドラッグか Shift＋ドラッグで平行移動（画面をクリックしたあとは矢印キーでも可。視点のボタンで元に戻る）、スマートフォンでは2本指のドラッグで平行移動・つまんで拡大縮小、スクロールまたはスライダーで拡大縮小。「表示する階」を下げると上の階が外れ、その階の中が見えます。家具はその階（1F〜8F）に置かれ、動かせません。室内・目線: 「表示する階」で選んだ階の床から 1.6 m の高さに立ち、ドラッグで見回し、右ドラッグ・Shift＋ドラッグ・矢印キー・2本指のドラッグで歩きます。「梁」で、選んだ階の天井の梁（250 × 600 mm、仮定）と梁下の高さを表示・非表示にします。GLB には表示中のものが入り、Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",
+                     hint="外からの視点: ドラッグでモデルの中央を中心に回転、右ドラッグか Shift＋ドラッグで平行移動（画面をクリックしたあとは矢印キーでも可。視点のボタンで元に戻る）、スマートフォンでは2本指のドラッグで平行移動・つまんで拡大縮小、スクロールまたはスライダーで拡大縮小。「表示する階」を下げると上の階が外れ、その階の中が見えます。家具はその階（1F〜8F）に置かれ、動かせません。室内・目線: 「表示する階」で選んだ階の床から 1.6 m の高さに立ち、ドラッグで見回し、右ドラッグ・Shift＋ドラッグ・矢印キー・2本指のドラッグで歩きます。「梁」で、選んだ階の天井の梁（v5 の断面から縮尺で読んだもの）と梁下の高さを表示・非表示にします。GLB には表示中のものが入り、Clip Studio に 3D 素材として読み込めます（1 単位 = 1 m）。",
                      specH="仕様", sSrc="元の図", sSite="敷地", sBld="建物", sLv="レベル", sFin="仕上げ", sUnit="住戸", sFurn="家具", sGf="1階", sSt="階段・EV", sStr="構造", sAr="面積",
                      lv=["GF"] + [f"{i}F" for i in range(1, N_TYP + 1)] + ["屋上"], roof="屋根", ent="ENT.", stock="Stock")}
     txt = {l: dict(ui[l], **t[l]) for l in ("en", "ja")}
