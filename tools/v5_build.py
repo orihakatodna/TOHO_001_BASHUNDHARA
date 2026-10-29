@@ -38,7 +38,7 @@ OUT = ROOT / "models" / "v5_g8.html"
 TPL = ROOT / "tools" / "v5_template.html"
 CM01 = ROOT / "models" / "unit_brick.html"
 FT = 304.8  # mm
-DRAWING, REV, DATE = "CM-06", "E", "2026-10-29"
+DRAWING, REV, DATE = "CM-06", "F", "2026-10-29"
 
 # ---- 記入値（v5 p2。面積は p1 の表）
 W_NOTE = 10995           # 建物の幅 10.995 m（各平面の下の寸法）
@@ -128,12 +128,13 @@ WIN_TYP = [
     (0, 1200, 250, 8400, "win", 1250, 2150, 8),         # 西面の横長窓（西立面: ガラス y 1,250〜8,360・床から 1.37〜2.05 m、枠を含めて約 1.26〜2.15 m、8枚割り。平面の部屋ごとの窓ではなく立面を採る、了承済み）
     (1100, 0, 3150, 250, "win", *WIN, 2),               # 寝室2 の南（x は RevG、高さと2枚割りは南立面）
     (TERRACE_OPEN[0], 0, TERRACE_OPEN[1], 250, "open", 1250, TYP_H - BEAM[1], 0),  # テラスの南（南立面 床から 1.26〜2.46 m、下は煉瓦の手すり壁。上端は梁の下端）
-    (7693.8, 0, 9893.8, 250, "win", *WIN, 2),           # 主寝室の南（v5 平面 x 7,620〜9,920。左端は南の植栽の左端、右端は RevG の開口の右端）
+    (7693.8, 0, 9893.8, 250, "sl", 0, DOOR_H, 2),       # 主寝室の南、バルコニーへ: テラスと同じ掃出しのガラス戸（Rev.F、2026-10-29 ユーザー指示）。v5 平面 x 7,620〜9,920
+                                                        # （左端は南の植栽の左端、右端は RevG の開口の右端）。南立面のガラス（床から 1.1〜2.0 m）は、手前の手すり 1.25 m で下が隠れる
     (10743.8, 1100, 10993.8, 3712.5, "win", *WIN, 3),   # 主寝室の東（RevG）
     (10743.8, 4512.5, 10993.8, 6350, "vent", *VENT, 1), # 主寝室浴室の東（RevG）
     (10743.8, 7450, 10993.8, 8650, "win", *WIN, 2),     # 台所の東（RevG）
     (10693.8, 13700, 10993.8, 14150, "vent", *VENT, 1), # 階段室の東（RevG）
-    (1100, 9500, 3150, 9750, "win", *WIN, 2),           # 寝室3 の北、植栽へ（v5 平面 x 1,070〜3,140）
+    (1100, 9500, 3150, 9750, "sl", 0, DOOR_H, 2),       # 寝室3 の北、バルコニーへ: テラスと同じ掃出しのガラス戸（同上）。v5 平面 x 1,070〜3,140
     (3850, 9500, 4450, 9750, "win", *WIN, 1),           # 居間の北（v5 平面 x 3,843〜4,450）
 ]
 N_PLANTER = (0, 9750, 3375, 10720)        # 寝室3 の北の植栽（平面 y 9,750〜10,720 を採る、了承済み。東端は間仕切りの東の面）
@@ -171,10 +172,11 @@ FURN = [
     ["tv", 3021, 2105, 90],        # テレビ台（東の間仕切りに付ける）: 図 (3,000, 2,105)
     ["dchair", 1268, 3600, 0], ["side", 1735, 3600, 0], ["dchair", 2202, 3600, 0],  # 北の壁ぎわの椅子2脚と丸テーブル: 図 x 1,315・1,735・2,190。丸テーブルを中心に並べた
     # 寝室3
-    ["double", 1720, 8465, 0],     # ベッド: 図 (1,780, 8,620)、頭は北。ヘッドボードが北の壁（y 9,500）と北西の柱（x 1,000 まで）に収まるよう西へ 60・南へ 155
-    ["side", 2675, 9270, 0],       # ナイトテーブル（東）: 図 (2,400, 9,050)。ベッドの東へ
-    ["dchair", 3006, 7790, -90], ["side", 3020, 8255, 0], ["dchair", 3006, 8720, -90],  # 東の壁ぎわの椅子2脚（西向き）と丸テーブル: 図 y 8,030・8,440・8,850。ナイトテーブルを避けて南へ 130〜240
-    ["tv", 1450, 6804, 0],         # テレビ台（南の間仕切りに付ける）: 図 (1,450, 6,770)
+    ["double", 1283, 7986, 90],    # ベッド: 図は頭を北の壁に付けて (1,780, 8,620)。北の壁の開口を掃出しのガラス戸にした（Rev.F、ユーザー指示）ので、
+                                   # 戸の前を空けるため頭を西の壁に付けて回した（ユーザー未確認）。北西の柱（y 8,750 から）と戸の前 約 0.8 m を避ける
+    ["side", 479, 7035, 0],        # ナイトテーブル: ベッドの頭の南の脇（図の位置 (1,150・2,400, 9,050) は戸の前）
+    ["dchair", 3006, 7790, -90], ["side", 3020, 8255, 0], ["dchair", 3006, 8720, -90],  # 東の壁ぎわの椅子2脚（西向き）と丸テーブル: 図 y 8,030・8,440・8,850。南へ 130〜240
+    ["tv", 1730, 6804, 0],         # テレビ台（南の間仕切りに付ける）: 図 (1,450, 6,770)。ナイトテーブルを避けて東へ 280
     # リビング・ダイニング
     ["tv", 3604, 4620, 90],        # テレビ台（西の間仕切りに付ける）: 図 (3,570, 4,620)
     ["side", 4100, 4670, 0],       # 丸テーブル（ソファの前）: 図 (4,100, 4,670)
@@ -209,7 +211,7 @@ FURN = [
     ["counter", 9535, 7505, 180],  # 南のカウンター（流し）: 図 x 8,620〜10,590
 ]
 # 図にあって置かないもの（CAT の寸法で入らない、または相当する種類が無い）: 寝室2 の西のナイトテーブル・1人掛けの横の丸テーブル、
-# 寝室3 の西のナイトテーブル（柱）・弧形のソファと丸テーブル（ベッドとテレビ台の間 0.48 m）、主寝室のナイトテーブル2つ、
+# 寝室3 のナイトテーブル1つ・弧形のソファと丸テーブル（ベッドとテレビ台の間が狭い）、主寝室のナイトテーブル2つ、
 # 玄関（ENT.）の横の台（下足入れか。x 4,870〜5,690）、台所の北の西半分の棚（x 7,090〜8,480）と南の列の西端の四角（x 7,160〜7,690）
 EYE = [6350, 8650, -0.35]   # 室内・目線の初めの位置（玄関 ENT. の内側）と向き（ラジアン。0 は南を向き、負は西へ回す）
 TYPE_H = {"bed": 1000, "sofa": 820, "chair": 900}   # 高さ（mm）。CM-01 の build(): ベッドはヘッドボード 1.0 m、ソファは座 0.42＋背 0.4、椅子は座 0.45＋背 0.45
@@ -772,12 +774,14 @@ def check():
     swings = [a for o in opens["typ"] for a in clear_areas(o)]
     fits = lambda b, p: all(inside(p, x, y) for x in (b[0] + T, b[2] - T) for y in (b[1] + T, b[3] - T)) and \
         not any(b[0] + T < x < b[2] - T and b[1] + T < y < b[3] - T for x, y in p)
-    exts = []   # 外壁の窓・開口: (範囲, 下端, 室内側の面の向き, 室内側の面の位置)
+    exts = []   # 外壁の窓・開口・掃出しのガラス戸: (範囲, 下端, 室内側の面の向き, 室内側の面の位置)。扉は扉の開きで照合する
     for o in opens["typ"]:
         r = o["r"]
-        if o["kind"] not in ("win", "vent", "open") or r[1] >= UY:
+        if o["kind"] == "door" or r[1] >= UY:
             continue
-        side = "W" if r[0] <= 1 else "E" if r[2] >= W - 1 else "S" if r[1] <= 1 else "N"
+        side = "W" if r[0] <= 1 else "E" if r[2] >= W - 1 else "S" if r[1] <= 1 else "N" if r[3] >= UY - 1 else None
+        if side is None:   # 内側の開口（テラスと居間の間のガラス戸）
+            continue
         exts.append((r, o["z"][0], side, {"W": r[2], "E": r[0], "S": r[3], "N": r[1]}[side]))
     for i, f in enumerate(fs):
         k, b, tag = f["k"], f["b"], f"{f['k']} ({f['x']}, {f['y']})"
@@ -802,7 +806,7 @@ def check():
             near = {"W": b[0] < face + 150, "E": b[2] > face - 150, "S": b[1] < face + 150, "N": b[3] > face - 150}[side]
             along = (b[1], b[3], r[1], r[3]) if side in "WE" else (b[0], b[2], r[0], r[2])
             if f["h"] and f["h"] > z0 and near and along[0] < along[3] - T and along[2] < along[1] - T:
-                found.append(f"窓の前に下端（{z0:.0f}）より高い家具（{f['h']:.0f}）: {tag}")
+                found.append(f"窓・ガラス戸の前に下端（{z0:.0f}）より高い家具（{f['h']:.0f}）: {tag}")
         for g in fs[i + 1:]:
             if g["b"] and ovt(b, g["b"]):
                 found.append(f"家具どうしが重なる: {tag} と {g['k']} ({g['x']}, {g['y']})")
@@ -847,7 +851,7 @@ def texts(d, P, zs):
             "sBldv": f"10.995 × 15.000 m, G+8. Floors 1F–8F: dwelling 9.75 m deep, core 5.25 m behind it on the right; the rear left ({VOID[2] / 1000:.2f} × {CORE_NOTE / 1000:.2f} m) is open above the ground floor (“Roof”).",
             "sLvv": f"GF 12′ ({GF_H / 1000:.3f} m), 1F–8F 10′ ({TYP_H / 1000:.3f} m). Ground floor +1′-6″ above the road (assumed). Roof {rf:.2f} m above the road, parapet {PARAPET_RF / 1000:.2f} m, stair room {ROOF_ROOM / 1000:.2f} m high: top {top:.2f} m (H ≤ 33 m).",
             "sFinv": "West face fair-faced concrete (formwork 1,800 × 900, form ties @600 × @450) with one long window on each floor; south face exposed brick (English bond). East and north faces concrete (assumed: no drawing). Partitions brick, 125 mm, exposed.",
-            "sUnitv": "B.R.2 and B.R.3, each with a bath; Master Bedroom with bath and closet; Living Dining entered at ENT. from the lift hall; Kitchen; accessible bath; Terrace with planters. Brick planter balconies north of B.R.3 and south of the Master Bedroom. Doors as drawn in v5: swing doors 0.6–0.7 m, a sliding door to the accessible bath, and sliding doors from the Master Bedroom to the walk-in closet.",
+            "sUnitv": "B.R.2 and B.R.3, each with a bath; Master Bedroom with bath and closet; Living Dining entered at ENT. from the lift hall; Kitchen; accessible bath; Terrace with planters. Brick planter balconies north of B.R.3 and south of the Master Bedroom, reached through glazed sliding doors like the terrace's. Doors as drawn in v5: swing doors 0.6–0.7 m, a sliding door to the accessible bath, and sliding doors from the Master Bedroom to the walk-in closet.",
             "sFurnv": "As drawn in the v5 plan of floors 1F–8F, at the sizes of the CM-01 furniture list (as CM-04/05): beds, sofa, chairs, tables, TV units, kitchen counters, fridge, WCs, basins. The drawn pieces are smaller than those sizes, so some are moved or left out. The two baths drawn in v5 are shown as shower areas (the list has no bath). Shown on the floor chosen in “Floors shown”; fixed in place.",
             "sGfv": "Parking for 6 (1–4 on the east, 5–6 under the roof at the rear left), brick driveway, steps and tactile paving from the road to the lift hall, lift, stair, stock under the stair.",
             "sStv": f"One stair, flights 1.15 m: GF {n0} risers × {hs[0] / n0:.0f} mm, 1F–8F {n1} × {hs[1] / n1:.0f} mm, treads 250 mm; up the east flight, back on the west (as v5). Lift 1,600 kg (RevG).",
@@ -864,7 +868,7 @@ def texts(d, P, zs):
             "sBldv": f"10.995 × 15.000 m、G+8。1F〜8F は住戸の奥行 9.75 m、その北の右にコア 5.25 m。左奥（{VOID[2] / 1000:.2f} × {CORE_NOTE / 1000:.2f} m）は1階の上が空く（「Roof」）。",
             "sLvv": f"GF 12′（{GF_H / 1000:.3f} m）、1F〜8F 10′（{TYP_H / 1000:.3f} m）。1階の床は道路から +1′-6″（仮定）。屋根は道路から {rf:.2f} m、パラペット {PARAPET_RF / 1000:.2f} m、階段室の高さ {ROOF_ROOM / 1000:.2f} m で上端 {top:.2f} m（H ≤ 33 m）。",
             "sFinv": "西面は打ち放し（型枠 1,800 × 900、Pコン @600 × @450）で各階に横長の窓1本、南面は煉瓦（イングリッシュボンド）。東面・北面は打ち放し（図が無いので仮定）。間仕切りは煉瓦 125 mm、現し。",
-            "sUnitv": "寝室2・寝室3（それぞれ浴室付き）、主寝室（浴室・クローゼット付き）、リビング・ダイニング（ENT. で EV ホールから入る）、台所、共用浴室（障害者対応）、テラス（植栽付き）。寝室3 の北と主寝室の南に、煉瓦の手すりの植栽バルコニー。扉は v5 のとおり: 開き戸は幅 0.6〜0.7 m、共用浴室は引き戸、クローゼットは主寝室から引き違い戸で入る。",
+            "sUnitv": "寝室2・寝室3（それぞれ浴室付き）、主寝室（浴室・クローゼット付き）、リビング・ダイニング（ENT. で EV ホールから入る）、台所、共用浴室（障害者対応）、テラス（植栽付き）。寝室3 の北と主寝室の南に、煉瓦の手すりの植栽バルコニー（テラスと同じ掃出しのガラス戸から出る）。扉は v5 のとおり: 開き戸は幅 0.6〜0.7 m、共用浴室は引き戸、クローゼットは主寝室から引き違い戸で入る。",
             "sFurnv": "v5 の 1〜8F 平面に描かれた家具を、CM-01 の家具の一覧の寸法で置いた（CM-04/05 と同じ）: ベッド、ソファ、椅子、テーブル、テレビ台、台所のカウンター、冷蔵庫、便器、洗面台。図の家具は一覧より小さいので、一部はずらすか省いた。v5 の浴槽2つは、一覧に浴槽が無いのでシャワースペースで示す。「表示する階」で選んだ階に表示し、動かせない。",
             "sGfv": "駐車 6台（1〜4 は東、5・6 は左奥の屋根の下）、煉瓦敷きの車路、道路から EV ホールまでの段と点字ブロック、EV、階段、階段の下の Stock。",
             "sStv": f"1本、有効幅 1.15 m。GF は蹴上 {hs[0] / n0:.0f} mm × {n0} 段、1F〜8F は {hs[1] / n1:.0f} mm × {n1} 段、踏面 250 mm。東半分を上がり、西半分で戻る（v5 による）。EV 1,600 kg（RevG）。",
