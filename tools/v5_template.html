@@ -86,6 +86,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
         <label for="lv"><span data-i="lvTag">Floors shown</span><input type="range" id="lv" min="0" max="9" value="9"><span id="lvName" class="lvn">Roof</span></label>
         <button class="btn" id="zoneT" aria-pressed="true" data-i="zones">Room names</button>
         <button class="btn" id="furnT" aria-pressed="true" data-i="furn">Furniture</button>
+        <button class="btn" id="beamT" aria-pressed="true" data-i="beams">Beams</button>
       </div>
       <div class="bar">
         <span class="tag" data-i="csTag">For Clip Studio (GLB)</span>
@@ -211,6 +212,13 @@ __BUILD__
 const furnG=new THREE.Group();furnG.name='Furniture';sc.add(furnG);
 D.furn.forEach(([k,x,y,r])=>{const g=build(k);g.name=k;g.position.set(wx(x),0,wz(y));g.rotation.y=r*Math.PI/180;furnG.add(g);});
 let showFurn=true;
+// ---- 梁（選んだ階の天井の梁）。上の階を隠しても見えるよう、上の階のスラブの下の梁を別に描き、梁下の高さを表示する（tools/v5_build.py の ceiling_beams）
+// 外周の梁は外壁の中に納まると仮定して描かない。梁の上面は、間仕切りの上面と重ならないよう 5 mm 上げる
+const beamG={};
+['gf','typ'].forEach(k=>{const g=new THREE.Group(),c=D.beams[k],B=new Batch();g.name='Beams';sc.add(g);beamG[k]=g;
+  c.r.forEach(r=>B.box([r[0],r[1],r[2],r[3],c.z[0],c.z[1]+5,'beam'],0));B.flush(g);});
+let showBeams=true;
+const beamL=document.createElement('div');beamL.className='dim';view.appendChild(beamL);
 // ---- 敷地・道路・塀・植栽・車路の坂・段
 const siteG=new THREE.Group();siteG.name='Site';sc.add(siteG);
 (function(){const B=new Batch();D.siteB.forEach(b=>B.box(b,0));B.flush(siteG);
@@ -240,7 +248,12 @@ function render(){{const w=view.clientWidth,h=view.clientHeight;if(mode==='orbit
   if(mode==='orbit'){cam.position.set(tgt.x+dist*Math.cos(ph)*Math.sin(th),tgt.y+dist*Math.sin(ph),tgt.z+dist*Math.cos(ph)*Math.cos(th));cam.lookAt(tgt);}
   else{cam.position.copy(eye);cam.lookAt(eye.x+Math.sin(yaw)*Math.cos(pitch),eye.y+Math.sin(pitch),eye.z+Math.cos(yaw)*Math.cos(pitch));}
   R.render(sc,cam);
-  const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&mode==='orbit'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});}
+  const w=view.clientWidth,h=view.clientHeight;labels.forEach(d=>{const v=new THREE.Vector3(...d.p).project(cam);const vis=showDims&&mode==='orbit'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;d.e.hidden=!vis;if(vis){d.e.style.left=((v.x+1)/2*w)+'px';d.e.style.top=((1-v.y)/2*h)+'px';}});
+  // 梁下の高さ（梁の下端の位置に表示。外からも室内からも）
+  const bk=beamKey();let bv=false;
+  if(showBeams&&bk){const c=D.beams[bk],v=new THREE.Vector3(wx(c.at[0]),(D.levels[lvN].z+c.z[0])/1000,wz(c.at[1])).project(cam);bv=v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05;
+    if(bv){beamL.textContent=TXT[lang].ub+' '+fmm(c.z[0])+' mm';beamL.style.left=((v.x+1)/2*w)+'px';beamL.style.top=((1-v.y)/2*h)+'px';}}
+  beamL.hidden=!bv;}
 const views={persp:{th:-1.0,ph:0.25,dist:54,y:14},street:{th:-0.35,ph:0.06,dist:42,y:11},south:{th:0,ph:0.04,dist:72,y:14},west:{th:-Math.PI/2,ph:0.04,dist:72,y:14},top:{th:0,ph:1.55,dist:80,y:0}};
 function press(k){document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===k));}
 // 室内・目線は、表示する階が GF・屋上なら住戸の階（1F・8F）に替えて、玄関 ENT. の内側から始める。画角は外から 40°、室内 60°
@@ -254,10 +267,14 @@ document.getElementById('zoneT').addEventListener('click',e=>{showZones=!showZon
 function lvLabel(){const n=+document.getElementById('lv').value;document.getElementById('lvName').textContent=TXT[lang].lv[n];}
 // 表示する階: その階より上を隠す。家具はその階が住戸の階（1F〜8F）なら置く。室内・目線では住戸の階に限り、目の高さもその階に合わせる
 const NT=D.levels.length-2;let lvN=+document.getElementById('lv').value;
+// 梁は、表示する階が GF なら1階の天井（1F のスラブの下）、1F〜8F なら住戸の天井の梁を出す。屋上では出さない
+function beamKey(){return lvN===0?'gf':lvN>=1&&lvN<=NT?'typ':null;}
 function applyLevel(){LV.forEach((g,i)=>g.visible=i<=lvN);const f=lvN>=1&&lvN<=NT;furnG.visible=showFurn&&f;if(f)furnG.position.y=D.levels[lvN].z/1000;
+  const bk=beamKey();Object.keys(beamG).forEach(k=>beamG[k].visible=showBeams&&k===bk);if(bk)beamG[bk].position.y=D.levels[lvN].z/1000;
   if(mode==='inside')eye.y=D.levels[lvN].z/1000+EYE_H;document.getElementById('lv').value=lvN;lvLabel();}
 document.getElementById('lv').addEventListener('input',e=>{lvN=+e.target.value;if(mode==='inside')lvN=Math.max(1,Math.min(NT,lvN));applyLevel();render();});
 document.getElementById('furnT').addEventListener('click',e=>{showFurn=!showFurn;e.currentTarget.setAttribute('aria-pressed',showFurn);applyLevel();render();});
+document.getElementById('beamT').addEventListener('click',e=>{showBeams=!showBeams;e.currentTarget.setAttribute('aria-pressed',showBeams);applyLevel();render();});
 let drag=false,px=0,py=0;
 // タッチ操作（スマートフォン・タブレット）: 1本指は回転（室内では見回し）、2本指でドラッグすると平行移動（室内では歩く）、つまむと拡大縮小（外からのみ）
 const tp=new Map();let pinch=null;
